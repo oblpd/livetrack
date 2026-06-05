@@ -1,0 +1,2663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Oblique — Production Dashboard</title>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Oblique"/>
+<meta name="theme-color" content="#e7314f"/>
+<link rel="icon" type="image/png" sizes="180x180" href="/apple-touch-icon.png?v=2"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2"/>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png?v=2"/>
+<link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png?v=2"/>
+<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png?v=2"/>
+<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png?v=2"/>
+<link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png?v=2"/>
+<link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png?v=2"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, update, get, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBqCrOMMHA1k4rM1jgKZTZcOwexjFgQkPs",
+  authDomain: "parkcity-chiro.firebaseapp.com",
+  databaseURL: "https://parkcity-chiro-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "parkcity-chiro",
+  storageBucket: "parkcity-chiro.firebasestorage.app",
+  messagingSenderId: "624603744139",
+  appId: "1:624603744139:web:92d8d17e0fbcd0ef70118e"
+};
+try {
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+  window._fb = true;
+  window._fbUpdate = (p,d) => update(ref(db,p),d);
+  window._fbGet    = (p)   => get(ref(db,p));
+  window._fbSet    = (p,d) => set(ref(db,p),d);
+  window._fbListen = (p,cb)=> onValue(ref(db,p), s=>cb(s.val()));
+} catch(e){ window._fb=false; }
+</script>
+
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — 8px grid, mobile-first
+   Primary: #e7314f  Accent: #151413  
+   Background: #f3f1ea
+   Radius: 8/12   Shadow: 3 levels
+   Font: Inter
+   ═══════════════════════════════════════════ */
+:root {
+  --pri: #e7314f;
+  --pri-hover: #d42a45;
+  --pri-bg: rgba(231,49,79,.06);
+  --pri-bg2: rgba(231,49,79,.12);
+  --pri-border: rgba(231,49,79,.18);
+  --acc: #151413;
+  --acc-bg: rgba(21,20,19,.05);
+  --acc-border: rgba(21,20,19,.12);
+
+  --n0: #ffffff;
+  --n50: #faf9f7;
+  --n100: #f3f1ea;
+  --n200: #e8e5dc;
+  --n300: #d4d0c6;
+  --n400: #a09c93;
+  --n500: #6b645a;
+  --n600: #4a4640;
+  --n700: #2a2724;
+  --n800: #1a1918;
+  --n900: #0e0d0c;
+
+  /* Semantic — Status Colors (redesigned for stronger hierarchy) */
+  /* Live = urgent red pulse */
+  --live: #e7314f;
+  --live-bg: rgba(231,49,79,.1);
+  --live-bg2: rgba(231,49,79,.18);
+  --live-border: rgba(231,49,79,.28);
+  /* Upcoming = warm amber */
+  --upcoming: #c27a1a;
+  --upcoming-bg: rgba(194,122,26,.08);
+  --upcoming-bg2: rgba(194,122,26,.14);
+  --upcoming-border: rgba(194,122,26,.22);
+  /* Wrapped = muted sage */
+  --wrapped: #6b8f71;
+  --wrapped-bg: rgba(107,143,113,.07);
+  --wrapped-bg2: rgba(107,143,113,.12);
+  --wrapped-border: rgba(107,143,113,.18);
+
+  --success: #2E7D32;
+  --success-bg: rgba(76,175,80,.08);
+  --success-border: rgba(76,175,80,.18);
+  --warn: #9B7D5A;
+  --warn-bg: rgba(196,155,108,.07);
+  --warn-border: rgba(196,155,108,.16);
+
+  --bg: var(--n100);
+  --surface: var(--n0);
+  --surface2: var(--n50);
+  --text: var(--n800);
+  --text2: var(--n500);
+  --text3: var(--n400);
+  --border: var(--n300);
+  --border2: var(--n200);
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --sh-sm: 0 1px 3px rgba(0,0,0,.06);
+  --sh-md: 0 2px 12px rgba(0,0,0,.08);
+  --sh-lg: 0 8px 32px rgba(0,0,0,.12);
+  --min-touch: 44px;
+}
+[data-theme="dark"] {
+  --bg: var(--n900);
+  --surface: var(--n800);
+  --surface2: var(--n700);
+  --text: var(--n100);
+  --text2: var(--n400);
+  --text3: var(--n500);
+  --border: var(--n700);
+  --border2: var(--n700);
+  --sh-sm: 0 1px 3px rgba(0,0,0,.3);
+  --sh-md: 0 2px 12px rgba(0,0,0,.4);
+  --sh-lg: 0 8px 32px rgba(0,0,0,.5);
+  --pri-bg: rgba(231,49,79,.1);
+  --pri-bg2: rgba(231,49,79,.18);
+  --pri-border: rgba(231,49,79,.25);
+  --live-bg: rgba(231,49,79,.12);
+  --live-bg2: rgba(231,49,79,.22);
+  --live-border: rgba(231,49,79,.32);
+  --upcoming: #d4993a;
+  --upcoming-bg: rgba(212,153,58,.1);
+  --upcoming-bg2: rgba(212,153,58,.16);
+  --upcoming-border: rgba(212,153,58,.25);
+  --wrapped: #8bb890;
+  --wrapped-bg: rgba(139,184,144,.08);
+  --wrapped-bg2: rgba(139,184,144,.14);
+  --wrapped-border: rgba(139,184,144,.2);
+  --success-bg: rgba(76,175,80,.06);
+  --success-border: rgba(76,175,80,.12);
+  --success: #66BB6A;
+  --warn-bg: rgba(196,155,108,.06);
+  --warn-border: rgba(196,155,108,.1);
+  --warn: #C49B6C;
+  --acc-bg: rgba(243,241,234,.05);
+  --acc-border: rgba(243,241,234,.1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+  min-height:100dvh;transition:background .3s,color .3s;-webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom);}
+
+.page{display:none;}.page.active{display:block;}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD — Redesigned, Mobile-first
+   ═══════════════════════════════════════════ */
+
+/* ═══ DASHBOARD HEADER ═══ */
+.dash-hdr{
+  background:var(--acc);color:var(--n100);
+  padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));
+  height:calc(56px + env(safe-area-inset-top));
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+[data-theme="dark"] .dash-hdr{background:var(--n900);}
+.dash-logo{display:flex;align-items:center;gap:10px;}
+.dash-logo img{width:32px;height:32px;border-radius:var(--r-sm);}
+.dash-logo-text{display:flex;flex-direction:column;gap:1px;}
+.dash-logo-name{font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;}
+.dash-logo-sub{font-size:9px;color:rgba(243,241,234,.4);letter-spacing:.1em;text-transform:uppercase;}
+.dash-hdr-r{display:flex;align-items:center;gap:8px;}
+.dash-clock{font-size:10px;font-weight:700;color:rgba(243,241,234,.45);font-variant-numeric:tabular-nums;}
+.hdr-btn{
+  min-height:var(--min-touch);min-width:var(--min-touch);
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r-sm);padding:0 12px;color:var(--n100);
+  font-size:14px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;justify-content:center;
+}
+.hdr-btn:hover{background:rgba(255,255,255,.15);}
+
+/* ═══ HERO ═══ */
+.dash-hero{background:var(--acc);padding:24px 16px 24px;}
+[data-theme="dark"] .dash-hero{background:var(--n900);}
+.dash-hero-label{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--pri);margin-bottom:4px;}
+.dash-hero-title{font-size:26px;font-weight:900;color:var(--n100);line-height:1.1;letter-spacing:-.02em;margin-bottom:4px;}
+.dash-hero-sub{font-size:11px;color:rgba(243,241,234,.4);}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px;}
+.dash-stat{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--r-sm);padding:12px;text-align:center;
+  min-height:var(--min-touch);display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.dash-stat-num{font-size:22px;font-weight:900;color:var(--n100);line-height:1;}
+.dash-stat-label{font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,241,234,.35);margin-top:4px;}
+/* Color-coded stat numbers */
+.dash-stat.stat-live .dash-stat-num{color:var(--pri);}
+.dash-stat.stat-upcoming .dash-stat-num{color:var(--upcoming);}
+.dash-stat.stat-wrapped .dash-stat-num{color:var(--wrapped);}
+
+/* ═══ SEARCH + FILTERS — Redesigned ═══ */
+.search-bar{
+  position:sticky;top:calc(56px + env(safe-area-inset-top));z-index:90;
+  background:var(--bg);padding:16px 16px 12px;
+  border-bottom:1px solid var(--border2);
+}
+.search-wrap{position:relative;}
+.search-input{
+  width:100%;min-height:var(--min-touch);height:48px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:0 16px 0 44px;
+  font-family:'Inter',sans-serif;font-size:15px;font-weight:500;
+  color:var(--text);outline:none;transition:border .2s,box-shadow .2s;
+}
+.search-input:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(231,49,79,.1);}
+.search-input::placeholder{color:var(--text3);}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--text3);pointer-events:none;}
+.search-clear{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;border:none;
+  background:var(--acc-bg);color:var(--text2);font-size:14px;
+  cursor:pointer;display:none;align-items:center;justify-content:center;
+  font-family:'Inter',sans-serif;transition:background .2s;
+}
+.search-clear.visible{display:flex;}
+.search-clear:hover{background:var(--pri-bg2);color:var(--pri);}
+
+.filter-row{
+  display:flex;gap:8px;padding:12px 0 4px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.filter-row::-webkit-scrollbar{display:none;}
+.filter-chip{
+  min-height:var(--min-touch);padding:0 16px;border-radius:99px;
+  border:1.5px solid var(--border);background:var(--surface);
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  color:var(--text2);cursor:pointer;transition:all .2s;
+  white-space:nowrap;display:flex;align-items:center;gap:6px;
+  flex-shrink:0;-webkit-tap-highlight-color:transparent;
+}
+.filter-chip:hover{border-color:var(--pri);color:var(--pri);}
+.filter-chip:active{transform:scale(.97);}
+.filter-chip.active{background:var(--acc);border-color:var(--acc);color:var(--n100);}
+[data-theme="dark"] .filter-chip.active{background:var(--n100);border-color:var(--n100);color:var(--acc);}
+.filter-chip .chip-count{
+  font-size:10px;font-weight:800;
+  background:rgba(0,0,0,.08);border-radius:99px;
+  padding:2px 7px;min-width:20px;text-align:center;
+}
+.filter-chip.active .chip-count{background:rgba(255,255,255,.18);}
+[data-theme="dark"] .filter-chip.active .chip-count{background:rgba(0,0,0,.15);}
+
+/* Sort dropdown */
+.sort-btn{
+  min-height:var(--min-touch);padding:0 14px;border-radius:99px;
+  border:1.5px solid var(--border);background:var(--surface);
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
+  color:var(--text2);cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:5px;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.sort-btn:hover{border-color:var(--pri);color:var(--pri);}
+.sort-btn:active{transform:scale(.97);}
+
+/* ═══ DASHBOARD BODY ═══ */
+.dash-body{max-width:860px;margin:0 auto;padding:16px 16px 96px;}
+
+/* ═══ LIVE TODAY section — Redesigned with urgency ═══ */
+.live-section{
+  background:var(--live-bg);
+  border:2px solid var(--live-border);
+  border-radius:var(--r-md);padding:16px;margin-bottom:16px;
+  position:relative;overflow:hidden;
+}
+.live-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--pri);
+}
+.live-section-hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.live-dot-lg{width:10px;height:10px;background:var(--pri);border-radius:50%;animation:pulse 1.5s infinite;flex-shrink:0;box-shadow:0 0 8px rgba(231,49,79,.4);}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.85)}}
+.live-section-title{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pri);}
+.live-section-count{font-size:10px;font-weight:800;background:var(--pri);color:#fff;border-radius:99px;padding:3px 10px;margin-left:auto;}
+
+/* ═══ MONTH ACCORDION — Redesigned ═══ */
+.month-group{margin-top:16px;}
+.month-group:first-child{margin-top:0;}
+.month-hdr{
+  min-height:var(--min-touch);height:52px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:0 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:all .2s;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.month-hdr:hover{background:var(--surface2);}
+.month-hdr:active{transform:scale(.995);}
+.month-hdr:not(.collapsed){border-radius:var(--r-md) var(--r-md) 0 0;border-bottom-color:transparent;}
+.month-left{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;letter-spacing:.01em;color:var(--text);}
+.month-icon{font-size:18px;}
+.month-right{display:flex;align-items:center;gap:8px;}
+.month-badge{
+  font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 10px;border-radius:99px;
+}
+.month-badge.upcoming{background:var(--upcoming-bg);color:var(--upcoming);border:1px solid var(--upcoming-border);}
+.month-badge.wrapped{background:var(--wrapped-bg);color:var(--wrapped);border:1px solid var(--wrapped-border);}
+.month-badge.mixed{background:var(--pri-bg);color:var(--pri);border:1px solid var(--pri-border);}
+.month-count{font-size:11px;font-weight:700;color:var(--text3);}
+.month-chevron{
+  font-size:12px;color:var(--text3);transition:transform .25s ease;
+  display:inline-flex;align-items:center;width:24px;height:24px;justify-content:center;
+}
+.month-hdr.collapsed .month-chevron{transform:rotate(-90deg);}
+
+.month-body{
+  border:1px solid var(--border);border-top:none;
+  border-radius:0 0 var(--r-md) var(--r-md);
+  padding:8px;overflow:hidden;
+  display:flex;flex-direction:column;gap:8px;
+}
+.month-body.collapsed{display:none;}
+
+/* ═══ PROJECT CARDS — Redesigned for mobile ═══ */
+.p-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:16px;
+  display:flex;flex-direction:column;gap:12px;
+  cursor:pointer;transition:all .2s;
+  position:relative;min-height:var(--min-touch);
+  -webkit-tap-highlight-color:transparent;
+}
+.p-card:hover{border-color:var(--pri);box-shadow:var(--sh-md);transform:translateY(-1px);}
+.p-card:active{transform:translateY(0);box-shadow:var(--sh-sm);}
+
+/* Card top row: date + info + status */
+.p-card-top{display:flex;gap:12px;align-items:flex-start;}
+
+/* Date pill */
+.p-date{
+  display:flex;flex-direction:column;align-items:center;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--r-sm);padding:8px 12px;min-width:52px;flex-shrink:0;
+}
+.p-date-mon{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pri);}
+.p-date-day{font-size:22px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-.02em;}
+.p-date-dow{font-size:8px;font-weight:600;color:var(--text3);text-transform:uppercase;margin-top:2px;}
+.p-card.is-wrapped .p-date-mon{color:var(--wrapped);}
+.p-card.is-wrapped .p-date-day,.p-card.is-wrapped .p-date-dow{color:var(--text3);}
+.p-card.is-live .p-date-mon{color:var(--pri);}
+
+/* Card info */
+.p-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.p-client{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.p-title{font-size:15px;font-weight:800;color:var(--text);line-height:1.3;}
+.p-card.is-wrapped .p-title{color:var(--text2);}
+
+/* Status + priority */
+.p-status{
+  display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;
+}
+.s-tag{
+  font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 12px;border-radius:99px;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.s-tag.live{
+  background:var(--live-bg2);color:var(--live);
+  border:1.5px solid var(--live-border);
+  animation:tag-pulse 2s infinite;
+}
+@keyframes tag-pulse{0%,100%{box-shadow:0 0 0 0 rgba(231,49,79,.2)}50%{box-shadow:0 0 0 6px rgba(231,49,79,0)}}
+.s-tag.upcoming{background:var(--upcoming-bg2);color:var(--upcoming);border:1.5px solid var(--upcoming-border);}
+.s-tag.wrapped{background:var(--wrapped-bg2);color:var(--wrapped);border:1.5px solid var(--wrapped-border);}
+.s-tag.tbc{background:var(--acc-bg);color:var(--text3);border:1.5px solid var(--acc-border);}
+
+.s-tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.s-tag.live .s-tag-dot{background:var(--live);animation:pulse 1.5s infinite;}
+.s-tag.upcoming .s-tag-dot{background:var(--upcoming);}
+.s-tag.wrapped .s-tag-dot{background:var(--wrapped);}
+
+.p-days{font-size:10px;font-weight:600;color:var(--text3);text-align:right;}
+.p-priority{
+  font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 8px;border-radius:99px;
+}
+.p-priority.soon{background:#FFF3E0;color:#E65100;border:1px solid #FFE0B2;}
+[data-theme="dark"] .p-priority.soon{background:rgba(230,81,0,.1);color:#FFB74D;border-color:rgba(255,183,77,.15);}
+.p-priority.this-week{background:#FFF8E1;color:#F9A825;border:1px solid #FFF176;}
+[data-theme="dark"] .p-priority.this-week{background:rgba(249,168,37,.08);color:#FFD54F;border-color:rgba(255,213,79,.12);}
+
+/* Card bottom row: meta info */
+.p-card-meta{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding-top:8px;border-top:1px solid var(--border2);
+  font-size:11px;color:var(--text2);
+}
+.p-card.is-wrapped .p-card-meta{border-top-color:transparent;opacity:.6;}
+.p-meta-item{display:flex;align-items:center;gap:4px;}
+.p-meta-sep{width:3px;height:3px;background:var(--border);border-radius:50%;flex-shrink:0;}
+
+/* No results — Redesigned */
+.no-results{text-align:center;padding:56px 24px;color:var(--text3);}
+.no-results-icon{font-size:40px;margin-bottom:12px;opacity:.6;}
+.no-results-text{font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text2);}
+.no-results-sub{font-size:12px;color:var(--text3);}
+
+/* ═══ FAB — Add Shoot Button ═══ */
+
+/* ═══ CARD KEBAB MENU ═══ */
+.card-kebab{position:relative;}
+.kebab-btn{
+  width:32px;height:32px;border:none;background:transparent;
+  border-radius:var(--r-sm);cursor:pointer;
+  font-size:16px;color:var(--text3);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;
+  letter-spacing:1px;line-height:1;
+}
+.kebab-btn:hover{background:var(--surface2);color:var(--text);}
+.kebab-btn:active{transform:scale(.92);}
+.kebab-drop{
+  position:absolute;top:100%;right:0;z-index:50;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);box-shadow:var(--sh-lg);
+  min-width:120px;padding:4px;
+  opacity:0;pointer-events:none;transform:translateY(-4px);
+  transition:all .15s ease;
+}
+.kebab-drop.open{opacity:1;pointer-events:auto;transform:translateY(2px);}
+[data-theme="dark"] .kebab-drop{background:var(--n800);border-color:var(--n700);}
+.kebab-item{
+  display:flex;align-items:center;gap:8px;width:100%;
+  padding:10px 12px;border:none;background:transparent;
+  border-radius:6px;font-size:12px;font-weight:600;
+  color:var(--text);cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .1s;-webkit-tap-highlight-color:transparent;
+  text-align:left;
+}
+.kebab-item:hover{background:var(--surface2);}
+.kebab-item:active{transform:scale(.98);}
+.kebab-item.danger{color:var(--pri);}
+.kebab-item.danger:hover{background:rgba(231,49,79,.08);}
+
+/* ═══ DELETE CONFIRM MODAL ═══ */
+.confirm-overlay{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s ease;
+  padding:24px;
+}
+.confirm-overlay.open{opacity:1;pointer-events:auto;}
+.confirm-box{
+  background:var(--surface);width:100%;max-width:340px;
+  border-radius:var(--r-lg);padding:24px;
+  transform:scale(.9);transition:transform .25s ease;
+  text-align:center;box-shadow:var(--sh-lg);
+}
+.confirm-overlay.open .confirm-box{transform:scale(1);}
+[data-theme="dark"] .confirm-box{background:var(--n800);}
+.confirm-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.confirm-text{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5;}
+.confirm-btns{display:flex;gap:10px;}
+.confirm-btn{
+  flex:1;min-height:var(--min-touch);border:none;
+  border-radius:var(--r-sm);font-size:13px;font-weight:800;
+  cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.confirm-btn.cancel{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.confirm-btn.cancel:hover{border-color:var(--text2);}
+.confirm-btn.danger{background:var(--pri);color:#fff;}
+.confirm-btn.danger:hover{opacity:.9;}
+
+.fab-add{
+  position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));right:20px;
+  z-index:150;width:56px;height:56px;border-radius:50%;
+  background:var(--pri);color:#fff;border:none;
+  font-size:28px;font-weight:300;line-height:1;
+  cursor:pointer;box-shadow:0 4px 16px rgba(231,49,79,.4);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;-webkit-tap-highlight-color:transparent;
+  font-family:'Inter',sans-serif;
+}
+.fab-add:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(231,49,79,.5);}
+.fab-add:active{transform:scale(.95);}
+.fab-add.hidden{display:none;}
+
+/* ═══ ADD SHOOT MODAL ═══ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(4px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s ease;
+}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal-sheet{
+  background:var(--surface);width:100%;max-width:480px;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  padding:0 20px calc(20px + env(safe-area-inset-bottom));
+  transform:translateY(100%);transition:transform .3s ease;
+  max-height:90vh;overflow-y:auto;
+}
+.modal-overlay.open .modal-sheet{transform:translateY(0);}
+[data-theme="dark"] .modal-sheet{background:var(--n800);}
+.modal-handle{
+  width:36px;height:4px;background:var(--border);border-radius:99px;
+  margin:10px auto 16px;
+}
+.modal-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.modal-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.02em;}
+.modal-close{
+  min-width:var(--min-touch);min-height:var(--min-touch);
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text2);transition:all .15s;-webkit-tap-highlight-color:transparent;
+}
+.modal-close:hover{border-color:var(--pri);color:var(--pri);}
+.modal-field{margin-bottom:16px;}
+.modal-label{
+  display:block;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text2);margin-bottom:6px;
+}
+.modal-input{
+  width:100%;min-height:var(--min-touch);height:48px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:0 14px;
+  font-size:14px;font-weight:500;color:var(--text);
+  font-family:'Inter',sans-serif;transition:border-color .15s;
+  box-sizing:border-box;
+}
+.modal-input:focus{outline:none;border-color:var(--pri);}
+.modal-input::placeholder{color:var(--text3);}
+[data-theme="dark"] .modal-input{background:var(--n900);border-color:var(--n700);color:var(--n100);}
+.modal-row{display:flex;gap:12px;}
+.modal-row .modal-field{flex:1;}
+.modal-save{
+  width:100%;min-height:var(--min-touch);height:52px;
+  background:var(--pri);color:#fff;border:none;
+  border-radius:var(--r-sm);font-size:14px;font-weight:800;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .2s;-webkit-tap-highlight-color:transparent;
+  letter-spacing:.02em;margin-top:8px;
+}
+.modal-save:hover{background:var(--pri-hover);}
+.modal-save:active{transform:scale(.98);}
+.modal-save:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* ═══════════════════════════════════════════
+   SHOOT PAGE — Kept exactly as-is
+   ═══════════════════════════════════════════ */
+.shoot-page-topbar{
+  background:var(--pri);color:#fff;
+  padding:0 16px;padding-top:env(safe-area-inset-top);
+  height:calc(56px + env(safe-area-inset-top));
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;gap:8px;
+}
+
+/* ═══ BOTTOM ACTION BAR (Shoot Page) ═══ */
+.shoot-bottom-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:8px 16px;padding-bottom:calc(8px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 -2px 16px rgba(0,0,0,.1);
+}
+[data-theme="dark"] .shoot-bottom-bar{
+  background:var(--n800);
+  border-top-color:var(--n700);
+  box-shadow:0 -2px 16px rgba(0,0,0,.4);
+}
+.bottom-back-btn{
+  min-height:var(--min-touch);
+  background:var(--pri);border:none;
+  border-radius:var(--r-sm);padding:0 16px;color:#fff;
+  font-size:13px;font-weight:800;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .2s;
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.bottom-back-btn:hover{background:var(--pri-hover);}
+.bottom-back-btn:active{transform:scale(.97);}
+.bottom-bar-info{
+  flex:1;min-width:0;display:flex;flex-direction:column;gap:1px;
+}
+.bottom-bar-title{font-size:11px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;letter-spacing:.02em;}
+.bottom-bar-sub{font-size:9px;color:var(--text3);letter-spacing:.04em;}
+.bottom-bar-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.bottom-icon-btn{
+  min-height:var(--min-touch);min-width:var(--min-touch);
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);color:var(--text);font-size:14px;cursor:pointer;
+  transition:all .2s;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.bottom-icon-btn:hover{border-color:var(--pri);color:var(--pri);}
+.bottom-icon-btn:active{transform:scale(.95);}
+
+/* ═══ SYNC STATUS INDICATOR ═══ */
+.sync-indicator{
+  position:fixed;top:calc(env(safe-area-inset-top) + 64px);left:50%;
+  transform:translateX(-50%) translateY(-8px);
+  background:var(--acc);color:var(--n100);
+  padding:6px 16px;border-radius:99px;
+  font-size:11px;font-weight:700;letter-spacing:.04em;
+  display:flex;align-items:center;gap:6px;
+  opacity:0;transition:all .35s ease;z-index:300;
+  pointer-events:none;box-shadow:var(--sh-lg);white-space:nowrap;
+}
+.sync-indicator.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.sync-indicator.success{background:var(--wrapped);color:#fff;}
+.sync-indicator.error{background:var(--pri);color:#fff;}
+.sync-spinner{
+  width:14px;height:14px;border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .6s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sync-check{font-size:13px;flex-shrink:0;}
+
+/* ═══ LIVE PROGRESS (Dashboard Cards) ═══ */
+.live-card-progress{
+  display:flex;flex-direction:column;gap:4px;
+  padding-top:8px;border-top:1px solid var(--live-border);
+}
+.live-prog-bar{
+  height:5px;background:var(--live-bg);border-radius:99px;overflow:hidden;
+}
+.live-prog-fill{
+  height:100%;background:var(--pri);border-radius:99px;
+  transition:width .5s ease;width:0%;
+}
+.live-prog-meta{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.live-prog-label{font-size:10px;font-weight:700;color:var(--pri);}
+.live-prog-scene{font-size:9px;font-weight:600;color:var(--text2);text-align:right;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55%;}
+.shoot-page-topbar.day2-theme{background:var(--acc);}
+[data-theme="dark"] .shoot-page-topbar.day2-theme{background:var(--n900);}
+.back-btn{
+  min-height:var(--min-touch);
+  background:var(--n100);border:none;
+  border-radius:var(--r-sm);padding:0 14px;color:var(--pri);
+  font-size:12px;font-weight:800;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .2s;flex-shrink:0;
+  display:flex;align-items:center;gap:6px;
+}
+.back-btn:hover{background:#fff;transform:translateX(-2px);}
+.shoot-topbar-l{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1;overflow:hidden;}
+.shoot-topbar-title{font-size:12px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.shoot-topbar-sub{font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.05em;text-transform:uppercase;}
+.shoot-topbar-r{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.live-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:3px 9px;font-size:9px;font-weight:800;color:#fff;letter-spacing:.08em;text-transform:uppercase;}
+.live-pill.off{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.6);}
+.ldot{width:5px;height:5px;background:currentColor;border-radius:50%;animation:pulse 1.5s infinite;}
+.live-pill.off .ldot{animation:none;}
+.icon-btn{
+  min-height:var(--min-touch);min-width:var(--min-touch);
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:var(--r-sm);color:#fff;font-size:14px;cursor:pointer;
+  transition:all .2s;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;justify-content:center;
+}
+.icon-btn:hover{background:rgba(255,255,255,.22);}
+
+/* Timer bar */
+.timer-bar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:12px 16px;display:flex;align-items:center;gap:12px;
+  overflow:visible;position:sticky;top:56px;z-index:99;
+  box-shadow:var(--sh-sm);
+}
+.timer-now{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+.timer-clock{font-size:18px;font-weight:900;color:var(--pri);font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+.timer-date{font-size:8px;color:var(--text3);font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.timer-divider{width:1px;height:32px;background:var(--border);flex-shrink:0;}
+.timer-current{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
+.timer-label{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.timer-scene{font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.timer-countdown{font-size:10px;font-weight:600;color:var(--pri);font-variant-numeric:tabular-nums;}
+.timer-countdown.warning{animation:warn-pulse 1s infinite;}
+@keyframes warn-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.timer-next{display:none;}
+.timer-status-wrap{display:none;}
+
+@media(min-width:640px){
+  .timer-next{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .timer-status-wrap{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
+}
+.timer-next-label{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.timer-next-scene{font-size:10px;font-weight:600;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.timer-status-label{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.status-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:99px;font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;}
+.status-badge.on-time{background:var(--success-bg);color:var(--success);border:1px solid var(--success-border);}
+.status-badge.ahead{background:rgba(37,150,190,.1);color:#1976D2;border:1px solid rgba(37,150,190,.2);}
+[data-theme="dark"] .status-badge.ahead{color:#42A5F5;}
+.status-badge.delayed{background:var(--pri-bg2);color:var(--pri);border:1px solid var(--pri-border);animation:warn-pulse 2s infinite;}
+.status-badge.wrap-done{background:var(--success-bg);color:var(--success);border:1px solid var(--success-border);}
+.status-badge.hidden{display:none;}
+
+/* Timer progress strip — thin bar under timer bar showing day progress */
+.timer-progress-strip{
+  height:3px;background:var(--border2);position:sticky;
+  top:calc(56px + env(safe-area-inset-top) + 56px);z-index:98;
+}
+.timer-progress-fill{
+  height:100%;background:var(--pri);border-radius:0 2px 2px 0;
+  transition:width 1s ease;
+}
+
+/* Shoot hero */
+.shoot-hero{background:var(--surface);padding:16px;border-bottom:1px solid var(--border);}
+.hero-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+@media(min-width:640px){.hero-grid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr));}}
+.ib{display:flex;flex-direction:column;gap:2px;}
+.ib-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);}
+.ib-val{font-size:12px;font-weight:600;color:var(--text);line-height:1.4;}
+
+/* Shoot content */
+.shoot-wrap{max-width:860px;margin:0 auto;padding:16px 16px calc(80px + env(safe-area-inset-bottom) + 56px);}
+.sec-title{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pri);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.prog-bar{background:var(--surface2);border:1px solid var(--border);border-radius:99px;height:6px;overflow:hidden;margin-bottom:4px;}
+.prog-fill{height:100%;background:var(--pri);border-radius:99px;transition:width .5s ease;width:0%;}
+.prog-label{font-size:10px;color:var(--text3);text-align:right;margin-bottom:16px;}
+.prog-label strong{color:var(--pri);}
+.activity-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;margin-bottom:16px;}
+.activity-feed{max-height:80px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;}
+.act-item{display:flex;gap:6px;align-items:baseline;font-size:11px;}
+.act-time{font-size:9px;color:var(--text3);flex-shrink:0;font-weight:500;}
+.act-msg{color:var(--text2);line-height:1.4;}
+.act-msg em{color:var(--pri);font-style:normal;font-weight:600;}
+.act-empty{font-size:11px;color:var(--text3);font-style:italic;}
+
+/* Sessions */
+.session{margin-bottom:16px;}
+.session-hdr{background:var(--pri);color:#fff;border-radius:var(--r-md) var(--r-md) 0 0;padding:10px 16px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
+.srange{font-size:9px;font-weight:500;opacity:.7;}
+.session.day2 .session-hdr{background:var(--acc);}
+[data-theme="dark"] .session.day2 .session-hdr{background:var(--n100);color:var(--acc);}
+.day-divider{text-align:center;padding:12px 16px;border-radius:var(--r-md);margin:24px 0 16px;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;}
+.day-divider.day1{background:var(--pri);color:#fff;}
+.day-divider.day2{background:var(--acc);color:var(--n100);}
+[data-theme="dark"] .day-divider.day2{background:var(--n100);color:var(--acc);}
+
+/* Scene rows */
+.scene-row{background:var(--surface);border:1px solid var(--border);border-top:none;padding:12px;display:grid;grid-template-columns:22px 88px 1fr;gap:8px;align-items:start;position:relative;transition:all .15s;cursor:pointer;}
+.scene-row:nth-child(even of .scene-row){background:var(--bg);}
+[data-theme="dark"] .scene-row:nth-child(even of .scene-row){background:var(--surface2);}
+.scene-row:last-of-type{border-radius:0 0 var(--r-md) var(--r-md);}
+.scene-row:hover{background:var(--surface2)!important;}
+.scene-row.done{opacity:.45;}
+.scene-row.now-active{border-left:3px solid var(--pri);background:var(--pri-bg)!important;}
+.session.day2 .scene-row.now-active{border-left-color:var(--acc);}
+.chk{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.scene-row.done .chk{background:var(--pri);border-color:var(--pri);}
+.session.day2 .scene-row.done .chk{background:var(--acc);border-color:var(--acc);}
+[data-theme="dark"] .session.day2 .scene-row.done .chk{background:var(--n100);border-color:var(--n100);}
+[data-theme="dark"] .session.day2 .scene-row.done .chk svg path{stroke:var(--acc);}
+.chk svg{display:none;}.scene-row.done .chk svg{display:block;}
+.scene-row:hover .chk{border-color:var(--pri);}
+.smeta{display:flex;flex-direction:column;gap:2px;}
+.stime{font-size:10px;font-weight:700;color:var(--pri);line-height:1.3;font-variant-numeric:tabular-nums;}
+.session.day2 .stime{color:var(--acc);}
+[data-theme="dark"] .session.day2 .stime{color:var(--n300);}
+.sloc{font-size:10px;color:var(--text2);font-weight:500;}
+.scontent{display:flex;flex-direction:column;gap:3px;}
+.stitle{font-size:12px;font-weight:700;color:var(--text);line-height:1.4;padding-right:56px;transition:opacity .2s;}
+.scene-row.done .stitle{text-decoration:line-through;opacity:.5;}
+.sdesc{font-size:11px;color:var(--text2);line-height:1.5;transition:opacity .2s;}
+.scene-row.done .sdesc{opacity:.4;}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
+.tag{font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid var(--border);color:var(--text2);background:var(--surface2);}
+.checked-stamp{position:absolute;top:10px;right:10px;font-size:9px;color:var(--pri);font-weight:700;opacity:0;transition:opacity .2s;}
+.scene-row.done .checked-stamp{opacity:1;}
+
+/* Break rows */
+.break-row{border:none;padding:10px 16px;display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+.break-row .break-icon{font-size:13px;flex-shrink:0;}
+.break-row .bl{flex:1;height:1px;background:rgba(255,255,255,.15);}
+.break-row{background:var(--acc);color:var(--n100);}
+.break-row.move{background:#C49B6C;color:#1a1200;}.break-row.move .bl{background:rgba(0,0,0,.12);}
+.break-row.lunch{background:#4CAF50;color:#fff;}.break-row.lunch .bl{background:rgba(255,255,255,.2);}
+.break-row.wrap{background:var(--pri);color:#fff;}.break-row.wrap .bl{background:rgba(255,255,255,.2);}
+
+.shoot-footer{text-align:center;font-size:9px;color:var(--text3);margin-top:8px;letter-spacing:.05em;text-transform:uppercase;}
+
+/* Toast */
+#toast{position:fixed;bottom:calc(22px + 60px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(16px);background:var(--pri);color:#fff;padding:10px 20px;border-radius:99px;font-size:12px;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;white-space:nowrap;box-shadow:var(--sh-lg);}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- ═══ DASHBOARD PAGE ═══ -->
+<div class="page active" id="page-dashboard">
+  <div class="dash-hdr">
+    <div class="dash-logo">
+      <img src="data:image/png;base64,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" alt="Oblique"/>
+      <div class="dash-logo-text">
+        <div class="dash-logo-name">Oblique</div>
+        <div class="dash-logo-sub">Production Dashboard</div>
+      </div>
+    </div>
+    <div class="dash-hdr-r">
+      <div class="dash-clock" id="dash-clock">--:--</div>
+      <button class="hdr-btn" onclick="toggleDark()" id="dash-dark-btn">🌙</button>
+    </div>
+  </div>
+
+  <div class="dash-hero">
+    <div class="dash-hero-label">Oblique · Internal Production</div>
+    <div class="dash-hero-title">Production Dashboard</div>
+    <div class="dash-hero-sub">All active and scheduled productions</div>
+    <div class="dash-stats">
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-total">7</div><div class="dash-stat-label">Total</div></div>
+      <div class="dash-stat stat-upcoming"><div class="dash-stat-num" id="stat-upcoming">0</div><div class="dash-stat-label">Upcoming</div></div>
+      <div class="dash-stat stat-live"><div class="dash-stat-num" id="stat-live">0</div><div class="dash-stat-label">Live</div></div>
+      <div class="dash-stat stat-wrapped"><div class="dash-stat-num" id="stat-wrapped">0</div><div class="dash-stat-label">Wrapped</div></div>
+    </div>
+  </div>
+
+  <!-- Search + Filters — Redesigned -->
+  <div class="search-bar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="search-input" type="text" placeholder="Search project, client, location..." oninput="filterDashboard()"/>
+      <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+    </div>
+    <div class="filter-row">
+      <button class="filter-chip active" data-filter="all" onclick="setFilter('all',this)">All <span class="chip-count" id="chip-all">7</span></button>
+      <button class="filter-chip" data-filter="upcoming" onclick="setFilter('upcoming',this)">📅 Upcoming <span class="chip-count" id="chip-upcoming">0</span></button>
+      <button class="filter-chip" data-filter="live" onclick="setFilter('live',this)">🔴 Live <span class="chip-count" id="chip-live">0</span></button>
+      <button class="filter-chip" data-filter="wrapped" onclick="setFilter('wrapped',this)">✅ Wrapped <span class="chip-count" id="chip-wrapped">0</span></button>
+      <button class="sort-btn" id="sort-btn" onclick="cycleSort()">↑ Earliest first</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+    <div id="live-section"></div>
+    <div id="monthly-groups"></div>
+    <div id="no-results" class="no-results" style="display:none;">
+      <div class="no-results-icon">🔍</div>
+      <div class="no-results-text">No shoots match your search</div>
+      <div class="no-results-sub">Try a different keyword or clear your filters</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FAB — Add Shoot ═══ -->
+<button class="fab-add" id="fab-add" onclick="openAddShoot()" title="Add shoot">+</button>
+
+<!-- ═══ ADD SHOOT MODAL ═══ -->
+<div class="modal-overlay" id="add-shoot-modal" onclick="closeAddShootOverlay(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-hdr">
+      <div class="modal-title">Add Shoot</div>
+      <button class="modal-close" onclick="closeAddShoot()">✕</button>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Client Name</label>
+      <input class="modal-input" id="add-client" type="text" placeholder="e.g. Sunway Houses"/>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Shoot Title</label>
+      <input class="modal-input" id="add-title" type="text" placeholder="e.g. Property Photoshoot"/>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label class="modal-label">Start Date</label>
+        <input class="modal-input" id="add-date-start" type="date"/>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">End Date <span style="font-weight:400;opacity:.6;">(optional)</span></label>
+        <input class="modal-input" id="add-date-end" type="date"/>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Location <span style="font-weight:400;opacity:.6;">(optional)</span></label>
+      <input class="modal-input" id="add-location" type="text" placeholder="e.g. Studio, Bangsar"/>
+    </div>
+    <button class="modal-save" id="add-save" onclick="saveNewShoot()">Add to Dashboard</button>
+  </div>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<div class="confirm-overlay" id="delete-confirm" onclick="closeDeleteConfirm()">
+  <div class="confirm-box" onclick="event.stopPropagation()">
+    <div class="confirm-title">Delete Shoot</div>
+    <div class="confirm-text" id="delete-confirm-text">Are you sure you want to remove this shoot from the dashboard?</div>
+    <div class="confirm-btns">
+      <button class="confirm-btn cancel" onclick="closeDeleteConfirm()">Cancel</button>
+      <button class="confirm-btn danger" id="delete-confirm-btn" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SHOOT PAGE ═══ -->
+<div class="page" id="page-shoot">
+  <div id="shoot-content"></div>
+</div>
+
+<div id="toast"></div>
+<div class="sync-indicator" id="sync-indicator">
+  <div class="sync-spinner"></div>
+  <span id="sync-text">Syncing…</span>
+</div>
+
+<script>
+const SHOOTS = [
+  {
+    id: 'sunway-houses-may2026',
+    actId: 'sunway-houses-may2026-activity',
+    client: 'Sunway Houses',
+    title: 'Property Photoshoot',
+    dates: ['2026-05-25','2026-05-26'],
+    datesLabel: '25–26 May 2026 · Mon–Tue',
+    location: 'Sunway Houses, Subang',
+    crewCall: '8:00 AM',
+    talentCall: '4:00 PM (Day 1)',
+    wrapEst: '5:45 PM (Day 2)',
+    days: 2,
+  },
+  {
+    id: 'parkcity-chiro-may2026',
+    actId: 'parkcity-chiro-may2026-activity',
+    client: 'Parkcity Chiro',
+    title: 'Brand Videoshoot',
+    dates: ['2026-05-14'],
+    datesLabel: '14 May 2026 · Thursday',
+    location: 'Parkcity Chiro, KL',
+    crewCall: '10:00 AM',
+    talentCall: '10:00 AM',
+    wrapEst: '4:15 PM',
+    days: 1,
+  },
+  {
+    id: 'curo-may2026',
+    actId: 'curo-may2026-activity',
+    client: 'Curo',
+    title: 'Brand Videoshoot',
+    dates: ['2026-05-13'],
+    datesLabel: '13 May 2026 · Wednesday',
+    location: 'Klinik Medilove Puchong Jaya',
+    crewCall: '9:30 AM',
+    talentCall: '10:30 AM',
+    wrapEst: '5:00 PM',
+    days: 1,
+  },
+  {
+    id: 'sunway-campus-recce-may2026',
+    actId: 'sunway-campus-recce-may2026-activity',
+    client: 'Sunway University',
+    title: 'Campus Recce',
+    dates: ['2026-05-28'],
+    datesLabel: '28 May 2026 · Thursday',
+    location: 'Sunway University, Bandar Sunway',
+    crewCall: '11:00 AM',
+    talentCall: '—',
+    wrapEst: '6:10 PM',
+    days: 1,
+  },
+  {
+    id: 'petico-day2-may2026',
+    actId: 'petico-day2-may2026-activity',
+    client: 'Petico',
+    title: 'Brand Campaign Day 2',
+    dates: ['2026-05-21'],
+    datesLabel: '21 May 2026 · Thursday',
+    location: 'Talent Home, KL',
+    crewCall: '10:00 AM',
+    talentCall: '10:00 AM',
+    wrapEst: '4:30 PM',
+    days: 1,
+  },
+  {
+    id: 'sunway-waterfront-may2026',
+    actId: 'sunway-waterfront-may2026-activity',
+    client: 'Sunway Waterfront',
+    title: 'Residences Photoshoot',
+    dates: ['2026-05-09','2026-05-11'],
+    datesLabel: '9 + 11 May 2026 · Fri + Sun',
+    location: 'Sunway Waterfront Residences',
+    crewCall: '8:00 AM',
+    talentCall: '8:30 AM',
+    wrapEst: '7:30 PM (Day 2)',
+    days: 2,
+  },
+  {
+    id: 'getha-frwd-jun2026',
+    actId: 'getha-frwd-jun2026-activity',
+    client: 'Getha x FRWD',
+    title: 'Brand Campaign',
+    dates: ['2026-06-15'],
+    datesLabel: '15 Jun 2026 · Monday',
+    location: 'TBC',
+    crewCall: 'TBC',
+    talentCall: 'TBC',
+    wrapEst: 'TBC',
+    days: 1,
+  },
+  {
+    id: 'getha-dk-jun2026',
+    actId: 'getha-dk-jun2026-activity',
+    client: 'Getha',
+    title: 'Dream Kingdom — Social Content Video',
+    dates: ['2026-06-09'],
+    datesLabel: '9 Jun 2026 · Tuesday',
+    location: 'Getha Showroom',
+    crewCall: '10:00 AM',
+    talentCall: '—',
+    wrapEst: '3:30 PM',
+    days: 1,
+  },
+];
+
+// ═══ DARK MODE ═══
+let dark = localStorage.getItem('oblique-dark-mode') === 'true';
+applyDark();
+function applyDark(){
+  document.documentElement.setAttribute('data-theme', dark?'dark':'');
+  const b1 = document.getElementById('dash-dark-btn');
+  const b2 = document.getElementById('shoot-dark-btn');
+  if(b1) b1.textContent = dark ? '☀️' : '🌙';
+  if(b2) b2.textContent = dark ? '☀️' : '🌙';
+}
+function toggleDark(){
+  dark = !dark;
+  localStorage.setItem('oblique-dark-mode', dark ? 'true' : 'false');
+  applyDark();
+}
+
+// ═══ DATE HELPERS ═══
+function parseDate(s){ const[y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+function today(){ const n=new Date(); n.setHours(0,0,0,0); return n; }
+function isSameDay(d1,d2){ return d1.getFullYear()===d2.getFullYear()&&d1.getMonth()===d2.getMonth()&&d1.getDate()===d2.getDate(); }
+function getShootStatus(shoot){
+  const td=today();
+  const shootDates=shoot.dates.map(parseDate);
+  if(shootDates.some(d=>isSameDay(d,td))) return 'live';
+  if(shootDates[0]>td) return 'upcoming';
+  return 'wrapped';
+}
+function daysUntil(dateStr){
+  const d=parseDate(dateStr);d.setHours(0,0,0,0);
+  return Math.ceil((d-today())/(1000*60*60*24));
+}
+
+// ═══ FILTER + SEARCH STATE ═══
+let currentFilter = 'all';
+let currentSort = 'date-asc';
+const sortModes = ['date-asc','date-desc','recent'];
+const sortLabels = {'date-asc':'↑ Earliest first','date-desc':'↓ Latest first','recent':'⏱ Recent activity'};
+const sortIcons = {'date-asc':'↑','date-desc':'↓','recent':'⏱'};
+
+function setFilter(filter, el){
+  currentFilter = filter;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  filterDashboard();
+}
+
+function cycleSort(){
+  const idx = (sortModes.indexOf(currentSort)+1) % sortModes.length;
+  currentSort = sortModes[idx];
+  const btn = document.getElementById('sort-btn');
+  btn.innerHTML = sortLabels[currentSort];
+  filterDashboard();
+}
+
+function filterDashboard(){
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  renderDashboard(q, currentFilter, currentSort);
+}
+
+function clearSearch(){
+  const inp = document.getElementById('search-input');
+  inp.value = '';
+  document.getElementById('search-clear').style.display='none';
+  filterDashboard();
+}
+
+// ═══ DASHBOARD CLOCK ═══
+function updateDashClock(){
+  const now=new Date();const h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
+  const pad=n=>String(n).padStart(2,'0');
+  const el=document.getElementById('dash-clock');
+  if(el) el.textContent=pad(h>12?h-12:h||12)+':'+pad(m)+' '+(h>=12?'PM':'AM');
+}
+setInterval(updateDashClock,1000);updateDashClock();
+
+// ═══ RENDER DASHBOARD ═══
+function renderDashboard(query='', filter='all', sort='date-asc'){
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Search clear button visibility
+  const clearBtn = document.getElementById('search-clear');
+  if(clearBtn) clearBtn.style.display = query ? 'flex' : 'none';
+
+  // Filter shoots
+  let filtered = SHOOTS.filter(s=>{
+    const status = getShootStatus(s);
+    if(filter!=='all' && status!==filter) return false;
+    if(query){
+      const hay = (s.client+' '+s.title+' '+s.location+' '+s.datesLabel).toLowerCase();
+      if(!hay.includes(query)) return false;
+    }
+    return true;
+  });
+
+  // Stats (from ALL shoots, not filtered)
+  const allLive = SHOOTS.filter(s=>getShootStatus(s)==='live');
+  const allUpcoming = SHOOTS.filter(s=>getShootStatus(s)==='upcoming');
+  const allWrapped = SHOOTS.filter(s=>getShootStatus(s)==='wrapped');
+  document.getElementById('stat-total').textContent = SHOOTS.length;
+  document.getElementById('stat-live').textContent = allLive.length;
+  document.getElementById('stat-upcoming').textContent = allUpcoming.length;
+  document.getElementById('stat-wrapped').textContent = allWrapped.length;
+  document.getElementById('chip-all').textContent = SHOOTS.length;
+  document.getElementById('chip-live').textContent = allLive.length;
+  document.getElementById('chip-upcoming').textContent = allUpcoming.length;
+  document.getElementById('chip-wrapped').textContent = allWrapped.length;
+
+  // No results
+  const noRes = document.getElementById('no-results');
+  if(!filtered.length){ noRes.style.display='block'; document.getElementById('live-section').innerHTML=''; document.getElementById('monthly-groups').innerHTML=''; return; }
+  noRes.style.display='none';
+
+  // Separate live
+  const live = filtered.filter(s=>getShootStatus(s)==='live');
+  const rest = filtered.filter(s=>getShootStatus(s)!=='live');
+
+  // Live section — with progress indicators
+  const liveEl = document.getElementById('live-section');
+  if(live.length){
+    liveEl.innerHTML = `<div class="live-section"><div class="live-section-hdr"><div class="live-dot-lg"></div><div class="live-section-title">Live Today</div><div class="live-section-count">${live.length}</div></div><div style="display:flex;flex-direction:column;gap:8px;">${live.map(s=>buildLiveCard(s)).join('')}</div></div>`;
+    // Fetch live progress from Firebase
+    live.forEach(s => fetchLiveProgress(s));
+  } else { liveEl.innerHTML=''; }
+
+  // Group by month
+  const monthGroups={};
+  for(const s of rest){
+    const d=parseDate(s.dates[0]);
+    const key=d.getFullYear()+'-'+String(d.getMonth()).padStart(2,'0');
+    if(!monthGroups[key]) monthGroups[key]={year:d.getFullYear(),month:d.getMonth(),shoots:[]};
+    monthGroups[key].shoots.push(s);
+  }
+
+  // Sort months based on mode
+  const nowKey=today().getFullYear()+'-'+String(today().getMonth()).padStart(2,'0');
+  let monthKeys;
+  if(sort==='date-desc'){
+    // Newest month first
+    const allKeys=Object.keys(monthGroups).sort().reverse();
+    monthKeys=allKeys;
+  } else if(sort==='recent'){
+    // Closest to today first
+    const td=today();
+    const allKeys=Object.keys(monthGroups).sort((a,b)=>{
+      const [ay,am]=a.split('-').map(Number); const [by,bm]=b.split('-').map(Number);
+      const da=Math.abs(new Date(ay,am,1)-td); const db=Math.abs(new Date(by,bm,1)-td);
+      return da-db;
+    });
+    monthKeys=allKeys;
+  } else {
+    // Default: upcoming months first, then past months
+    const upKeys=Object.keys(monthGroups).filter(k=>k>=nowKey).sort();
+    const wrKeys=Object.keys(monthGroups).filter(k=>k<nowKey).sort().reverse();
+    monthKeys=[...upKeys,...wrKeys];
+  }
+
+  const collapseState=JSON.parse(localStorage.getItem('oblique-month-collapse')||'{}');
+
+  let html='';
+  for(const key of monthKeys){
+    const mg=monthGroups[key];
+    const monthLabel=MONTHS[mg.month]+' '+mg.year;
+    const isPast=key<nowKey;
+
+    // Sort within month
+    const mUp=mg.shoots.filter(s=>getShootStatus(s)==='upcoming').sort((a,b)=>parseDate(a.dates[0])-parseDate(b.dates[0]));
+    const mWr=mg.shoots.filter(s=>getShootStatus(s)==='wrapped').sort((a,b)=>parseDate(b.dates[0])-parseDate(a.dates[0]));
+
+    // Sort within month — apply sort mode
+    let sorted;
+    if(sort==='date-desc'){
+      // Reverse: wrapped first, upcoming last, both by date descending
+      const allDesc = [...mg.shoots].sort((a,b)=>parseDate(b.dates[0])-parseDate(a.dates[0]));
+      sorted = allDesc;
+    } else if(sort==='recent'){
+      // Recent activity: nearest to today first (both past and future)
+      const td = today();
+      sorted = [...mg.shoots].sort((a,b)=>{
+        const da=Math.abs(parseDate(a.dates[0])-td);
+        const db=Math.abs(parseDate(b.dates[0])-td);
+        return da-db;
+      });
+    } else {
+      // Default: upcoming first (asc), then wrapped
+      sorted=[...mUp,...mWr];
+    }
+
+    const hasUserPref=collapseState.hasOwnProperty(key);
+    const isCollapsed=hasUserPref?collapseState[key]:isPast;
+
+    const icon=isPast?'✅':'📅';
+    let badgeClass='upcoming';
+    if(mUp.length===0) badgeClass='wrapped';
+    else if(mWr.length>0) badgeClass='mixed';
+    const badgeText=mUp.length>0?(mUp.length+' upcoming'):'All wrapped';
+
+    html+=`<div class="month-hdr${isCollapsed?' collapsed':''}" onclick="toggleMonth('${key}',this)">
+      <div class="month-left"><span class="month-icon">${icon}</span>${monthLabel}</div>
+      <div class="month-right">
+        <span class="month-badge ${badgeClass}">${badgeText}</span>
+        <span class="month-count">${sorted.length}</span>
+        <span class="month-chevron">▾</span>
+      </div>
+    </div>`;
+    html+=`<div class="month-body${isCollapsed?' collapsed':''}">`;
+    for(const s of sorted) html+=buildCard(s);
+    html+='</div>';
+  }
+
+  document.getElementById('monthly-groups').innerHTML=html;
+}
+
+function toggleMonth(key,hdr){
+  const body=hdr.nextElementSibling;
+  const collapsed=hdr.classList.toggle('collapsed');
+  body.classList.toggle('collapsed');
+  const state=JSON.parse(localStorage.getItem('oblique-month-collapse')||'{}');
+  state[key]=collapsed;
+  localStorage.setItem('oblique-month-collapse',JSON.stringify(state));
+}
+
+// ═══ BUILD CARD ═══
+function buildCard(shoot){
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const d=parseDate(shoot.dates[0]);
+  const status=getShootStatus(shoot);
+  const du=daysUntil(shoot.dates[0]);
+
+  let daysLabel='';
+  if(status==='upcoming'){
+    if(du===0) daysLabel='Today';
+    else if(du===1) daysLabel='Tomorrow';
+    else if(du<=7) daysLabel='In '+du+' days';
+    else daysLabel='In '+du+' days';
+  } else if(status==='wrapped'){
+    const ago=Math.abs(du);
+    daysLabel=ago===0?'Today':ago===1?'Yesterday':ago+' days ago';
+  }
+
+  let tagClass=status;
+  let tagIcon='';
+  let tagText='';
+  if(status==='live'){ tagText='Live'; tagIcon=''; }
+  else if(status==='upcoming'){ tagText='Upcoming'; tagIcon=''; }
+  else { tagText='Wrapped'; tagIcon=''; }
+  if(shoot.crewCall==='TBC'){ tagText='TBC'; tagClass='tbc'; }
+
+  let priority='';
+  if(status==='upcoming'){
+    if(du<=2) priority='<div class="p-priority soon">⚡ Soon</div>';
+    else if(du<=7) priority='<div class="p-priority this-week">This week</div>';
+  }
+
+  return `<div class="p-card ${status==='live'?'is-live':''} ${status==='wrapped'?'is-wrapped':''}" onclick="openShoot('${shoot.id}')">
+    <div class="p-card-top">
+      <div class="p-date ${status}">
+        <div class="p-date-mon">${MONTHS[d.getMonth()]}</div>
+        <div class="p-date-day">${d.getDate()}</div>
+        <div class="p-date-dow">${DAYS[d.getDay()]}</div>
+      </div>
+      <div class="p-info">
+        <div class="p-client">${shoot.client}</div>
+        <div class="p-title">${shoot.title}</div>
+      </div>
+      <div class="p-status">
+        <div class="s-tag ${tagClass}"><span class="s-tag-dot"></span>${tagText}</div>
+        ${priority}
+        ${daysLabel?`<div class="p-days">${daysLabel}</div>`:''}
+      </div>
+      <div class="card-kebab" onclick="event.stopPropagation()">
+        <button class="kebab-btn" onclick="toggleKebab(this)" aria-label="Actions">&#8942;</button>
+        <div class="kebab-drop">
+          <button class="kebab-item" onclick="closeAllKebabs();openEditShoot('${shoot.id}')">Edit</button>
+          <button class="kebab-item danger" onclick="closeAllKebabs();openDeleteConfirm('${shoot.id}')">Delete</button>
+        </div>
+      </div>
+    </div>
+    <div class="p-card-meta">
+      <span>${shoot.location||'TBC'}</span>
+      ${shoot.days>1?`<span class="p-meta-sep"></span><span>${shoot.days} days</span>`:''}
+    </div>
+  </div>`;
+}
+// ═══ BUILD LIVE CARD (with progress) ═══
+function buildLiveCard(shoot){
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const d=parseDate(shoot.dates[0]);
+
+  // Calculate time-based progress from crewCall to wrapEst
+  let timePct = 0;
+  let timeLabel = 'Starting…';
+  const now = new Date();
+  const crewTime = parseTimeToday(shoot.crewCall);
+  const wrapTime = parseTimeToday(shoot.wrapEst);
+  if(crewTime && wrapTime){
+    const total = wrapTime - crewTime;
+    const elapsed = now - crewTime;
+    if(elapsed < 0){ timePct = 0; timeLabel = 'Starts at ' + shoot.crewCall; }
+    else if(elapsed >= total){ timePct = 100; timeLabel = '100% · Wrapping up'; }
+    else { timePct = Math.round(elapsed/total*100); timeLabel = timePct + '% through day'; }
+  }
+
+  // Calculate time remaining
+  let timeRemaining = '';
+  if(wrapTime){
+    const minsLeft = Math.round((wrapTime - now) / 60000);
+    if(minsLeft > 0 && minsLeft < 600){
+      const hrs = Math.floor(minsLeft / 60);
+      const mins = minsLeft % 60;
+      timeRemaining = hrs > 0 ? hrs+'h '+mins+'m left' : mins+'m left';
+    } else if(minsLeft <= 0){
+      timeRemaining = 'Past wrap time';
+    }
+  }
+
+  return `<div class="p-card is-live" onclick="openShoot('${shoot.id}')">
+    <div class="p-card-top">
+      <div class="p-date live">
+        <div class="p-date-mon">${MONTHS[d.getMonth()]}</div>
+        <div class="p-date-day">${d.getDate()}</div>
+        <div class="p-date-dow">${DAYS[d.getDay()]}</div>
+      </div>
+      <div class="p-info">
+        <div class="p-client">${shoot.client}</div>
+        <div class="p-title">${shoot.title}</div>
+      </div>
+      <div class="p-status">
+        <div class="s-tag live"><span class="s-tag-dot"></span>Live</div>
+      </div>
+    </div>
+    <div class="live-card-progress">
+      <div class="live-prog-bar"><div class="live-prog-fill" id="live-prog-${shoot.id}" style="width:${timePct}%"></div></div>
+      <div class="live-prog-meta">
+        <span class="live-prog-label" id="live-label-${shoot.id}">${timeLabel}</span>
+        <span class="live-prog-scene" id="live-scene-${shoot.id}">
+          ${timeRemaining ? timeRemaining : 'Loading…'}
+        </span>
+      </div>
+      <div class="live-prog-meta" style="margin-top:2px;">
+        <span class="live-prog-scenes-count" id="live-done-${shoot.id}" style="font-size:10px;font-weight:600;color:var(--text2);">Fetching progress…</span>
+      </div>
+    </div>
+    <div class="p-card-meta">
+      <span>📍 ${shoot.location}</span>
+      ${shoot.days>1?`<span class="p-meta-sep"></span><span>Day ${getCurrentDay(shoot)} of ${shoot.days}</span>`:''}
+    </div>
+  </div>`;
+}
+
+function getCurrentDay(shoot){
+  const td = today();
+  for(let i=0;i<shoot.dates.length;i++){
+    if(isSameDay(parseDate(shoot.dates[i]), td)) return i+1;
+  }
+  return 1;
+}
+
+function parseTimeToday(str){
+  if(!str || str==='TBC' || str==='—') return null;
+  // Extract first time from strings like "8:00 AM" or "4:15 PM (Day 2)"
+  const match = str.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if(!match) return null;
+  let h = parseInt(match[1]); const m = parseInt(match[2]); const ap = match[3].toUpperCase();
+  if(ap==='PM' && h<12) h+=12; if(ap==='AM' && h===12) h=0;
+  const d = new Date(); d.setHours(h,m,0,0);
+  return d;
+}
+
+function fetchLiveProgress(shoot){
+  if(!window._fbGet) {
+    // No Firebase — show fallback
+    const el = document.getElementById('live-done-'+shoot.id);
+    if(el) el.textContent = 'Offline — open to view schedule';
+    return;
+  }
+  window._fbGet(shoot.id).then(snap=>{
+    const data = snap.val();
+    updateLiveSceneCount(shoot.id, data);
+  }).catch(()=>{
+    const el = document.getElementById('live-done-'+shoot.id);
+    if(el) el.textContent = 'Could not load progress';
+  });
+
+  // Also listen for live updates
+  if(window._fbListen){
+    window._fbListen(shoot.id, data=>{
+      updateLiveSceneCount(shoot.id, data);
+    });
+  }
+}
+
+function updateLiveSceneCount(shootId, data){
+  const el = document.getElementById('live-done-'+shootId);
+  if(!el) return;
+  if(!data || typeof data !== 'object'){
+    el.textContent = '0 scenes completed';
+    return;
+  }
+  const doneCount = Object.values(data).filter(v => v && v.done).length;
+  const totalScenes = Object.keys(data).length;
+  el.textContent = doneCount + ' of ' + totalScenes + ' scenes completed';
+}
+
+// ═══ NAVIGATION ═══
+function openShoot(shootId){
+  const shoot=SHOOTS.find(s=>s.id===shootId);
+  if(!shoot) return;
+  if(shoot.userAdded){
+    openEditShoot(shootId);
+    return;
+  }
+  buildShootPage(shoot);
+  document.getElementById('page-dashboard').classList.remove('active');
+  document.getElementById('page-shoot').classList.add('active');
+  document.getElementById('fab-add').classList.add('hidden');
+  window.scrollTo(0,0);
+}
+
+function backToDashboard(){
+  if(window._currentListener) window._currentListener();
+  if(window._currentActListener) window._currentActListener();
+  clearAllTimers();
+  document.getElementById('page-shoot').classList.remove('active');
+  document.getElementById('page-dashboard').classList.add('active');
+  document.getElementById('fab-add').classList.remove('hidden');
+  window.scrollTo(0,0);
+  applyDark();
+  renderDashboard();
+}
+
+function buildShootPage(shoot){
+  document.getElementById('shoot-content').innerHTML=getShootHTML(shoot);
+  applyDark();
+  setStickyOffset();
+  window.addEventListener('resize',setStickyOffset);
+  initShootPage(shoot);
+}
+
+function setStickyOffset(){
+  requestAnimationFrame(()=>{
+    const topbar=document.querySelector('#page-shoot .shoot-page-topbar');
+    const timerBar=document.querySelector('#page-shoot .timer-bar');
+    if(topbar&&timerBar) timerBar.style.top=topbar.getBoundingClientRect().height+'px';
+  });
+}
+window.addEventListener('scroll',()=>{
+  const topbar=document.querySelector('#page-shoot .shoot-page-topbar');
+  const timerBar=document.querySelector('#page-shoot .timer-bar');
+  if(topbar&&timerBar){ const h=topbar.getBoundingClientRect().height; if(timerBar.style.top!==h+'px') timerBar.style.top=h+'px'; }
+},{passive:true});
+
+// ═══ SHOOT PAGE TEMPLATES ═══
+function getShootHTML(shoot){
+  if(shoot.id==='sunway-houses-may2026') return getSunwayHTML(shoot);
+  if(shoot.id==='parkcity-chiro-may2026') return getParkcityHTML(shoot);
+  if(shoot.id==='curo-may2026') return getCuroHTML(shoot);
+  if(shoot.id==='sunway-campus-recce-may2026') return getRecceHTML(shoot);
+  if(shoot.id==='petico-day2-may2026') return getPeticoHTML(shoot);
+  if(shoot.id==='sunway-waterfront-may2026') return getWaterfrontHTML(shoot);
+  if(shoot.id==='getha-frwd-jun2026') return getPlaceholderHTML(shoot);
+  if(shoot.id==='getha-dk-jun2026') return getGethaDKHTML(shoot);
+  return '<p style="padding:40px;text-align:center;">Shoot not found.</p>';
+}
+
+function shootTopbar(shoot, extraClass=''){
+  return `
+  <div class="shoot-page-topbar ${extraClass}">
+    <div class="shoot-topbar-l">
+      <div class="shoot-topbar-title">${shoot.client} — ${shoot.title}</div>
+      <div class="shoot-topbar-sub">${shoot.datesLabel} · Oblique</div>
+    </div>
+    <div class="shoot-topbar-r">
+      <div class="live-pill" id="live-pill"><div class="ldot"></div><span>LIVE</span></div>
+    </div>
+  </div>
+  <div class="shoot-bottom-bar" id="shoot-bottom-bar">
+    <button class="bottom-back-btn" onclick="backToDashboard()">← Back</button>
+    <div class="bottom-bar-info">
+      <div class="bottom-bar-title">${shoot.client}</div>
+      <div class="bottom-bar-sub">${shoot.title}</div>
+    </div>
+    <div class="bottom-bar-actions">
+      <button class="bottom-icon-btn" onclick="toggleDark()" id="shoot-dark-btn">🌙</button>
+    </div>
+  </div>`;
+}
+
+function timerBar(){
+  return `
+  <div class="timer-bar" id="timer-bar">
+    <div class="timer-now">
+      <div class="timer-clock" id="timer-clock">--:--</div>
+      <div class="timer-date" id="timer-date"></div>
+    </div>
+    <div class="timer-divider"></div>
+    <div class="timer-current">
+      <div class="timer-label" id="timer-label">Shoot Status</div>
+      <div class="timer-scene" id="timer-scene">—</div>
+      <div class="timer-countdown" id="timer-countdown">—</div>
+    </div>
+    <div class="timer-divider"></div>
+    <div class="timer-next">
+      <div class="timer-next-label" id="timer-next-label">Location</div>
+      <div class="timer-next-scene" id="timer-next-scene">—</div>
+    </div>
+    <div class="timer-divider"></div>
+    <div class="timer-status-wrap">
+      <div class="timer-status-label">Status</div>
+      <div class="status-badge hidden" id="status-badge">—</div>
+    </div>
+  </div>
+  <div class="timer-progress-strip" id="timer-progress-strip">
+    <div class="timer-progress-fill" id="timer-progress-fill" style="width:0%"></div>
+  </div>`;
+}
+
+function shootHero(shoot){
+  return `
+  <div class="shoot-hero">
+    <div class="hero-grid">
+      <div class="ib"><div class="ib-label">Project</div><div class="ib-val">${shoot.client}</div></div>
+      <div class="ib"><div class="ib-label">Shoot Date${shoot.days>1?'s':''}</div><div class="ib-val">${shoot.datesLabel}</div></div>
+      <div class="ib"><div class="ib-label">Crew Call</div><div class="ib-val">${shoot.crewCall}</div></div>
+      <div class="ib"><div class="ib-label">Talent Call</div><div class="ib-val">${shoot.talentCall}</div></div>
+      <div class="ib"><div class="ib-label">Wrap Est.</div><div class="ib-val">${shoot.wrapEst}</div></div>
+    </div>
+  </div>`;
+}
+
+function progressAndActivity(){
+  return `
+  <div class="sec-title">Shoot Progress</div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="prog-label"><strong id="prog-done">0</strong> of <strong id="prog-total">0</strong> completed</div>
+  <div class="sec-title">Live Activity</div>
+  <div class="activity-box"><div class="activity-feed" id="activity-feed"><div class="act-empty">No activity yet — waiting for shoot to begin.</div></div></div>`;
+}
+
+function sceneRow(id, start, end, next, time, loc, title, desc, tags, day2=false){
+  const tagHtml = tags.map(t=>`<span class="tag">${t}</span>`).join('');
+  const d2 = day2 ? ' data-day="2"' : '';
+  return `
+  <div class="scene-row" data-id="${id}" data-start="${start}" data-end="${end}" data-next="${next}"${d2} onclick="handleCheck(this)">
+    <div class="chk"><svg width="11" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4.5l3 3L11 1" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="smeta"><div class="stime">${time}</div><div class="sloc">${loc}</div></div>
+    <div class="scontent">
+      <div class="stitle">${title}</div>
+      ${desc?`<div class="sdesc">${desc}</div>`:''}
+      ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
+    </div>
+    <div class="checked-stamp"></div>
+  </div>`;
+}
+
+function breakRow(type, icon, text){
+  const cls = type ? ` ${type}` : '';
+  return `<div class="break-row${cls}"><span class="break-icon">${icon}</span><span>${text}</span><div class="bl"></div></div>`;
+}
+
+function sessionOpen(title, range, day2=false){
+  return `<div class="session${day2?' day2':''}"><div class="session-hdr">${title} <span class="srange">${range}</span>`;
+}
+function sessionClose(){ return `</div>`; }
+
+// ═══════════════════════════════════════════════════
+// SUNWAY HOUSES HTML
+// ═══════════════════════════════════════════════════
+function getSunwayHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Block 1 — Lagoon View · Facilities <span class="srange">8:00 AM – 10:30 AM</span></div>
+      ${breakRow('','📋','8:00–8:30 AM · Crew Meet Up + Briefing (Lagoon View Lobby)')}
+      ${sceneRow('s01','08:30','08:45','Gym','8:30–8:45 AM','Pool','Pool — Wide Shot','Wide establishing shot of the Lagoon View pool area.',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s02','08:45','09:00','Tennis Court','8:45–9:00 AM','Gym','Gym — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s03','09:00','09:15','Squash Court','9:00–9:15 AM','Tennis Court','Tennis Court — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
+      ${sceneRow('s04','09:15','09:30','Table Tennis Room','9:15–9:30 AM','Squash Court','Squash Court — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
+      ${sceneRow('s05','09:30','09:45','Cafeteria','9:30–9:45 AM','Table Tennis Room','Table Tennis Room — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
+      ${sceneRow('s06','09:45','10:00','Laundry Room','9:45–10:00 AM','Cafeteria','Cafeteria — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s07','10:00','10:15','Convenient Store','10:00–10:15 AM','Laundry Room','Laundry Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s08','10:15','10:30','Move to Rooms','10:15–10:30 AM','Convenient Store','Convenient Store — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${breakRow('move','🚶','10:30–10:45 AM · Move to Rooms')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 2 — Lagoon View · Rooms <span class="srange">10:45 AM – 12:15 PM</span></div>
+      ${sceneRow('s09','10:45','11:00','Twin Sharing Room','10:45–11:00 AM','Triple Sharing Room','Triple Sharing Room — Wide Shot','White clean plain sheets required.',['📸 Wide','⏱ 15 min','🪴 Room props, lamps, plants, frames, bed shawl'])}
+      ${sceneRow('s10','11:00','11:15','Single No View','11:00–11:15 AM','Twin Sharing Room','Twin Sharing Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s11','11:15','11:30','Single Room','11:15–11:30 AM','Single No View','Single (No View) Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s12','11:30','11:45','Pantry & Dining','11:30–11:45 AM','Single Room','Single Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s13','11:45','12:00','Bathroom','11:45 AM–12:00 PM','Pantry & Dining','Pantry & Dining — Wide Shot','',['📸 Wide','⏱ 15 min','🍽 Mugs, plates'])}
+      ${sceneRow('s14','12:00','12:15','Lunch Break','12:00–12:15 PM','Bathroom','Bathroom — Wide Shot','',['📸 Wide','⏱ 15 min','🧴 Diffuser, hand soap, mug'])}
+      ${breakRow('lunch','🍽','12:15–1:00 PM · Lunch Break')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 3 — Indah Villa · Facilities <span class="srange">1:15 PM – 2:15 PM</span></div>
+      ${breakRow('move','🚶','1:00–1:15 PM · Move to Indah Villa')}
+      ${sceneRow('s15','13:15','13:30','Gym','1:15–1:30 PM','Pool','Indah Villa Pool — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s16','13:30','13:45','Multipurpose Room','1:30–1:45 PM','Gym','Indah Villa Gym — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s17','13:45','14:00','Convenient Store','1:45–2:00 PM','Multipurpose Room','Multipurpose Room — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
+      ${sceneRow('s18','14:00','14:15','Move to Rooms','2:00–2:15 PM','Convenient Store','Indah Villa Convenient Store — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${breakRow('move','🚶','2:15–2:30 PM · Move to Rooms + Crew Set Up')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 4 — Indah Villa · Rooms <span class="srange">2:30 PM – 3:45 PM</span></div>
+      ${sceneRow('s19','14:30','14:45','Living Room','2:30–2:45 PM','Twin Sharing NL107','Twin Sharing Room NL107 — Wide Shot','White clean plain sheets required.',['📸 Wide','⏱ 15 min','🪴 Room props, lamps, plants, frames, bed shawl'])}
+      ${sceneRow('s20','14:45','15:00','Pantry & Dining','2:45–3:00 PM','Living Room','Living Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s21','15:00','15:15','Bathroom','3:00–3:15 PM','Pantry & Dining','Pantry & Dining — Wide Shot','',['📸 Wide','⏱ 15 min','🛋 Sofa pillow, shawl, plants, frames'])}
+      ${sceneRow('s22','15:15','15:30','Single Room SL605','3:15–3:30 PM','Bathroom','Bathroom — Wide Shot','',['📸 Wide','⏱ 15 min','🍽 Mugs, plates'])}
+      ${sceneRow('s23','15:30','15:45','Move to SUA','3:30–3:45 PM','Single Room SL605','Single Room SL605 — Wide Shot','',['📸 Wide','⏱ 15 min','🧴 Diffuser, hand soap, mug'])}
+      ${breakRow('move','🚶','3:45–4:00 PM · Move to SUA + Talent Meet Up + Crew Set Up')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 5 — SUA · Rooms + Lifestyle w/ Talent <span class="srange">4:00 PM – 6:30 PM</span></div>
+      ${sceneRow('s24','16:00','16:30','Twin Sharing Room','4:00–4:30 PM','Four Sharing Room','Four Sharing Room — Wide + Lifestyle','All 3 Talents. White clean plain sheets required.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'])}
+      ${sceneRow('s25','16:30','17:00','Living Room','4:30–5:00 PM','Twin Sharing Room','Twin Sharing Room — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Casual 1'])}
+      ${sceneRow('s26','17:00','17:30','Pantry & Dining','5:00–5:30 PM','Living Room','Living Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🛋 Sofa pillow, shawl, plants, frames'])}
+      ${sceneRow('s27','17:30','18:00','Bathroom','5:30–6:00 PM','Pantry & Dining','Pantry & Dining — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🍽 Mugs, plates, cutleries, food'])}
+      ${sceneRow('s28','18:00','18:30','Wrap!','6:00–6:30 PM','Bathroom','Bathroom — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'])}
+      ${breakRow('wrap','✅','6:30 PM · Check Footage + Wrap — Day 1 Complete')}
+    </div>
+
+    <div class="day-divider day2">📅 Day 2 — Tuesday, 26 May 2026 · SUA + SUR · Crew Call 8:00 AM · Talent Group B 3:00 PM · Wrap Est. 5:45 PM</div>
+
+    <div class="session day2"><div class="session-hdr">Block 6 — SUA · Facilities <span class="srange">8:00 AM – 11:00 AM</span></div>
+      ${breakRow('','📋','8:00–8:30 AM · Crew + Talent Group A Briefing (SUA Lobby)')}
+      ${sceneRow('d2s01','08:30','09:00','Student Lounge','8:30–9:00 AM','Badminton Court','Badminton Court — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Sports','🏸 Badminton rackets, shuttlecock'],true)}
+      ${sceneRow('d2s02','09:00','09:30','Study Room','9:00–9:30 AM','Student Lounge','Student Lounge — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','📚 Books, laptops, stationeries'],true)}
+      ${sceneRow('d2s03','09:30','10:00','Laundry Room','9:30–10:00 AM','Study Room','Study Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','💻 Laptops, books, stationeries'],true)}
+      ${sceneRow('d2s04','10:00','10:30','Parcel Box','10:00–10:30 AM','Laundry Room','Laundry Room — Wide + Lifestyle','Talent 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 · Casual 2','🧺 Laundry basket, shirt'],true)}
+      ${sceneRow('d2s05','10:30','11:00','Move to SUR','10:30–11:00 AM','Parcel Box','Parcel Box — Wide + Lifestyle','Talent 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 · Casual 2','📦 Parcels'],true)}
+      ${breakRow('move','🚶','11:00–11:15 AM · Move to SUR')}
+    </div>
+
+    <div class="session day2"><div class="session-hdr">Block 7 — SUR · Facilities <span class="srange">11:15 AM – 2:15 PM</span></div>
+      ${sceneRow('d2s06','11:15','11:45','Squash Court','11:15–11:45 AM','Pool','SUR Pool — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Sports','🏖 Towels, sunglasses'],true)}
+      ${sceneRow('d2s07','11:45','12:15','Multipurpose Court','11:45 AM–12:15 PM','Squash Court','Squash Court — Wide + Lifestyle','Talent 1 & 3.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 3 · Sports','🎾 Squash rackets, ball','🔑 Needs access'],true)}
+      ${sceneRow('d2s08','12:15','12:45','Laundry Room','12:15–12:45 PM','Multipurpose Court','Multipurpose Court — Wide + Lifestyle','Talent 2 & 3. Setup badminton + basketball net.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 & 3 · Sports','🏀 Basketball, badminton racquets'],true)}
+      ${sceneRow('d2s09','12:45','13:15','Study Room','12:45–1:15 PM','Laundry Room','SUR Laundry Room — Wide + Lifestyle','Talent 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 · Casual 2','🧺 Laundry basket, shirt'],true)}
+      ${sceneRow('d2s10','13:15','13:45','Cafeteria','1:15–1:45 PM','Study Room','SUR Study Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','💻 Laptops, books, stationeries'],true)}
+      ${sceneRow('d2s11','13:45','14:15','Lunch Break','1:45–2:15 PM','Cafeteria','SUR Cafeteria — Wide + Lifestyle','All 3 Talents. Prepare foods in advance.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','🍽 Food, drinks, cutleries, trays'],true)}
+      ${breakRow('lunch','🍽','2:15–2:45 PM · Lunch Break')}
+    </div>
+
+    <div class="session day2"><div class="session-hdr">Block 8 — SUR (Milano) · Rooms <span class="srange">3:00 PM – 5:45 PM</span></div>
+      ${breakRow('move','🚶','2:45–3:00 PM · Move to Rooms + Crew Set Up + Talent Group B Meet Up')}
+      ${sceneRow('d2s12','15:00','15:30','Move to another unit','3:00–3:30 PM','Twin Sharing Room','Twin Sharing Room — Wide + Lifestyle','Talent 2 & 3. White clean plain sheets required.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 & 3 · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'],true)}
+      ${breakRow('move','🚶','3:30–3:45 PM · Move to another unit + Crew Set Up')}
+      ${sceneRow('d2s13','15:45','16:15','Living Room','3:45–4:15 PM','Twin Sharing (Small)','Twin Sharing Room (Small) — Wide + Lifestyle','Talent 1 & 3.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 3 · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'],true)}
+      ${sceneRow('d2s14','16:15','16:45','Pantry & Dining','4:15–4:45 PM','Living Room','Living Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🛋 Sofa pillow, shawl, plants, frames, books'],true)}
+      ${sceneRow('d2s15','16:45','17:15','Bathroom','4:45–5:15 PM','Pantry & Dining','Pantry & Dining — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🍽 Mugs, plates, cutleries, food'],true)}
+      ${sceneRow('d2s16','17:15','17:45','Wrap!','5:15–5:45 PM','Bathroom','Bathroom — Wide + Lifestyle','Talent 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
+      ${breakRow('wrap','✅','5:45 PM · Check Footage + Wrap — Day 2 Complete 🎉')}
+    </div>
+
+    <div class="shoot-footer">Sunway Houses Photoshoot · 25–26 May 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// PARKCITY CHIRO HTML
+// ═══════════════════════════════════════════════════
+function getParkcityHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Morning Session <span class="srange">10:00 AM – 1:30 PM</span></div>
+      ${breakRow('','📋','10:00–10:15 AM · Crew Setup + Briefing (Parkcity Chiro)')}
+      ${sceneRow('p01','10:15','11:15','Video 2 — Questions Hook','10:15–11:15 AM','Chiro Room','Video 1 — Chiropractic Session with Explanation','Nicholas + Parkcity Dog. Diagnosing, explaining, B-rolls: hands adjusting, screens/reports.',['📸 Wide + Closeups','⏱ 60 min','🎙 Nicholas, Parkcity Dog','🦴 Chiro tools, X-rays'])}
+      ${sceneRow('p02','11:15','12:15','Ending CTA','11:15 AM–12:15 PM','Office','Video 2 — "The Questions I Always Get as a Pet Chiropractor"','Nicholas straight-to-camera. Hook → Setup → Conflict → Turn → Close.',['📸 Wide, straight-to-cam','⏱ 60 min','🎙 Nicholas, Parkcity Dog','🦴 Chiro tools'])}
+      ${sceneRow('p03','11:15','12:15','Ending CTA','11:15 AM–12:15 PM','Office','Video 3 — "Your Dog\'s Behaviour Problem Might Be a Body Problem"','Jun straight-to-camera. Intro → Credential → Ending.',['📸 Wide, straight-to-cam','⏱ 60 min','🎙 Jun, Parkcity Dog','🏋️ Fitness/behaviour tools'])}
+      ${sceneRow('p04','12:15','12:30','Video 4 — KL First','12:15–12:30 PM','Registration Area','Ending #1 & #2 — Soft CTA: Triple Diagnostic Offer','Evergreen ending. Nicholas + Jun on camera.',['📸 Wide, straight-to-cam','⏱ 15 min','🎙 Nicholas, Jun','♻️ Evergreen'])}
+      ${sceneRow('p05','12:30','13:30','Lunch Break','12:30–1:30 PM','Areas inside clinic','Video 4 — "KL\'s First Pet Chiropractic & Canine Fitness Training Center"','Brand positioning. Hook → Dual intro → Why first → Offer → Ending. B-rolls: working routine.',['📸 Wide','⏱ 60 min','🎙 Nicholas, Jun','🦴 Chiro/fitness tools'])}
+      ${breakRow('lunch','🍽','1:30–2:00 PM · Lunch Break')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Afternoon Session <span class="srange">2:00 PM – 4:15 PM</span></div>
+      ${breakRow('','📋','2:00 PM · Sean + Dogs Arrive + Briefing (Poodle + Chihuahua)')}
+      ${sceneRow('p06','14:15','15:15','Fitness Session','2:15–3:15 PM','Chiro Room','Chiropractic Session — Poodle (Sean as owner)','Nicholas interacting with + diagnosing Poodle. B-rolls: adjusting, screens/reports.',['📸 Wide + Closeups','⏱ 60 min','🎙 Nicholas, Sean, Poodle','🦴 Chiro tools, X-rays'])}
+      ${sceneRow('p07','15:15','16:15','Wrap','3:15–4:15 PM','Fitness Room','Fitness Session — Chihuahua (Sean as owner)','Jun interacting with + diagnosing Chihuahua. B-rolls: movements, reports.',['📸 Wide + Closeups','⏱ 60 min','🎙 Jun, Nicholas, Sean, Chihuahua','🏋️ Fitness tools'])}
+      ${breakRow('wrap','✅','4:15 PM · Production Footage Check + Wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">Parkcity Chiro Videoshoot · 14 May 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// CURO HTML
+// ═══════════════════════════════════════════════════
+function getCuroHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Morning Session <span class="srange">9:30 AM – 12:35 PM</span></div>
+      ${breakRow('','📋','9:30–10:00 AM · Crew Setup + Short Briefing (Klinik Medilove Entrance)')}
+      ${sceneRow('c01','10:00','10:30','Mum + Son arrive','10:00–10:30 AM','Outdoors (EXT)','B-Rolls — Bright Warm Daylight','Sunrays/leaves closeups. Wide shot of skies.',['📸 Wide + Closeups','⏱ 30 min'])}
+      ${breakRow('','📋','10:30–10:45 AM · Talent: Mother + Son arrive + briefing (Contact: 012-910 1384)')}
+      ${sceneRow('c02','10:45','11:00','Walk to walkway','10:45–10:50 AM','Reception (INT)','Scene 5-1 — QR Scan','Phone focuses on QR, scan animation, app loads: "Your queue: #8".',['📸 Phone closeup','⏱ 5 min','📱 Phone, App interface'])}
+      ${sceneRow('c03','11:00','11:05','Walk to Upper Walkway','11:00–11:00 AM','Outside Clinic (EXT)','Scene 5-2 — Mum + Child Exit Clinic','Mum and child EXIT through clinic doors.',['📸 Wide','⏱ 10 min','🎙 Mum, Child'])}
+      ${sceneRow('c04','11:05','11:15','Park — Mum smiles','11:05–11:15 AM','Upper Walkway (EXT)','Scene 5-4 — Child Chatters','Child immediately starts chattering, pointing outside.',['📸 Mid shot + follow','⏱ 10 min','🎙 Child','🎬 Slow mo'])}
+      ${sceneRow('c05','11:15','11:25','Walking — Settle outside','11:15–11:25 AM','Upper Walkway (EXT)','Scene 5-5 — Mum Smiles','Tension visibly drains from her face.',['📸 Mum closeups + follow','⏱ 10 min','🎙 Mum','🎬 Slow mo'])}
+      ${sceneRow('c06','11:25','11:35','Child animated','11:25–11:35 AM','Upper Walkway (EXT)','Scene 5-6 — Settle on Bench','They settle onto a bench or open area outside.',['📸 Wide','⏱ 10 min','🎙 Mum, Child'])}
+      ${sceneRow('c07','11:35','11:45','Mum glances phone','11:35–11:45 AM','Upper Walkway (EXT)','Scene 5-7 — Child Happy + Animated','Child is happy and animated.',['📸 Child closeup','⏱ 10 min','🎙 Child'])}
+      ${sceneRow('c08','11:45','11:55','Phone seated','11:45–11:55 AM','Upper Walkway (EXT)','Scene 5-8a — Mum Glances Phone (Standing)','Mum glances at phone, looks up, calm, in control, present.',['📸 Mum looking at phone closeup','⏱ 10 min','🎙 Mum','📱 Phone'])}
+      ${sceneRow('c09','11:55','12:05','Walk back to clinic','11:55 AM–12:05 PM','Upper Walkway (EXT)','Scene 5-8b — Seated, Smiles with Child','Mum glances phone, smiles. Text-on-screen fades in: "Scan to check your queue time."',['📸 Wide > slowly blur out','⏱ 10 min','🎙 Mum, Child','📱 Phone'])}
+      ${breakRow('move','🚶','12:05–12:10 PM · Walk back to clinic + Elderly man arrives + brief (Aziz: 019-260 1501)')}
+      ${sceneRow('c10','12:10','12:20','Scene 1-2 — Door push','12:10–12:20 PM','Clinic Entrance (EXT)','Scene 1-1 — Mum + Child Walk In','Mum and child walk into clinic together.',['📸 Wide follow','⏱ 10 min','🎙 Mum, Child'])}
+      ${sceneRow('c11','12:20','12:30','Man + Woman arrive','12:20–12:30 PM','Clinic Entrance (EXT)','Scene 1-2 — Push Open Door, Both Freeze','She pushes open the glass door, both freeze.',['📸 Closeup door handles','⏱ 10 min','🎙 Mum'])}
+      ${breakRow('','📋','12:30 PM · Man (Tim) + Woman (Javin) arrive + brief')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Afternoon Session <span class="srange">12:30 PM – 5:00 PM</span></div>
+      ${sceneRow('c12','12:30','12:40','Scene 2-4b cough','12:30–12:40 PM','Waiting Area (INT)','Scene 2-4a — Elderly Man Coughs into Tissue','Patient: Elderly man, 50s, deeply coughs into tissue.',['📸 Mid shot, camera pans','⏱ 10 min','🎙 Elderly','🧻 Tissues'])}
+      ${sceneRow('c13','12:40','12:50','Scene 2-5 phlegm','12:40–12:50 PM','Waiting Area (INT)','Scene 2-4b — Elderly Man Patient Closeup','Patient closeup.',['📸 Patient closeup','⏱ 10 min','🎙 Elderly','🧻 Tissues'])}
+      ${sceneRow('c14','12:50','13:00','Scene 1-5a','12:50–1:00 PM','Waiting Area (INT)','Scene 2-5 — Tissue Reveals Bloody Phlegm','Props prepared in advance.',['📸 Overshoulder, tissue closeup','⏱ 10 min','🎙 Elderly','🧻 Tissue, bloody phlegm (prepared)'])}
+      ${sceneRow('c15','13:00','13:10','Scene 1-5b','1:00–1:10 PM','Waiting Area (INT)','Scene 1-5a — Walking Reveal, Packed Waiting Room','Walking from behind, reveal rows of patients.',['📸 Low wide follow, child eye level','⏱ 10 min','🎙 Mum, Child, Man, Woman, Elderly'])}
+      ${sceneRow('c16','13:10','13:20','Scene 2-1','1:10–1:20 PM','Waiting Area (INT)','Scene 1-5b — Walking from Front','Rows of patients by the side, mum and child uneasy.',['📸 Wide follow','⏱ 10 min','🎙 Mum, Child, Man, Woman, Elderly'])}
+      ${sceneRow('c17','13:20','13:30','Scene 3-1a closeup','1:20–1:30 PM','Waiting Area (INT)','Scene 2-1 — Patient Expressions + Symptoms','Wide pan of patients.',['📸 Wide pan','⏱ 10 min','🎙 Man, Woman, Elderly'])}
+      ${sceneRow('c18','13:30','13:40','Scene 3-1b overlooking','1:30–1:40 PM','Waiting Area (INT)','Scene 3-1a — Mum Scanning Room','Mum face, scanning room, jaw tightens slightly.',['📸 Mum closeups','⏱ 10 min','🎙 Mum'])}
+      ${sceneRow('c19','13:40','13:50','Scene 3-4b','1:40–1:50 PM','Waiting Area (INT)','Scene 3-1b — Mum Overlooking Clinic','Overshoulder, camera follows head turning.',['📸 Overshoulder','⏱ 10 min','🎙 All talents'])}
+      ${sceneRow('c20','13:50','14:00','Footage check','1:50–2:00 PM','Waiting Area (INT)','Scene 3-4b — Mum Looks Back at Room','Mid shot showing mum and child.',['📸 Mid shot','⏱ 10 min','🎙 All talents'])}
+      ${breakRow('','📋','2:00 PM · Production footage check · Elderly man wrap')}
+      ${breakRow('lunch','🍽','2:00–2:30 PM · Lunch Break')}
+      ${sceneRow('c21','14:30','14:40','Scene 1-4 child','2:30–2:40 PM','Clinic Entrance (INT)','Scene 1-3 — Door Opens, Mum Hesitates','Door opens. Mom hesitates. Some patients behind.',['📸 Mum closeups','⏱ 10 min','🎙 Mum'])}
+      ${sceneRow('c22','14:40','14:50','Scene 3-2 arm pull','2:40–2:50 PM','Clinic Entrance (INT)','Scene 1-4 — Child Looks Uneasy','Child closeups.',['📸 Child closeups','⏱ 10 min','🎙 Child'])}
+      ${sceneRow('c23','14:50','15:00','Scene 3-3','2:50–3:00 PM','Waiting Area (INT)','Scene 3-2 — Arm Pulls Child Closer','Mid shot, mum and child.',['📸 Mid shot','⏱ 10 min','🎙 Mum, Child'])}
+      ${sceneRow('c24','15:00','15:10','Scene 3-4a','3:00–3:10 PM','Waiting Area (INT)','Scene 3-3 — Child Looks Up Sensing Something','Child holding mom tighter. Mum POV, high angle.',['📸 High angle looking at child','⏱ 10 min','🎙 Child'])}
+      ${sceneRow('c25','15:10','15:20','Scene 3-5','3:10–3:20 PM','Waiting Area (INT)','Scene 3-4a — Mum Looks Down at Child','Child POV, low angle looking at mum.',['📸 Low angle looking at mum','⏱ 10 min','🎙 Mum, Child'])}
+      ${sceneRow('c26','15:20','15:30','Scene 3-6 hesitating','3:20–3:30 PM','Waiting Area (INT)','Scene 3-5 — Hand on Door Frame, Half In Half Out','Hand touching handles/buttons closeups.',['📸 Hand closeups','⏱ 10 min','🎙 Mum'])}
+      ${sceneRow('c27','15:30','15:40','Scene 4-3 notices screen','3:30–3:40 PM','Waiting Area (INT)','Scene 3-6 — Mum Hesitating, Worried','Mum closeup, side angle.',['📸 Mum closeup, side angle','⏱ 10 min','🎙 Mum'])}
+      ${sceneRow('c28','15:40','15:50','Scene 4-4 reaches phone','3:40–3:50 PM','Waiting Area (INT)','Scene 4-3 — Camera Pulls Back, Mum Notices Screen','Curiosity then recognition. Dolly out.',['📸 Mum closeup + dolly out','⏱ 10 min','🎙 Mum'])}
+      ${sceneRow('c29','15:50','16:00','Scene 3-7 empty chair','3:50–4:00 PM','Waiting Area (INT)','Scene 4-4 — She Reaches for Phone to Scan','Phone closeup.',['📸 Phone closeup','⏱ 10 min','🎙 Mum','📱 Phone'])}
+      ${breakRow('','📋','4:00 PM · Production footage check · Mum + Son wrap')}
+      ${sceneRow('c30','16:00','16:10','Scene 2-2a man coughs','4:00–4:10 PM','Waiting Area (INT)','Scene 3-7 — Empty Chair Between Sick Patients','Text-on-screen: "Would you wait… and risk your child\'s health?"',['📸 Wide still + dolly in','⏱ 10 min','🎙 Man, Woman'])}
+      ${sceneRow('c31','16:10','16:20','Scene 2-2b closeup','4:10–4:20 PM','Waiting Area (INT)','Scene 2-2a — Man, 40s, Hunched, Shivering, Eyes Red','Mid shot, camera pans to patient.',['📸 Mid shot, pan','⏱ 10 min','🎙 Man','🧻 Balled wet tissues'])}
+      ${sceneRow('c32','16:20','16:30','Scene 2-3a woman sneezes','4:20–4:30 PM','Waiting Area (INT)','Scene 2-2b — Man Patient Closeup','',['📸 Patient closeup','⏱ 10 min','🎙 Man','🧻 Balled wet tissues'])}
+      ${sceneRow('c33','16:30','16:40','Scene 2-3b closeup','4:30–4:40 PM','Waiting Area (INT)','Scene 2-3a — Woman, 30s, Mask Half-Down, Mid-Sneeze','Mid shot, camera pans.',['📸 Mid shot, pan','⏱ 10 min','🎙 Woman','😷 Mask'])}
+      ${sceneRow('c34','16:40','16:50','Bear mascot scenes','4:40–4:50 PM','Waiting Area (INT)','Scene 2-3b — Woman Patient Closeup','',['📸 Patient closeup','⏱ 10 min','🎙 Woman','😷 Mask'])}
+      ${sceneRow('c35','16:50','17:00','Footage check + Wrap','4:50–5:00 PM','Reception (INT)','Scenes 4-1 & 4-2 — Curo Bear Mascot (Post Production)','Bear mascot pops up at reception, holds sign with QR code. Will add bear mascot in post.',['📸 Wide still + dolly in','⏱ 10 min','⚡ Post-production: Bear mascot'])}
+      ${breakRow('wrap','✅','5:00 PM · Production Footage Check + Wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">Curo Brand Videoshoot · 13 May 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// SUNWAY CAMPUS RECCE HTML
+// ═══════════════════════════════════════════════════
+function getRecceHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Morning — FASS Facilities <span class="srange">11:00 AM – 1:10 PM</span></div>
+      ${breakRow('','📋','11:00–11:10 AM · Meet up at FASS Sunway Square')}
+      ${sceneRow('r01','11:10','11:20','Design Studio','11:10–11:20 AM','Ceramic Room','Ceramic Room','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r02','11:20','11:30','Digital Workshop','11:20–11:30 AM','Design Studio','Design Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r03','11:30','11:40','Drafting Studio','11:30–11:40 AM','Digital Workshop','Digital Workshop','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r04','11:40','11:50','Fabrication Lab','11:40–11:50 AM','Drafting Studio','Drafting Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r05','11:50','12:00','Film Shooting Studio','11:50 AM–12:00 PM','Fabrication Lab','Fabrication Lab','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r06','12:00','12:10','Post Production Studio','12:00–12:10 PM','Film Shooting Studio','Film Shooting Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r07','12:10','12:20','Project Studio','12:10–12:20 PM','Post Production Studio','Post Production Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r08','12:20','12:30','Radio Station','12:20–12:30 PM','Project Studio','Project Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r09','12:30','12:40','Recital Hall','12:30–12:40 PM','Radio Station','Radio Station','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r10','12:40','12:50','Recording Studio','12:40–12:50 PM','Recital Hall','Recital Hall','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r11','12:50','13:00','Webcast Studio','12:50–1:00 PM','Recording Studio','Recording Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${sceneRow('r12','13:00','13:10','Lunch','1:00–1:10 PM','Webcast Studio','Webcast Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
+      ${breakRow('lunch','🍽','1:10–2:30 PM · Lunch Break')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Afternoon — Sunway Square Levels 1–6 <span class="srange">2:30 PM – 6:10 PM</span></div>
+      ${breakRow('','📋','Level 1')}
+      ${sceneRow('r13','14:30','14:40','Square Gallery','2:30–2:40 PM','L1 — Grand Lobby','Grand Lobby','Recce — check layout, lighting, access, photo angles.',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
+      ${sceneRow('r14','14:40','14:50','Trading Room','2:40–2:50 PM','L1 — Square Gallery','Square Gallery','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
+      ${sceneRow('r15','14:50','15:00','Health & Safety Office','2:50–3:00 PM','L1 — Trading Room','Trading Room','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
+      ${sceneRow('r16','15:00','15:10','Grandstand','3:00–3:10 PM','L1 — Health & Safety Office','Health & Safety Office','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
+      ${sceneRow('r17','15:10','15:20','Move to Level 2','3:10–3:20 PM','L1 — Grandstand','Grandstand','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
+      ${breakRow('','📋','Level 2')}
+      ${sceneRow('r18','15:20','15:30','Study Area','3:20–3:30 PM','L2 — LT360','LT360','',['📍 Recce','⏱ 10 min','🏢 Level 2'])}
+      ${sceneRow('r19','15:30','15:40','Lounge L2','3:30–3:40 PM','L2 — Study Area','Study Area','',['📍 Recce','⏱ 10 min','🏢 Level 2'])}
+      ${sceneRow('r20','15:40','15:50','Move to Level 3','3:40–3:50 PM','L2 — Lounge L2','Lounge L2','',['📍 Recce','⏱ 10 min','🏢 Level 2'])}
+      ${breakRow('','📋','Level 3')}
+      ${sceneRow('r21','15:50','16:00','Collaborative Classroom','3:50–4:00 PM','L3 — Behavioral Lab','Behavioral Lab','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
+      ${sceneRow('r22','16:00','16:10','SBS Admin Office','4:00–4:10 PM','L3 — Collaborative Classroom','Collaborative Classroom','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
+      ${sceneRow('r23','16:10','16:20','Q Deck','4:10–4:20 PM','L3 — SBS Admin Office','SBS Admin Office','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
+      ${sceneRow('r24','16:20','16:30','The Atrium','4:20–4:30 PM','L3 — Q Deck','Q Deck','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
+      ${sceneRow('r25','16:30','16:40',"Cheah's Square",'4:30–4:40 PM','L3 — The Atrium','The Atrium','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
+      ${sceneRow('r26','16:40','16:50','Move to Level 4','4:40–4:50 PM',"L3 — Cheah's Square","Cheah's Square",'',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
+      ${breakRow('','📋','Level 4')}
+      ${sceneRow('r27','16:50','17:00','Q Co-Working','4:50–5:00 PM','L4 — Recital Hall','Recital Hall','',['📍 Recce','⏱ 10 min','🏢 Level 4'])}
+      ${sceneRow('r28','17:00','17:10','Move to Level 5','5:00–5:10 PM','L4 — Q Co-Working','Q Co-Working','',['📍 Recce','⏱ 10 min','🏢 Level 4'])}
+      ${breakRow('','📋','Level 5')}
+      ${sceneRow('r29','17:10','17:20','Exam Hall','5:10–5:20 PM','L5 — LT 5','LT 5','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
+      ${sceneRow('r30','17:20','17:30','JCPAC Grand Lobby','5:20–5:30 PM','L5 — Exam Hall','Exam Hall','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
+      ${sceneRow('r31','17:30','17:40','Cafe (Coming Soon)','5:30–5:40 PM','L5 — JCPAC Grand Lobby','JCPAC Grand Lobby','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
+      ${sceneRow('r32','17:40','17:50','Move to Level 6','5:40–5:50 PM','L5 — Cafe (Coming Soon)','Cafe (Coming Soon)','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
+      ${breakRow('','📋','Level 6')}
+      ${sceneRow('r33','17:50','18:00','Sky Light','5:50–6:00 PM','L6 — IT Learning Labs','IT Learning Labs','',['📍 Recce','⏱ 10 min','🏢 Level 6'])}
+      ${sceneRow('r34','18:00','18:10','Wrap!','6:00–6:10 PM','L6 — Sky Light','Sky Light','',['📍 Recce','⏱ 10 min','🏢 Level 6'])}
+      ${breakRow('wrap','✅','6:10 PM · Recce Complete 🎉')}
+    </div>
+
+    <div class="shoot-footer">Sunway Campus Recce · 28 May 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// PETICO DAY 2 HTML
+// ═══════════════════════════════════════════════════
+function getPeticoHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Video 05 — A Petico Order Is On Its Way <span class="srange">10:00 AM – 12:00 PM</span></div>
+      ${breakRow('','📋','10:00–10:30 AM · Crew Briefing + Props Check + Phone Screen Staging')}
+      ${sceneRow('pt01','10:30','11:00','Front Door — Doorbell','10:30–11:00 AM','Living Room','Riley Resting + Waiting — Cinematic','Riley resting, looking out window. Slow documentary zoom. Riley waiting by door. Doorbell reaction — capture genuine.',['🎬 Cinematic','⏱ 30 min','🎙 Riley','📦 Petico box (medium)','💡 Riley closeup: tail wag, tongue out'])}
+      ${sceneRow('pt02','11:00','11:30','B-Rolls — Riley resting','11:00–11:30 AM','Front Door','Owner Checks Phone + Box Arrives — Cinematic','Owner checks phone — order dispatched. Doorbell, Riley lifts head. Petico box arrives. Owner unpacks, Riley investigates.',['🎬 Cinematic','⏱ 30 min','🎙 Riley + Owner','📦 Petico box (medium), dog treats','💡 Riley runs to doorbell'])}
+      ${sceneRow('pt03','11:30','12:00','The Dog Narrator','11:30 AM–12:00 PM','Living Room','B-Rolls — Riley','Riley resting, looking at owner, sniffed floor/door, tail wag, settled/sitting. Close-up, slow zoom.',['🎬 Cinematic B-rolls','⏱ 30 min','🎙 Riley'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Video 01 — The Dog Narrator <span class="srange">12:00 PM – 1:30 PM</span></div>
+      ${sceneRow('pt04','12:00','12:15','Wish list scene','12:00–12:15 PM','Living Room / Sofa','Pet on Couch — Stares at Camera','Pet on couch, stares directly at camera. Slow blink. Camera floor-level throughout. Capture bowl tap, eating sounds, nail-on-floor sounds.',['🎬 Insta 360','⏱ 15 min','🎙 Riley + Owner','💡 Camera floor-level'])}
+      ${sceneRow('pt05','12:15','12:30','Owner finds list','12:15–12:30 PM','Living Room / Sofa','Pet "Writes" Wish List','Pet "writes" down wish list on paper. Cat slow blink to camera = money shot. Long takes near products. Let pet settle first.',['🎬 Insta 360','⏱ 15 min','🎙 Riley + Owner','📱 Notes app wish list, Petico box (small)'])}
+      ${sceneRow('pt06','12:30','12:45','Petico website scroll','12:30–12:45 PM','Living Room','Owner Finds List — Double Take','Owner finds list. Double take. Looks at pet. Pet blinks back. Pre-load Petico Club with points.',['⏱ 15 min','🎙 Riley + Owner','📦 Petico Club products A, B, C (physical)'])}
+      ${sceneRow('pt07','12:45','13:00','Box arrives','12:45–1:00 PM','Living Room','Opens Petico Website — Scrolls, Adds Items','Opens Petico website, scrolls, adds items. Fast, easy.',['⏱ 15 min','🎙 Riley + Owner','📱 Phone screen'])}
+      ${sceneRow('pt08','13:00','13:15','Pet slow blink + b-rolls','1:00–1:15 PM','Living Room','Box Arrives — Pet Investigates','Box arrives. Pet investigates. Treats. Toy. Pet eats, plays.',['⏱ 15 min','🎙 Riley + Owner','📦 Petico box'])}
+      ${sceneRow('pt09','13:15','13:30','Lunch Break','1:15–1:30 PM','Living Room','Pet Looks at Camera — Slow Blink + B-Rolls','Pet looks at camera. Slow blink. Pet and owner interact.',['⏱ 15 min','🎙 Riley + Owner'])}
+      ${breakRow('lunch','🍽','1:30–2:00 PM · Lunch Break · Aina + Cat Arrive')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Video 08 — Panic vs Peace (Split Screen) <span class="srange">2:00 PM – 3:10 PM</span></div>
+      ${sceneRow('pt10','14:00','14:10','Shakes it — panics','2:00–2:10 PM','Kitchen / Dining','Discovers Empty Container — PANIC','Discovers empty container, shakes it, not much left → panics, grabs keys, rushes out.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','🔑 Keys, container with few foods left'])}
+      ${sceneRow('pt11','14:10','14:20','Calmly browses Petico','2:10–2:20 PM','Kitchen / Dining','Same Owner, Different Day — PEACE','Same owner, different day. Discovers empty container. Calmly browsing Petico website.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','📱 Keys, container, phone screen'])}
+      ${sceneRow('pt12','14:20','14:30','Add to cart Petico','2:20–2:30 PM','Kitchen / Dining','Frantically Checking Where to Buy — PANIC','Frantically checking where to buy. Next day (put a date). Earliest. Face drops.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner'])}
+      ${sceneRow('pt13','14:30','14:40','Cat stares at owner','2:30–2:40 PM','Kitchen / Dining','Add to Cart — Same Day Delivery — PEACE','Add to cart on Petico. Confirms order. Same Day Delivery. Done in seconds.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','📱 Phone screen'])}
+      ${sceneRow('pt14','14:40','14:50','Cat eating, owner relaxed','2:40–2:50 PM','Kitchen / Dining','Cat Gives Full Stare — Owner Stressed','Cat gives owner the full stare. Owner stressed.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner'])}
+      ${sceneRow('pt15','14:50','15:00','Ending — cat + owner','2:50–3:00 PM','Kitchen / Dining','Cat Eating, Owner Relaxed','Cat eating from full bowl. Owner relaxed on couch.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','🍽 Food bowl'])}
+      ${sceneRow('pt16','15:00','15:10','Riley Morning Routine','3:00–3:10 PM','Living Room','Ending — Cat and Owner Interact','Cat and owner interact. Closing shot.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Video 06 — Riley's Morning Routine <span class="srange">2:00 PM – 3:00 PM</span></div>
+      ${sceneRow('pt17a','14:00','14:30','Dog play + toys','2:00–2:30 PM','Living Room / Kitchen','Dog Following Owner + Eating — Pet POV','Dog following owner, eating. Insta 360.',['🎬 Pet POV / Insta 360','⏱ 30 min','🎙 Riley + Owner','🍽 Insta 360, food bowl'])}
+      ${sceneRow('pt17b','14:30','14:45','Dog walk outdoor','2:30–2:45 PM','Living Room / Kitchen','Dog Pee + Play Toys — Pet POV','Dog pee, play toys.',['🎬 Pet POV / Insta 360','⏱ 15 min','🎙 Riley + Owner','🧹 Insta 360, pee pad, food, flea comb'])}
+      ${sceneRow('pt17c','14:45','15:00','Cat Narrator','2:45–3:00 PM','Outdoor (Facilities)','Dog Running Around + Walk — Pet POV','Dog running around, owner takes dog for a walk.',['🎬 Pet POV / Insta 360','⏱ 15 min','🎙 Riley + Owner','📹 Insta 360'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Video 01 — The Cat Narrator <span class="srange">3:10 PM – 4:10 PM</span></div>
+      ${sceneRow('pt18','15:10','15:25','Cat wish list','3:10–3:25 PM','Living Room / Sofa','Cat on Couch — Stares at Camera','Pet on couch, stares directly at camera. Slow blink. Camera floor-level. Capture bowl tap, eating sounds.',['🎬 Insta 360','⏱ 15 min','🎙 Cat + Owner','💡 Camera floor-level'])}
+      ${sceneRow('pt19','15:25','15:40','Owner finds cat list','3:25–3:40 PM','Living Room / Sofa','Cat "Writes" Wish List','Cat slow blink to camera = money shot. Long takes near products. Let cat settle first.',['🎬 Insta 360','⏱ 15 min','🎙 Cat + Owner','📱 Notes app wish list, Petico box (small)'])}
+      ${sceneRow('pt20','15:40','15:55','Cat Petico scroll','3:40–3:55 PM','Living Room','Owner Finds List — Double Take, Cat Blinks','Owner finds list. Looks at cat. Cat blinks back. Pre-load Petico Club with points.',['⏱ 15 min','🎙 Cat + Owner','📦 Petico Club products A, B, C'])}
+      ${sceneRow('pt21','15:55','16:10','Cat box arrives','3:55–4:10 PM','Living Room','Opens Petico Website — Adds Items','Opens Petico website, scrolls, adds items.',['⏱ 15 min','🎙 Cat + Owner','📱 Phone screen'])}
+      ${sceneRow('pt22','16:10','16:25','Cat b-rolls','4:10–4:25 PM','Living Room','Cat Box Arrives — Investigates','Box arrives. Cat investigates. Treats. Toy.',['⏱ 15 min','🎙 Cat + Owner','📦 Petico box'])}
+      ${sceneRow('pt23','16:25','16:40','Cinematic Slow Zoom','4:25–4:40 PM','Living Room','Cat Slow Blink — B-Rolls','Cat looks at camera. Slow blink. Cat and owner interact.',['⏱ 15 min','🎙 Cat + Owner'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Video 02 — Cinematic Slow Zoom <span class="srange">3:10 PM – 4:30 PM</span></div>
+      ${sceneRow('pt24','15:10','15:40','Owner pets animal','3:10–3:40 PM','Living Room','Opening Extreme Close-up — Riley Sleeping','Opening extreme close-up. Riley sleeping/resting. Slow zoom, morning light. Long unguided takes. Camera floor-to-low height.',['🎬 Cinematic','⏱ 30 min','🎙 Riley'])}
+      ${sceneRow('pt25','15:40','16:10','B-rolls — cinematic','3:40–4:10 PM','Living Room','Owner Pets Animal — Slow Warm Moment','Owner hand pets animal. Pet looks up. Slow warm moment. Owner on phone — Petico website visible over shoulder.',['🎬 Cinematic','⏱ 30 min','🎙 Riley + Owner','📱 Petico website on phone','💡 Floor-level for pet-looking-up shot'])}
+      ${sceneRow('pt26','16:10','16:30','Wrap','4:10–4:30 PM','Living Room','B-Rolls — Cinematic','Pet sleeping close-up, slow zoom. Pet looking out window, looking at owner. Pet POV, owner hand entering frame.',['🎬 Cinematic B-rolls','⏱ 20 min','🎙 Riley + Owner'])}
+      ${breakRow('wrap','✅','4:30 PM · Check Footage + Wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">Petico Brand Campaign Day 2 · 21 May 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// SUNWAY WATERFRONT HTML
+// ═══════════════════════════════════════════════════
+function getWaterfrontHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Day 1 — Block A · Facilities <span class="srange">8:00 AM – 1:15 PM</span></div>
+      ${breakRow('','📋','8:00–8:30 AM · Meet Up + Short Briefing (Waterfront Lobby)')}
+      ${sceneRow('w01','08:30','09:00','Laundry','8:30–9:00 AM','Pool','Pool — Wide + Lifestyle','Hui Shan & Natsai in Sports outfit.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Hui Shan, Natsai · Sports','📚 Books, Sunglasses, Caps'])}
+      ${sceneRow('w02','09:00','09:30','Gym','9:00–9:30 AM','Laundry','Laundry — Wide + Lifestyle','Hui Shan in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Hui Shan · Casual 2','🧺 Laundry bag/basket, shirt'])}
+      ${sceneRow('w03','09:30','10:00','Atrium','9:30–10:00 AM','Gym','Gym — Wide + Lifestyle','Jacob & Natsai in Sports.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Jacob, Natsai · Sports','🏋️ Tumbler, Towel'])}
+      ${sceneRow('w04','10:00','10:45','Multipurpose Hall','10:00–10:45 AM','Atrium','Atrium — Wide + Lifestyle (WiFi Area)','All 3 Talents (Hui Shan, Natsai, Jacob) in Casual 2.',['📸 Wide + Lifestyle','⏱ 45 min','🎙 All 3 · Casual 2','💻 School bags, books, iPad, laptop, wireless headphones'])}
+      ${sceneRow('w05','10:45','11:15','Cafeteria','10:45–11:15 AM','Multipurpose Hall','Multipurpose Hall — Wide + Lifestyle','All 3 Talents in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 · Casual 2','📚 School bags, books'])}
+      ${sceneRow('w06','11:15','11:45','Security Room','11:15–11:45 AM','Cafeteria','Cafeteria — Wide + Lifestyle','Jacob in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Jacob · Casual 2','🍽 Food tray'])}
+      ${sceneRow('w07','11:45','12:15','Convenient Store','11:45 AM–12:15 PM','Security Room','Security Room — Wide + Lifestyle','Natsai & Jacob in Casual 2. Need 1 security as talent.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Natsai, Jacob · Casual 2','👮 Security with student scenes'])}
+      ${sceneRow('w08','12:15','12:45','Postbox','12:15–12:45 PM','Convenient Store','Convenient Store (Family Mart + Bila-bila) — Wide + Lifestyle','All 3 Talents in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 · Casual 2'])}
+      ${sceneRow('w09','12:45','13:15','Lunch','12:45–1:15 PM','Postbox','Postbox — Wide + Lifestyle','Natsai in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Natsai · Casual 2','📦 Parcel'])}
+      ${breakRow('lunch','🍽','1:15–1:45 PM · Lunch')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Day 1 — Block A · Lounge + Rooms <span class="srange">1:45 PM – 7:45 PM</span></div>
+      ${breakRow('move','🚶','1:45–2:00 PM · Move to Block A Lounge + Talent Group B Meet Up + Crew Set Up')}
+      ${sceneRow('w10','14:00','14:30','Student Lounge','2:00–2:30 PM','Kitchen (Communal)','Kitchen (Communal) — Wide + Lifestyle','John, Logesh, Aleena in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','🍽 Mugs, plates, cutleries, foods'])}
+      ${sceneRow('w11','14:30','15:00','Movie Room','2:30–3:00 PM','Student Lounge','Student Lounge — Wide + Lifestyle','John, Logesh, Aleena in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','📚 Books, laptops'])}
+      ${sceneRow('w12','15:00','15:30','Game Room','3:00–3:30 PM','Movie Room','Movie Room — Wide + Lifestyle','John, Logesh, Aleena in Casual 2. Movie access needed. Prepare static image.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','🎬 Movie access'])}
+      ${sceneRow('w13','15:30','16:00','Study Room','3:30–4:00 PM','Game Room','Game Room — Wide + Lifestyle','John & Logesh in Casual 2. PS5 access needed.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh · Casual 2','🎮 PS5'])}
+      ${sceneRow('w14','16:00','16:30','Move to Rooms','4:00–4:30 PM','Study Room','Study Room — Wide + Lifestyle (WiFi Area)','John, Logesh, Aleena in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','💻 Books, laptops, files, stationeries'])}
+      ${breakRow('move','🚶','4:30–4:45 PM · Move to Block A Rooms')}
+      ${sceneRow('w15','16:45','17:15','Single Small','4:45–5:15 PM','Twin Sharing','Twin Sharing — Wide + Lifestyle','John & Logesh in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
+      ${sceneRow('w16','17:15','17:45','Single Room','5:15–5:45 PM','Single Small','Single Small — Wide + Lifestyle','John in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
+      ${sceneRow('w17','17:45','18:15','Living Room','5:45–6:15 PM','Single Room','Single Room — Wide + Lifestyle','Aleena in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Aleena · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
+      ${sceneRow('w18','18:15','18:45','Pantry + Dining','6:15–6:45 PM','Living Room','Living Room — Wide + Lifestyle','John, Logesh, Aleena in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'])}
+      ${sceneRow('w19','18:45','19:15','Bathroom','6:45–7:15 PM','Pantry + Dining','Pantry + Dining Area — Wide + Lifestyle','John, Logesh, Aleena in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 1','🍽 Mugs, plates, cutleries, foods'])}
+      ${sceneRow('w20','19:15','19:45','Wrap Day 1','7:15–7:45 PM','Bathroom','Bathroom — Wide + Lifestyle','Logesh in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Logesh · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'])}
+      ${breakRow('wrap','✅','7:45 PM · Check Footage + Wrap — Day 1 Complete')}
+    </div>
+
+    <div class="day-divider day2">📅 Day 2 — Monday, 11 May 2026 · Blocks C + D · Crew 8:00 AM · Talent Group A 9:00 AM · Group B 1:00 PM</div>
+
+    <div class="session day2"><div class="session-hdr">Day 2 — Block D · Kitchen + Facilities <span class="srange">8:00 AM – 11:00 AM</span></div>
+      ${breakRow('','📋','8:00–8:30 AM · Meet Up + Short Briefing (Waterfront Lobby)')}
+      ${sceneRow('w21','08:30','09:00','Move to Pool','8:30–9:00 AM','Kitchen (Hood & Hob)','Kitchen (with Hood & Hob) — Wide + Lifestyle','Crystal, Sun Yi, Shaz in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Sun Yi, Shaz · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
+      ${breakRow('move','🚶','9:00–9:15 AM · Move to Pool (Facilities)')}
+      ${sceneRow('w22','09:15','09:45','Laundry','9:15–9:45 AM','Infinity Pool','Infinity Pool — Wide + Lifestyle','Crystal & Sun Yi in Sports.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Sun Yi · Sports','📚 Books, Sunglasses, Caps'],true)}
+      ${sceneRow('w23','09:45','10:15','Parcel Room','9:45–10:15 AM','Laundry','Laundry — Wide + Lifestyle','Crystal in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 2','🧺 Laundry bag/basket, shirt'],true)}
+      ${sceneRow('w24','10:15','10:45','Move to Block D','10:15–10:45 AM','Parcel Room','Parcel Room — Wide + Lifestyle','Sun Yi in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi · Casual 2','📦 Parcels'],true)}
+      ${breakRow('move','🚶','10:45–11:00 AM · Move to Block D Show Unit')}
+    </div>
+
+    <div class="session day2"><div class="session-hdr">Day 2 — Block D · Rooms <span class="srange">11:00 AM – 2:00 PM</span></div>
+      ${sceneRow('w25','11:00','11:30','Twin Sharing','11:00–11:30 AM','Twin Sharing (View)','Twin Sharing (View) — Wide + Lifestyle','Sun Yi & Shaz in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi, Shaz · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
+      ${sceneRow('w26','11:30','12:00','Single Small','11:30 AM–12:00 PM','Twin Sharing','Twin Sharing — Wide + Lifestyle','Sun Yi & Shaz in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi, Shaz · Casual 1'],true)}
+      ${sceneRow('w27','12:00','12:30','Single Big','12:00–12:30 PM','Single Small','Single Small — Wide + Lifestyle','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1'],true)}
+      ${sceneRow('w28','12:30','13:00','Single View','12:30–1:00 PM','Single Big','Single Big — Wide + Lifestyle','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1'],true)}
+      ${sceneRow('w29','13:00','13:30','Studio View','1:00–1:30 PM','Single View','Single View — Wide + Lifestyle','Sun Yi in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi · Casual 1'],true)}
+      ${sceneRow('w30','13:30','14:00','Lunch','1:30–2:00 PM','Studio View','Studio View (with Hood & Hob) — Wide + Lifestyle','Jun Hao in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Jun Hao · Casual 1'],true)}
+      ${breakRow('lunch','🍽','2:00–2:30 PM · Lunch + Talent Group B Meet Up + Crew Set Up')}
+    </div>
+
+    <div class="session day2"><div class="session-hdr">Day 2 — Block D · Rooms + Common Areas <span class="srange">2:30 PM – 4:00 PM</span></div>
+      ${sceneRow('w31','14:30','15:00','Living Room','2:30–3:00 PM','Pantry + Dining','Pantry + Dining Area — Wide + Lifestyle','Sufia, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sufia, Jun Hao, Ahmed · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
+      ${sceneRow('w32','15:00','15:30','Bathroom','3:00–3:30 PM','Living Room','Living Room — Wide + Lifestyle','Sufia, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sufia, Jun Hao, Ahmed · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'],true)}
+      ${sceneRow('w33','15:30','16:00','Move to Block C','3:30–4:00 PM','Bathroom','Bathroom — Wide + Lifestyle','Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Ahmed · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
+      ${breakRow('move','🚶','4:00–4:30 PM · Move to Block C + Crew Set Up')}
+    </div>
+
+    <div class="session day2"><div class="session-hdr">Day 2 — Block C · Rooms <span class="srange">4:30 PM – 7:30 PM</span></div>
+      ${sceneRow('w34','16:30','17:00','Ensuite Single','4:30–5:00 PM','Ensuite Twin','Ensuite Twin — Wide + Lifestyle','Crystal & Sufia in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Sufia · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
+      ${sceneRow('w35','17:00','17:30','Bathroom','5:00–5:30 PM','Ensuite Single','Ensuite Single — Wide + Lifestyle (WiFi Area)','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
+      ${sceneRow('w36','17:30','18:00','Pantry','5:30–6:00 PM','Bathroom','Bathroom — Wide + Lifestyle','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
+      ${sceneRow('w37','18:00','18:30','Dining Area','6:00–6:30 PM','Pantry','Pantry — Wide + Lifestyle','Crystal, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Jun Hao, Ahmed · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
+      ${sceneRow('w38','18:30','19:00','Living Room','6:30–7:00 PM','Dining Area','Dining Area — Wide + Lifestyle','Crystal, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Jun Hao, Ahmed · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
+      ${sceneRow('w39','19:00','19:30','Wrap!','7:00–7:30 PM','Living Room','Living Room — Wide + Lifestyle','Crystal, Ahmed, Jun Hao in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Ahmed, Jun Hao · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'],true)}
+      ${breakRow('wrap','✅','7:30 PM · Check Footage + Wrap — Day 2 Complete 🎉')}
+    </div>
+
+    <div class="shoot-footer">Sunway Waterfront Residences · 9 + 11 May 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// PLACEHOLDER (no schedule yet)
+// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// GETHA DREAM KINGDOM HTML
+// ═══════════════════════════════════════════════════
+function getGethaDKHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Dream Kingdom 1 · Mattress + Bedding Ready <span class="srange">10:00 AM – 12:15 PM</span></div>
+      ${breakRow('','📋','10:00 AM · Crew Call — Meet at Getha Showroom, briefing & walkthrough')}
+      ${breakRow('move','🟡','10:00–10:30 AM · Lighting Setup + Dial-In Dark Mood on DK1')}
+      ${sceneRow('g01','10:30','10:45','Side Profile','10:30–10:45 AM','DK1','Low 3/4 Profile — Slider','Camera at mattress height. 1 LED behind as rim, 1 as soft key. Shallow DOF.',['🎥 Slider','⏱ 15 min','💡 LED rim light behind bed'])}
+      ${sceneRow('g02','10:45','10:55','Macro Passes','10:45–10:55 AM','DK1','Straight-on Side Profile — Tripod','Centred, symmetrical. Tight crop — no floor/ceiling.',['🎥 Tripod','⏱ 10 min'])}
+      ${sceneRow('g03','10:55','11:10','Top-down','10:55–11:10 AM','DK1','Macro Texture Passes — Slider/Handheld','Quilting, stitching, embossing, corners. Move LED to 30–50cm from surface.',['🎥 Slider','⏱ 15 min','💡 1 LED close (snooted/dimmed)'])}
+      ${sceneRow('g04','11:10','11:20','Hand Press','11:10–11:20 AM','DK1','High-angle 3/4 Top-down — Gimbal/Tripod','Frame mattress surface only.',['🎥 Gimbal/Tripod','⏱ 10 min'])}
+      ${sceneRow('g05','11:20','11:40','Gimbal Orbit','11:20–11:40 AM','DK1','Hand Press Interaction — Side Angle','Slow press. Side-lit for silhouette. Higher FPS if possible.',['🎥 Side angle','⏱ 20 min','✋ Crew hands','💡 LED backlight behind hand'])}
+      ${sceneRow('g06','11:40','11:55','Bedding Detail','11:40–11:55 AM','DK1','Slow Gimbal Orbit — Hip Height','Arc from foot to 3/4. Strong light/shadow split on white sheets.',['🎥 Gimbal','⏱ 15 min','💡 Both LEDs same side'])}
+      ${sceneRow('g07','11:55','12:05','Sheet Pull','11:55 AM–12:05 PM','DK1','Pillow + Bedding Detail — Slider','Tight pass across pillows. White-on-white texture with dramatic side light.',['🎥 Slider','⏱ 10 min','💡 Side LED'])}
+      ${sceneRow('g08','12:05','12:15','Lunch','12:05–12:15 PM','DK1','Sheet Pull / Fabric Drape — Side Angle','Slow-motion. Side-lit fabric catching light as it moves. 60fps+.',['🎥 Side angle','⏱ 10 min','✋ Crew hands','💡 Backlight LED'])}
+      ${breakRow('lunch','🍽','12:15–1:00 PM · Lunch Break')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Dream Kingdom 2 · Mattress + Bedding Ready <span class="srange">1:00 PM – 2:55 PM</span></div>
+      ${breakRow('move','🟡','1:00–1:10 PM · Re-light for DK2')}
+      ${sceneRow('g09','13:10','13:25','Side Profile DK2','1:10–1:25 PM','DK2','Low 3/4 Profile — Slider','Same setup as Shot 1. Highlight any visual differences from DK1.',['🎥 Slider','⏱ 15 min','💡 LED rim light'])}
+      ${sceneRow('g10','13:25','13:35','Macro DK2','1:25–1:35 PM','DK2','Straight-on Side Profile — Tripod','Match framing of Shot 2 for edit consistency.',['🎥 Tripod','⏱ 10 min'])}
+      ${sceneRow('g11','13:35','13:50','Top-down DK2','1:35–1:50 PM','DK2','Macro Texture Passes — Slider/Handheld','Focus on DK2-specific details — different quilting, fabric, branding.',['🎥 Slider','⏱ 15 min','💡 Snooted LED'])}
+      ${sceneRow('g12','13:50','14:00','Hand Press DK2','1:50–2:00 PM','DK2','High-angle 3/4 Top-down — Gimbal','Same angle as Shot 4.',['🎥 Gimbal','⏱ 10 min'])}
+      ${sceneRow('g13','14:00','14:10','Dress Bed','2:00–2:10 PM','DK2','Hand Press Interaction — Side Angle','Match Shot 5.',['🎥 Side angle','⏱ 10 min','✋ Crew hands','💡 LED backlight'])}
+      ${breakRow('move','🟡','2:10–2:20 PM · Dress DK2 with bedding')}
+      ${sceneRow('g14','14:20','14:35','Bedding DK2','2:20–2:35 PM','DK2','Slow Gimbal Orbit — Hip Height','Match Shot 6 arc.',['🎥 Gimbal','⏱ 15 min','💡 Both LEDs'])}
+      ${sceneRow('g15','14:35','14:45','Sheet Detail DK2','2:35–2:45 PM','DK2','Pillow + Bedding Detail — Slider','Match Shot 7.',['🎥 Slider','⏱ 10 min','💡 Side LED'])}
+      ${sceneRow('g16','14:45','14:55','Both Beds','2:45–2:55 PM','DK2','Sheet Pull / Fabric Drape','Match Shot 8. 60fps+.',['🎥 Side angle','⏱ 10 min','✋ Crew hands','💡 Backlight LED'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Both Mattresses Side by Side <span class="srange">2:55 PM – 3:30 PM</span></div>
+      ${sceneRow('g17','14:55','15:15','Wide Shot','2:55–3:15 PM','DK1+2','Side-by-side Slider Transition','Slider travels from DK1 to DK2. Transition shot for the edit.',['🎥 Slider (long travel)','⏱ 20 min','💡 1 LED per bed'])}
+      ${sceneRow('g18','15:15','15:20','Logo CU','3:15–3:20 PM','DK1+2','Wide Establishing Shot — Gimbal Low Angle','Low & wide, looking up. Dim all ambient. Kingdom reveal shot.',['🎥 Gimbal','⏱ 5 min','💡 All LEDs on hero bed'])}
+      ${sceneRow('g19','15:20','15:25','CTA Beauty','3:20–3:25 PM','DK1+2','Logo / Branding Close-up','Any Getha / Dream Kingdom labels. Shallow DOF.',['🎥 Tight','⏱ 5 min','💡 1 LED'])}
+      ${sceneRow('g20','15:25','15:30','Wrap!','3:25–3:30 PM','DK1+2','CTA Beauty Shot — Tripod Locked','Static hero frame for end card: The Pinnacle of Sleep Luxury / From RM99,999.',['🎥 Tripod','⏱ 5 min','💡 Best lighting setup of the day'])}
+      ${breakRow('wrap','✅','3:30 PM · Check Footage + Wrap')}
+    </div>
+
+  </div>`;
+}
+
+function getPlaceholderHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap" style="text-align:center;padding:60px 24px;">
+    <div style="font-size:40px;margin-bottom:16px;">📋</div>
+    <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;">Schedule Coming Soon</div>
+    <div style="font-size:13px;color:var(--text-m);max-width:360px;margin:0 auto;line-height:1.6;">
+      This shoot is confirmed but the time schedule hasn't been created yet. Once the schedule is ready, the full live tracker with scene checklist and countdown timer will appear here.
+    </div>
+  </div>`;
+}
+
+
+// ═══ SHOOT PAGE LOGIC ═══
+// FIREBASE + CHECKLIST LOGIC
+// ═══════════════════════════════════════════════════
+let _currentShootId = null;
+let _currentActId   = null;
+
+function initShootPage(shoot){
+  _currentShootId = shoot.id;
+  _currentActId   = shoot.actId;
+  const total = document.querySelectorAll('.scene-row[data-id]').length;
+  document.getElementById('prog-total').textContent = total;
+
+  function waitFB(cb,n=0){if(window._fb&&window._fbListen){cb();return;}if(n>40)return;setTimeout(()=>waitFB(cb,n+1),100);}
+  waitFB(()=>{
+    setLive(true);
+    window._currentListener    = window._fbListen(shoot.id,   d=>renderState(d||{}));
+    window._currentActListener = window._fbListen(shoot.actId, d=>renderActivity(d));
+  });
+
+  initTimer(shoot);
+}
+
+function renderState(state){
+  document.querySelectorAll('.scene-row[data-id]').forEach(row=>{
+    const info=state[row.dataset.id];const stamp=row.querySelector('.checked-stamp');
+    if(info&&info.done){row.classList.add('done');if(stamp)stamp.textContent='✓ '+info.time;}
+    else{row.classList.remove('done');if(stamp)stamp.textContent='';}
+  });
+  updateProgress();
+  if(window._timerTick) window._timerTick();
+}
+
+function renderActivity(data){
+  const feed=document.getElementById('activity-feed');
+  if(!data||!Object.keys(data).length){feed.innerHTML='<div class="act-empty">No activity yet — waiting for shoot to begin.</div>';return;}
+  const items=Object.values(data).reverse().slice(0,15);
+  feed.innerHTML=items.map(a=>`<div class="act-item"><span class="act-time">${a.time}</span><span class="act-msg">${a.msg}</span></div>`).join('');
+}
+
+function updateProgress(){
+  const rows=document.querySelectorAll('.scene-row[data-id]');
+  const done=document.querySelectorAll('.scene-row[data-id].done').length;
+  const total=rows.length;
+  const pct=total?(done/total*100):0;
+  const fill=document.getElementById('prog-fill');
+  const doneEl=document.getElementById('prog-done');
+  if(fill) fill.style.width=pct+'%';
+  if(doneEl) doneEl.textContent=done;
+  document.getElementById('prog-total').textContent=total;
+  // Also update timer progress strip
+  const stripFill=document.getElementById('timer-progress-fill');
+  if(stripFill) stripFill.style.width=pct+'%';
+}
+
+async function handleCheck(row){
+  if(!window._fbUpdate){showSync('error','⚠️ Firebase not connected');return;}
+  const id=row.dataset.id;const isDone=row.classList.contains('done');
+  const title=row.querySelector('.stitle').textContent.trim().slice(0,50);
+  const now=new Date();const time=now.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+
+  // Show syncing state
+  showSync('syncing','Syncing…');
+
+  try{
+    const upd={};upd[id]=isDone?null:{done:true,time};
+    await window._fbUpdate(_currentShootId,upd);
+    const msg=isDone?'↩ Unmarked: <em>'+title+'</em>':'✅ Done: <em>'+title+'</em> at '+time;
+    await window._fbUpdate(_currentActId,{[Date.now().toString()]:{msg,time}});
+
+    // Show success state
+    showSync('success', isDone?'↩ Unmarked — saved':'✅ Saved');
+  }catch(e){
+    showSync('error','⚠️ Sync failed — tap to retry');
+  }
+}
+
+// ═══ SYNC INDICATOR ═══
+let _syncTimeout;
+function showSync(type, text){
+  const el = document.getElementById('sync-indicator');
+  const textEl = document.getElementById('sync-text');
+  if(!el) return;
+
+  clearTimeout(_syncTimeout);
+
+  // Reset classes
+  el.className = 'sync-indicator';
+  textEl.textContent = text;
+
+  // Set icon
+  const spinner = el.querySelector('.sync-spinner');
+  let checkEl = el.querySelector('.sync-check');
+  if(!checkEl){
+    checkEl = document.createElement('span');
+    checkEl.className = 'sync-check';
+    el.insertBefore(checkEl, textEl);
+  }
+
+  if(type === 'syncing'){
+    spinner.style.display = 'block';
+    checkEl.style.display = 'none';
+    el.classList.add('show');
+  } else if(type === 'success'){
+    spinner.style.display = 'none';
+    checkEl.style.display = 'block';
+    checkEl.textContent = '✓';
+    el.classList.add('show','success');
+    _syncTimeout = setTimeout(()=>{ el.classList.remove('show'); }, 2000);
+  } else if(type === 'error'){
+    spinner.style.display = 'none';
+    checkEl.style.display = 'block';
+    checkEl.textContent = '✕';
+    el.classList.add('show','error');
+    _syncTimeout = setTimeout(()=>{ el.classList.remove('show'); }, 3000);
+  }
+}
+
+function setLive(online){
+  const pill=document.getElementById('live-pill');
+  if(!pill)return;
+  pill.innerHTML='<div class="ldot"></div><span>'+(online?'LIVE':'OFFLINE')+'</span>';
+  pill.className='live-pill'+(online?'':' off');
+}
+
+// ═══════════════════════════════════════════════════
+// TIMER LOGIC
+// ═══════════════════════════════════════════════════
+let _timerInterval = null;
+function clearAllTimers(){ if(_timerInterval){clearInterval(_timerInterval);_timerInterval=null;} }
+
+function parseHM(s){const[h,m]=s.split(':').map(Number);return h*60+m;}
+function parseDateStr(s){const[y,mo,d]=s.split('-').map(Number);return new Date(y,mo-1,d,0,0,0,0);}
+
+function initTimer(shoot){
+  clearAllTimers();
+  const shootDates = shoot.dates;
+  const shootLabels = shoot.dates.map(d=>{
+    const dt = parseDateStr(d);
+    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return days[dt.getDay()]+', '+dt.getDate()+' '+months[dt.getMonth()]+' '+dt.getFullYear();
+  });
+
+  function tick(){
+    const now=new Date();
+    const h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
+    const pad=n=>String(n).padStart(2,'0');
+    const hh=h>12?h-12:h||12;
+    const clockEl=document.getElementById('timer-clock');
+    const dateEl=document.getElementById('timer-date');
+    const labelEl=document.getElementById('timer-label');
+    const sceneEl=document.getElementById('timer-scene');
+    const countEl=document.getElementById('timer-countdown');
+    const nextEl=document.getElementById('timer-next-scene');
+    const nextLabelEl=document.getElementById('timer-next-label');
+    if(!clockEl)return;
+
+    clockEl.textContent=pad(hh)+':'+pad(m)+':'+pad(s)+' '+(h>=12?'PM':'AM');
+    dateEl.textContent=now.toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+    // Which shoot day is today?
+    let dayIdx=-1;
+    for(let i=0;i<shootDates.length;i++){
+      const sd=parseDateStr(shootDates[i]);
+      if(now.getFullYear()===sd.getFullYear()&&now.getMonth()===sd.getMonth()&&now.getDate()===sd.getDate()){dayIdx=i;break;}
+    }
+
+    // Not a shoot day
+    if(dayIdx===-1){
+      const firstDate=parseDateStr(shootDates[0]);firstDate.setHours(0,0,0,0);
+      const todayMid=new Date();todayMid.setHours(0,0,0,0);
+      const daysLeft=Math.ceil((firstDate-todayMid)/(1000*60*60*24));
+      labelEl.textContent='Shoot Status';
+      if(daysLeft>0){
+        sceneEl.textContent='📅 '+daysLeft+' day'+(daysLeft>1?'s':'')+' until shoot';
+        countEl.textContent='Day 1: '+shootLabels[0];countEl.className='timer-countdown';
+      } else {
+        const lastDate=parseDateStr(shootDates[shootDates.length-1]);
+        if(todayMid>lastDate){
+          sceneEl.textContent='✅ Shoot has wrapped';
+          countEl.textContent='Completed '+shootLabels[shootLabels.length-1];countEl.className='timer-countdown';
+        } else {
+          sceneEl.textContent='📅 Shoot in progress';countEl.textContent='';countEl.className='timer-countdown';
+        }
+      }
+      nextLabelEl.textContent='Location';nextEl.textContent=shoot.location;
+      document.querySelectorAll('.scene-row').forEach(r=>r.classList.remove('now-active'));
+      setStatus('hidden','');
+      return;
+    }
+
+    // Shoot day!
+    const dayNum=dayIdx+1;
+    labelEl.textContent='Day '+dayNum+' · Now Shooting';
+    nextLabelEl.textContent='Up Next';
+    const nowMin=h*60+m;
+    const dayFilter=dayIdx===0?r=>!r.dataset.day||r.dataset.day==='1':r=>r.dataset.day===String(dayNum);
+    const rows=Array.from(document.querySelectorAll('.scene-row[data-start]')).filter(dayFilter);
+    let current=null,nextScene=null;
+    document.querySelectorAll('.scene-row').forEach(r=>r.classList.remove('now-active'));
+
+    for(let i=0;i<rows.length;i++){
+      const start=parseHM(rows[i].dataset.start),end=parseHM(rows[i].dataset.end);
+      if(nowMin>=start&&nowMin<end&&!rows[i].classList.contains('done')){
+        current=rows[i];
+        for(let j=i+1;j<rows.length;j++){if(!rows[j].classList.contains('done')){nextScene=rows[j];break;}}
+        break;
+      }
+    }
+
+    if(current){
+      current.classList.add('now-active');
+      sceneEl.textContent=current.querySelector('.stitle').textContent.trim();
+      const remaining=parseHM(current.dataset.end)-nowMin;
+      countEl.textContent=remaining<=5?'⚠️ '+remaining+' min remaining':remaining+' min remaining';
+      countEl.className='timer-countdown'+(remaining<=5?' warning':'');
+      nextEl.textContent=nextScene?nextScene.querySelector('.stitle').textContent.trim():'—';
+      updateShootStatus(rows,nowMin);
+    } else {
+      if(rows.length&&nowMin<parseHM(rows[0].dataset.start)){
+        sceneEl.textContent='Day '+dayNum+' hasn\'t started yet';
+        countEl.textContent='Starts at '+rows[0].querySelector('.stime').textContent.split('–')[0];
+        countEl.className='timer-countdown';
+        nextEl.textContent=rows[0].querySelector('.stitle').textContent.trim();
+        setStatus('hidden','');
+      } else {
+        const allDone=rows.every(r=>r.classList.contains('done'));
+        if(allDone&&rows.length){
+          sceneEl.textContent='All scenes wrapped! 🎉';countEl.textContent='';countEl.className='timer-countdown';nextEl.textContent='—';
+          setStatus('wrap-done','✅ All Done');
+        } else {
+          sceneEl.textContent='No active scene';countEl.textContent='—';countEl.className='timer-countdown';nextEl.textContent='—';
+          updateShootStatus(rows,nowMin);
+        }
+      }
+    }
+  }
+
+  window._timerTick = tick;
+  tick();
+  _timerInterval = setInterval(tick, 1000);
+}
+
+function updateShootStatus(rows, nowMin){
+  let shouldBeDone=0,actuallyDone=0,aheadCount=0;
+  for(const row of rows){
+    const end=parseHM(row.dataset.end);
+    if(end<=nowMin) shouldBeDone++;
+    if(row.classList.contains('done')){
+      if(end<=nowMin) actuallyDone++;
+      else aheadCount++;
+    }
+  }
+  const diff=actuallyDone-shouldBeDone+aheadCount;
+  if(shouldBeDone===0&&aheadCount===0) setStatus('on-time','🟢 On Time');
+  else if(diff>0) setStatus('ahead','🔵 '+diff+' scene'+(diff>1?'s':'')+' ahead');
+  else if(diff===0) setStatus('on-time','🟢 On Time');
+  else{ const b=Math.abs(diff); setStatus('delayed','🔴 '+b+' scene'+(b>1?'s':'')+' behind'); }
+}
+
+function setStatus(type,text){
+  const badge=document.getElementById('status-badge');
+  if(!badge)return;
+  if(type==='hidden'){badge.className='status-badge hidden';return;}
+  badge.className='status-badge '+type;badge.textContent=text;
+}
+
+// ═══════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════
+let _tt;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+// ═══ ADD / EDIT / DELETE SHOOT ═══
+// ═══ KEBAB MENU ═══
+function toggleKebab(btn){
+  const drop = btn.nextElementSibling;
+  const isOpen = drop.classList.contains('open');
+  closeAllKebabs();
+  if(!isOpen) drop.classList.add('open');
+}
+function closeAllKebabs(){
+  document.querySelectorAll('.kebab-drop.open').forEach(d=>d.classList.remove('open'));
+}
+document.addEventListener('click', closeAllKebabs);
+
+let _editingShootId = null;
+
+function openAddShoot(){
+  _editingShootId = null;
+  document.getElementById('add-shoot-modal').classList.add('open');
+  document.querySelector('#add-shoot-modal .modal-title').textContent = 'Add Shoot';
+  document.getElementById('add-save').textContent = 'Add to Dashboard';
+  // Default start date to tomorrow
+  const tmr = new Date(); tmr.setDate(tmr.getDate()+1);
+  document.getElementById('add-date-start').value = tmr.toISOString().split('T')[0];
+  document.getElementById('add-client').value = '';
+  document.getElementById('add-title').value = '';
+  document.getElementById('add-date-end').value = '';
+  document.getElementById('add-location').value = '';
+  setTimeout(()=>document.getElementById('add-client').focus(), 300);
+}
+
+function openEditShoot(shootId){
+  const shoot = SHOOTS.find(s=>s.id===shootId);
+  if(!shoot) return;
+  _editingShootId = shootId;
+  document.getElementById('add-shoot-modal').classList.add('open');
+  document.querySelector('#add-shoot-modal .modal-title').textContent = 'Edit Shoot';
+  document.getElementById('add-save').textContent = 'Save Changes';
+  document.getElementById('add-client').value = shoot.client || '';
+  document.getElementById('add-title').value = shoot.title || '';
+  document.getElementById('add-date-start').value = shoot.dates[0] || '';
+  document.getElementById('add-date-end').value = shoot.dates.length > 1 ? shoot.dates[shoot.dates.length-1] : '';
+  document.getElementById('add-location').value = (shoot.location && shoot.location !== 'TBC') ? shoot.location : '';
+  setTimeout(()=>document.getElementById('add-client').focus(), 300);
+}
+
+function closeAddShoot(){
+  document.getElementById('add-shoot-modal').classList.remove('open');
+  _editingShootId = null;
+}
+
+function closeAddShootOverlay(e){
+  if(e.target === e.currentTarget) closeAddShoot();
+}
+
+async function saveNewShoot(){
+  const client = document.getElementById('add-client').value.trim();
+  const title = document.getElementById('add-title').value.trim();
+  const startDate = document.getElementById('add-date-start').value;
+  const endDate = document.getElementById('add-date-end').value;
+  const location = document.getElementById('add-location').value.trim();
+
+  if(!client){ showToast('Client name is required'); return; }
+  if(!title){ showToast('Shoot title is required'); return; }
+  if(!startDate){ showToast('Start date is required'); return; }
+
+  const btn = document.getElementById('add-save');
+  btn.disabled = true;
+  btn.textContent = _editingShootId ? 'Saving...' : 'Adding...';
+
+  // Build dates array
+  const dates = [startDate];
+  if(endDate && endDate > startDate){
+    const s = new Date(startDate + 'T00:00:00');
+    const e = new Date(endDate + 'T00:00:00');
+    const d = new Date(s);
+    d.setDate(d.getDate()+1);
+    while(d <= e){
+      dates.push(d.toISOString().split('T')[0]);
+      d.setDate(d.getDate()+1);
+    }
+  }
+
+  // Build dates label
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const sd = new Date(startDate+'T00:00:00');
+  let datesLabel = sd.getDate()+' '+MONTHS[sd.getMonth()]+' '+sd.getFullYear()+' · '+DAYS[sd.getDay()];
+  if(dates.length > 1){
+    const ed = new Date(dates[dates.length-1]+'T00:00:00');
+    datesLabel = sd.getDate()+'-'+ed.getDate()+' '+MONTHS[sd.getMonth()]+' '+sd.getFullYear()+' · '+DAYS[sd.getDay()]+'-'+DAYS[ed.getDay()];
+  }
+
+  const isEdit = !!_editingShootId;
+  const existingShoot = isEdit ? SHOOTS.find(s=>s.id===_editingShootId) : null;
+  const isHardcoded = existingShoot && !existingShoot.userAdded;
+  const id = isEdit ? _editingShootId : (client+'-'+title).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'')+'-'+startDate.replace(/-/g,'');
+
+  try {
+    if(isEdit && isHardcoded){
+      // Editing a hardcoded shoot — merge changes into existing, save override to Firebase
+      existingShoot.client = client;
+      existingShoot.title = title;
+      existingShoot.dates = dates;
+      existingShoot.datesLabel = datesLabel;
+      existingShoot.location = location || existingShoot.location || 'TBC';
+      existingShoot.days = dates.length;
+
+      if(window._fbSet){
+        showSync('syncing', 'Saving changes...');
+        await window._fbSet('dashboard-overrides/'+id, {
+          client, title, dates, datesLabel,
+          location: existingShoot.location,
+          days: dates.length,
+          updatedAt: new Date().toISOString()
+        });
+        showSync('success', 'Changes saved');
+      }
+      renderDashboard();
+      closeAddShoot();
+    } else {
+      // New shoot or editing a user-added shoot
+      const shootData = {
+        id, actId: id+'-activity',
+        client, title, dates, datesLabel,
+        location: location || 'TBC',
+        crewCall: existingShoot?.crewCall || 'TBC',
+        talentCall: existingShoot?.talentCall || 'TBC',
+        wrapEst: existingShoot?.wrapEst || 'TBC',
+        days: dates.length,
+        userAdded: true,
+        createdAt: isEdit ? (existingShoot?.createdAt || new Date().toISOString()) : new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      if(window._fbSet){
+        showSync('syncing', isEdit ? 'Saving changes...' : 'Saving shoot...');
+        if(isEdit && id !== _editingShootId){
+          await window._fbSet('dashboard-shoots/'+_editingShootId, null);
+        }
+        await window._fbSet('dashboard-shoots/'+id, shootData);
+        showSync('success', isEdit ? 'Changes saved' : 'Shoot added');
+      }
+
+      if(isEdit){
+        const idx = SHOOTS.findIndex(s=>s.id===_editingShootId);
+        if(idx >= 0) SHOOTS.splice(idx, 1);
+      }
+      SHOOTS.push(shootData);
+      renderDashboard();
+      closeAddShoot();
+
+      if(!window._fbSet) showToast('Added locally — Firebase offline');
+    }
+  } catch(e){
+    showSync('error', 'Save failed');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = isEdit ? 'Save Changes' : 'Add to Dashboard';
+  }
+}
+
+// ═══ DELETE SHOOT ═══
+let _deleteTargetId = null;
+let _hiddenIds = [];
+
+function openDeleteConfirm(shootId){
+  const shoot = SHOOTS.find(s=>s.id===shootId);
+  if(!shoot) return;
+  _deleteTargetId = shootId;
+  const action = 'Remove';
+  document.getElementById('delete-confirm-text').textContent =
+    action+' "'+shoot.client+' — '+shoot.title+'" from the dashboard?';
+  document.getElementById('delete-confirm-btn').textContent = 'Delete';
+  document.getElementById('delete-confirm').classList.add('open');
+}
+
+function closeDeleteConfirm(){
+  document.getElementById('delete-confirm').classList.remove('open');
+  _deleteTargetId = null;
+}
+
+async function confirmDelete(){
+  if(!_deleteTargetId) return;
+  const id = _deleteTargetId;
+  const shoot = SHOOTS.find(s=>s.id===id);
+  const isHardcoded = shoot && !shoot.userAdded;
+  const btn = document.getElementById('delete-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = isHardcoded ? 'Hiding...' : 'Deleting...';
+
+  try{
+    if(isHardcoded){
+      // Hide hardcoded shoot via Firebase flag
+      if(window._fbSet){
+        showSync('syncing', 'Hiding...');
+        await window._fbSet('dashboard-hidden/'+id, true);
+        showSync('success', 'Shoot hidden');
+      }
+      const idx = SHOOTS.findIndex(s=>s.id===id);
+      if(idx >= 0) SHOOTS.splice(idx, 1);
+      _hiddenIds.push(id);
+    } else {
+      // Actually delete user-added shoot
+      if(window._fbSet){
+        showSync('syncing', 'Deleting...');
+        await window._fbSet('dashboard-shoots/'+id, null);
+        showSync('success', 'Shoot removed');
+      }
+      const idx = SHOOTS.findIndex(s=>s.id===id);
+      if(idx >= 0) SHOOTS.splice(idx, 1);
+    }
+    renderDashboard();
+    closeDeleteConfirm();
+    if(!window._fbSet) showToast('Updated locally — Firebase offline');
+  } catch(e){
+    showSync('error', 'Failed — try again');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Delete';
+  }
+}
+
+// Load user-added shoots from Firebase on startup
+function loadFirebaseShoots(){
+  if(!window._fbGet) return;
+
+  // Load hidden shoot IDs first, then filter
+  window._fbGet('dashboard-hidden').then(snap=>{
+    const data = snap.val();
+    if(data){
+      _hiddenIds = Object.keys(data).filter(k=>data[k]===true);
+      // Remove hidden shoots from local array
+      let changed = false;
+      _hiddenIds.forEach(id=>{
+        const idx = SHOOTS.findIndex(s=>s.id===id);
+        if(idx >= 0){ SHOOTS.splice(idx, 1); changed = true; }
+      });
+      if(changed) renderDashboard();
+    }
+  }).catch(()=>{});
+
+  // Load user-added shoots
+  window._fbGet('dashboard-shoots').then(snap=>{
+    const data = snap.val();
+    if(!data) return;
+    let added = 0;
+    Object.values(data).forEach(shoot=>{
+      if(shoot && shoot.id && !SHOOTS.find(s=>s.id===shoot.id) && !_hiddenIds.includes(shoot.id)){
+        shoot.userAdded = true;
+        SHOOTS.push(shoot);
+        added++;
+      }
+    });
+    if(added > 0) renderDashboard();
+  }).catch(()=>{});
+
+  // Load overrides for hardcoded shoots (date/title/client changes)
+  window._fbGet('dashboard-overrides').then(snap=>{
+    const data = snap.val();
+    if(!data) return;
+    let changed = false;
+    Object.entries(data).forEach(([id, overrides])=>{
+      const shoot = SHOOTS.find(s=>s.id===id);
+      if(shoot && overrides){
+        if(overrides.client) shoot.client = overrides.client;
+        if(overrides.title) shoot.title = overrides.title;
+        if(overrides.dates) shoot.dates = overrides.dates;
+        if(overrides.datesLabel) shoot.datesLabel = overrides.datesLabel;
+        if(overrides.location) shoot.location = overrides.location;
+        if(overrides.days) shoot.days = overrides.days;
+        changed = true;
+      }
+    });
+    if(changed) renderDashboard();
+  }).catch(()=>{});
+}
+
+// ═══ INIT ═══
+renderDashboard();
+
+// Load Firebase shoots after connection is ready
+function waitFBReady(cb,n=0){
+  if(window._fb && window._fbGet){cb();return;}
+  if(n>40)return;
+  setTimeout(()=>waitFBReady(cb,n+1),100);
+}
+waitFBReady(()=>loadFirebaseShoots());
+
+// Update live progress time-based bars every 30s
+setInterval(()=>{
+  const liveEl = document.getElementById('live-section');
+  if(!liveEl || !liveEl.innerHTML) return;
+  const liveShots = SHOOTS.filter(s=>getShootStatus(s)==='live');
+  liveShots.forEach(shoot=>{
+    const crewTime = parseTimeToday(shoot.crewCall);
+    const wrapTime = parseTimeToday(shoot.wrapEst);
+    if(!crewTime || !wrapTime) return;
+    const now = new Date();
+    const total = wrapTime - crewTime;
+    const elapsed = now - crewTime;
+    let pct=0, label='Starting…';
+    if(elapsed<0){pct=0;label='Starting soon';}
+    else if(elapsed>=total){pct=100;label='Wrapping up';}
+    else{pct=Math.round(elapsed/total*100);label=pct+'% through day';}
+    const fill=document.getElementById('live-prog-'+shoot.id);
+    const lbl=document.getElementById('live-label-'+shoot.id);
+    if(fill) fill.style.width=pct+'%';
+    if(lbl) lbl.textContent=label;
+  });
+}, 30000);
+</script>
+</body>
+</html>
