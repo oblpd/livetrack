@@ -193,6 +193,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .dash-hero-label{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--pri);margin-bottom:4px;}
 .dash-hero-title{font-size:26px;font-weight:900;color:var(--n100);line-height:1.1;letter-spacing:-.02em;margin-bottom:4px;}
 .dash-hero-sub{font-size:11px;color:rgba(243,241,234,.4);}
+.dash-hero-updated{font-size:10px;color:rgba(243,241,234,.25);margin-top:6px;letter-spacing:.02em;}
 .dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px;}
 .dash-stat{
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
@@ -296,7 +297,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .month-hdr{
   min-height:var(--min-touch);height:52px;
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-md);padding:0 16px;
+  border-radius:var(--r-md);padding:0 24px 0 16px;
   display:flex;align-items:center;justify-content:space-between;
   cursor:pointer;transition:all .2s;user-select:none;
   -webkit-tap-highlight-color:transparent;
@@ -829,6 +830,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div class="dash-hero-label">Oblique · Internal Production</div>
     <div class="dash-hero-title">Production Dashboard</div>
     <div class="dash-hero-sub">All active and scheduled productions</div>
+    <div class="dash-hero-updated" id="dash-updated"></div>
     <div class="dash-stats">
       <div class="dash-stat"><div class="dash-stat-num" id="stat-total">7</div><div class="dash-stat-label">Total</div></div>
       <div class="dash-stat stat-upcoming"><div class="dash-stat-num" id="stat-upcoming">0</div><div class="dash-stat-label">Upcoming</div></div>
@@ -1106,6 +1108,19 @@ function updateDashClock(){
   if(el) el.textContent=pad(h>12?h-12:h||12)+':'+pad(m)+' '+(h>=12?'PM':'AM');
 }
 setInterval(updateDashClock,1000);updateDashClock();
+
+// ═══ LAST UPDATED ═══
+function updateLastUpdated(){
+  const now=new Date();
+  const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d=now.getDate(),mon=MONTHS[now.getMonth()],y=now.getFullYear();
+  const h=now.getHours(),m=String(now.getMinutes()).padStart(2,'0');
+  const ampm=h>=12?'PM':'AM';
+  const h12=h>12?h-12:h||12;
+  const el=document.getElementById('dash-updated');
+  if(el) el.textContent='Last updated: '+d+' '+mon+' '+y+' · '+h12+':'+m+' '+ampm;
+}
+setInterval(updateLastUpdated,60000);updateLastUpdated();
 
 // ═══ RENDER DASHBOARD ═══
 function renderDashboard(query='', filter='all', sort='date-asc'){
