@@ -807,6 +807,78 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 /* Toast */
 #toast{position:fixed;bottom:calc(22px + 60px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(16px);background:var(--pri);color:#fff;padding:10px 20px;border-radius:99px;font-size:12px;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;white-space:nowrap;box-shadow:var(--sh-lg);}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* ═══ SHOT EDIT MODE ═══ */
+.edit-fab{
+  position:fixed;bottom:calc(72px + env(safe-area-inset-bottom));right:20px;z-index:210;
+  width:48px;height:48px;border-radius:50%;border:none;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text2);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--sh-lg);transition:all .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.edit-fab:active{transform:scale(.92);}
+.edit-fab.active{background:var(--pri);border-color:var(--pri);color:#fff;}
+.row-actions{
+  display:none;position:absolute;top:8px;right:8px;
+  gap:4px;z-index:5;
+}
+.shoot-wrap.edit-mode .row-actions{display:flex;}
+.row-action-btn{
+  width:30px;height:30px;border:none;border-radius:var(--r-sm);
+  background:var(--surface2);cursor:pointer;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;
+}
+.row-action-btn:active{transform:scale(.9);}
+.row-action-btn.row-del{color:#e74c3c;}
+.row-action-btn.row-edit{color:var(--upcoming);}
+.shoot-wrap.edit-mode .scene-row{cursor:default;}
+.add-shot-btn{
+  display:none;width:100%;padding:12px;border:2px dashed var(--border2);
+  border-radius:var(--r-md);background:transparent;color:var(--text3);
+  font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;
+  font-family:'Inter',sans-serif;margin-top:4px;
+  -webkit-tap-highlight-color:transparent;
+}
+.add-shot-btn:active{background:var(--surface2);}
+.shoot-wrap.edit-mode .add-shot-btn{display:block;}
+
+/* Shot Modal */
+.shot-modal-overlay{
+  position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  display:none;align-items:flex-end;justify-content:center;
+}
+.shot-modal-overlay.open{display:flex;}
+.shot-modal-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  width:100%;max-width:480px;max-height:85vh;overflow-y:auto;
+  padding:20px;animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.shot-modal-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:16px;}
+.shot-field{margin-bottom:12px;}
+.shot-field label{display:block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.shot-field input,.shot-field textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--border2);
+  border-radius:var(--r-sm);background:var(--surface2);color:var(--text);
+  font-size:13px;font-family:'Inter',sans-serif;outline:none;
+  transition:border-color .15s;box-sizing:border-box;
+}
+.shot-field input:focus,.shot-field textarea:focus{border-color:var(--pri);}
+.shot-field textarea{resize:vertical;min-height:60px;}
+.shot-modal-btns{display:flex;gap:8px;margin-top:16px;}
+.shot-modal-btns button{
+  flex:1;padding:12px;border:none;border-radius:var(--r-sm);
+  font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;
+}
+.shot-modal-btns .modal-cancel{background:var(--surface2);color:var(--text2);}
+.shot-modal-btns .modal-save{background:var(--pri);color:#fff;}
+.shot-modal-btns button:active{transform:scale(.97);}
+
 </style>
 </head>
 <body>
@@ -918,6 +990,25 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <!-- ═══ SHOOT PAGE ═══ -->
 <div class="page" id="page-shoot">
   <div id="shoot-content"></div>
+  <button class="edit-fab" id="edit-fab" onclick="toggleEditMode()" title="Edit shots">✏️</button>
+</div>
+
+<!-- Shot Edit/Add Modal -->
+<div class="shot-modal-overlay" id="shot-modal" onclick="if(event.target===this)closeShotModal()">
+  <div class="shot-modal-box">
+    <div class="shot-modal-title" id="shot-modal-title">Add Shot</div>
+    <div class="shot-field"><label>Time</label><input type="text" id="sm-time" placeholder="e.g. 10:30–10:45 AM"/></div>
+    <div class="shot-field"><label>Location</label><input type="text" id="sm-loc" placeholder="e.g. DK1"/></div>
+    <div class="shot-field"><label>Description</label><input type="text" id="sm-title" placeholder="e.g. Low 3/4 Profile — Slider"/></div>
+    <div class="shot-field"><label>Notes</label><textarea id="sm-desc" placeholder="Camera and lighting notes..."></textarea></div>
+    <div class="shot-field"><label>Tags (comma-separated)</label><input type="text" id="sm-tags" placeholder="e.g. 🎥 Slider, ⏱ 15 min, 💡 Rim light"/></div>
+    <input type="hidden" id="sm-mode" value="add"/>
+    <input type="hidden" id="sm-target" value=""/>
+    <div class="shot-modal-btns">
+      <button class="modal-cancel" onclick="closeShotModal()">Cancel</button>
+      <button class="modal-save" onclick="saveShotModal()">Save</button>
+    </div>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -1600,6 +1691,10 @@ function sceneRow(id, start, end, next, time, loc, title, desc, tags, day2=false
       ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
     </div>
     <div class="checked-stamp"></div>
+    <div class="row-actions">
+      <button class="row-action-btn row-edit" onclick="event.stopPropagation();openEditShot(this.closest('.scene-row'))" title="Edit">✏️</button>
+      <button class="row-action-btn row-del" onclick="event.stopPropagation();deleteShot(this.closest('.scene-row'))" title="Delete">🗑</button>
+    </div>
   </div>`;
 }
 
@@ -2098,11 +2193,18 @@ function initShootPage(shoot){
   const total = document.querySelectorAll('.scene-row[data-id]').length;
   document.getElementById('prog-total').textContent = total;
 
+  // Reset edit mode
+  _editMode = false;
+  const fab = document.getElementById('edit-fab');
+  if(fab){ fab.classList.remove('active'); fab.textContent = '✏️'; }
+
   function waitFB(cb,n=0){if(window._fb&&window._fbListen){cb();return;}if(n>40)return;setTimeout(()=>waitFB(cb,n+1),100);}
   waitFB(()=>{
     setLive(true);
     window._currentListener    = window._fbListen(shoot.id,   d=>renderState(d||{}));
     window._currentActListener = window._fbListen(shoot.actId, d=>renderActivity(d));
+    // Load any shot modifications (edits, deletes, adds)
+    loadShotMods(shoot);
   });
 
   initTimer(shoot);
@@ -2141,6 +2243,7 @@ function updateProgress(){
 }
 
 async function handleCheck(row){
+  if(_editMode) return; // Don't toggle check in edit mode
   if(!window._fbUpdate){showSync('error','⚠️ Firebase not connected');return;}
   const id=row.dataset.id;const isDone=row.classList.contains('done');
   const title=row.querySelector('.stitle').textContent.trim().slice(0,50);
@@ -2160,6 +2263,268 @@ async function handleCheck(row){
   }catch(e){
     showSync('error','⚠️ Sync failed — tap to retry');
   }
+}
+
+// ═══ SHOT EDIT MODE ═══
+let _editMode = false;
+
+function toggleEditMode(){
+  _editMode = !_editMode;
+  const wrap = document.querySelector('.shoot-wrap');
+  const fab = document.getElementById('edit-fab');
+  if(!wrap) return;
+
+  if(_editMode){
+    wrap.classList.add('edit-mode');
+    fab.classList.add('active');
+    fab.textContent = '✓';
+    // Inject add-shot buttons into each session
+    wrap.querySelectorAll('.session').forEach(ses => {
+      if(!ses.querySelector('.add-shot-btn')){
+        const btn = document.createElement('button');
+        btn.className = 'add-shot-btn';
+        btn.textContent = '+ Add Shot';
+        btn.onclick = function(){ openAddShot(this); };
+        ses.appendChild(btn);
+      }
+    });
+  } else {
+    wrap.classList.remove('edit-mode');
+    fab.classList.remove('active');
+    fab.textContent = '✏️';
+    // Remove add buttons
+    wrap.querySelectorAll('.add-shot-btn').forEach(b => b.remove());
+  }
+}
+
+function openEditShot(row){
+  const id = row.dataset.id;
+  const timeEl = row.querySelector('.stime');
+  const locEl = row.querySelector('.sloc');
+  const titleEl = row.querySelector('.stitle');
+  const descEl = row.querySelector('.sdesc');
+  const tagsEl = row.querySelector('.tags');
+
+  document.getElementById('shot-modal-title').textContent = 'Edit Shot';
+  document.getElementById('sm-time').value = timeEl ? timeEl.textContent : '';
+  document.getElementById('sm-loc').value = locEl ? locEl.textContent : '';
+  document.getElementById('sm-title').value = titleEl ? titleEl.textContent : '';
+  document.getElementById('sm-desc').value = descEl ? descEl.textContent : '';
+  document.getElementById('sm-tags').value = tagsEl ? Array.from(tagsEl.querySelectorAll('.tag')).map(t=>t.textContent).join(', ') : '';
+  document.getElementById('sm-mode').value = 'edit';
+  document.getElementById('sm-target').value = id;
+  document.getElementById('shot-modal').classList.add('open');
+}
+
+function openAddShot(btn){
+  const session = btn.closest('.session');
+  document.getElementById('shot-modal-title').textContent = 'Add Shot';
+  document.getElementById('sm-time').value = '';
+  document.getElementById('sm-loc').value = '';
+  document.getElementById('sm-title').value = '';
+  document.getElementById('sm-desc').value = '';
+  document.getElementById('sm-tags').value = '';
+  document.getElementById('sm-mode').value = 'add';
+  // Store reference to session
+  document.getElementById('sm-target').value = Array.from(document.querySelectorAll('.session')).indexOf(session);
+  document.getElementById('shot-modal').classList.add('open');
+}
+
+function closeShotModal(){
+  document.getElementById('shot-modal').classList.remove('open');
+}
+
+async function saveShotModal(){
+  const mode = document.getElementById('sm-mode').value;
+  const target = document.getElementById('sm-target').value;
+  const time = document.getElementById('sm-time').value.trim();
+  const loc = document.getElementById('sm-loc').value.trim();
+  const title = document.getElementById('sm-title').value.trim();
+  const desc = document.getElementById('sm-desc').value.trim();
+  const tagsStr = document.getElementById('sm-tags').value.trim();
+  const tags = tagsStr ? tagsStr.split(',').map(t=>t.trim()).filter(Boolean) : [];
+
+  if(!title){ alert('Description is required'); return; }
+
+  if(mode === 'edit'){
+    // Update DOM
+    const row = document.querySelector(`.scene-row[data-id="${target}"]`);
+    if(row){
+      const timeEl = row.querySelector('.stime');
+      const locEl = row.querySelector('.sloc');
+      const titleEl = row.querySelector('.stitle');
+      let descEl = row.querySelector('.sdesc');
+      const contentEl = row.querySelector('.scontent');
+      let tagsEl = row.querySelector('.tags');
+
+      if(timeEl) timeEl.textContent = time;
+      if(locEl) locEl.textContent = loc;
+      if(titleEl) titleEl.textContent = title;
+
+      if(desc){
+        if(descEl) descEl.textContent = desc;
+        else { descEl = document.createElement('div'); descEl.className='sdesc'; descEl.textContent=desc; contentEl.insertBefore(descEl, tagsEl); }
+      } else if(descEl) descEl.remove();
+
+      if(tags.length){
+        const tagHtml = tags.map(t=>`<span class="tag">${t}</span>`).join('');
+        if(tagsEl) tagsEl.innerHTML = tagHtml;
+        else { tagsEl = document.createElement('div'); tagsEl.className='tags'; tagsEl.innerHTML=tagHtml; contentEl.appendChild(tagsEl); }
+      } else if(tagsEl) tagsEl.remove();
+    }
+    // Save to Firebase
+    await saveShotMod('edit', target, {time, loc, title, desc, tags});
+    showSync('success', '✏️ Shot updated');
+  }
+
+  if(mode === 'add'){
+    const sessionIdx = parseInt(target);
+    const session = document.querySelectorAll('.session')[sessionIdx];
+    if(!session) return;
+
+    const newId = 'x' + Date.now().toString(36);
+    const tagHtml = tags.map(t=>`<span class="tag">${t}</span>`).join('');
+    const rowHtml = `
+      <div class="scene-row" data-id="${newId}" data-start="" data-end="" data-next="" onclick="handleCheck(this)">
+        <div class="chk"><svg width="11" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4.5l3 3L11 1" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="smeta"><div class="stime">${time}</div><div class="sloc">${loc}</div></div>
+        <div class="scontent">
+          <div class="stitle">${title}</div>
+          ${desc?`<div class="sdesc">${desc}</div>`:''}
+          ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
+        </div>
+        <div class="checked-stamp"></div>
+        <div class="row-actions">
+          <button class="row-action-btn row-edit" onclick="event.stopPropagation();openEditShot(this.closest('.scene-row'))" title="Edit">✏️</button>
+          <button class="row-action-btn row-del" onclick="event.stopPropagation();deleteShot(this.closest('.scene-row'))" title="Delete">🗑</button>
+        </div>
+      </div>`;
+
+    // Insert before the add-shot button
+    const addBtn = session.querySelector('.add-shot-btn');
+    const temp = document.createElement('div');
+    temp.innerHTML = rowHtml;
+    const newRow = temp.firstElementChild;
+    if(addBtn) session.insertBefore(newRow, addBtn);
+    else session.appendChild(newRow);
+
+    // Update progress count
+    updateProgress();
+
+    // Save to Firebase
+    await saveShotMod('add', newId, {time, loc, title, desc, tags, sessionIdx});
+    showSync('success', '✅ Shot added');
+  }
+
+  closeShotModal();
+}
+
+async function deleteShot(row){
+  const id = row.dataset.id;
+  const title = row.querySelector('.stitle')?.textContent || 'this shot';
+  if(!confirm('Delete "' + title + '"?')) return;
+
+  row.style.transition = 'all .3s';
+  row.style.opacity = '0';
+  row.style.maxHeight = '0';
+  row.style.overflow = 'hidden';
+  row.style.padding = '0';
+  row.style.margin = '0';
+  setTimeout(()=>{ row.remove(); updateProgress(); }, 300);
+
+  await saveShotMod('delete', id, true);
+  showSync('success', '🗑 Shot deleted');
+}
+
+async function saveShotMod(type, id, data){
+  if(!window._fbUpdate || !_currentShootId) return;
+  const path = _currentShootId + '-mods';
+  const upd = {};
+  if(type === 'delete') upd['deleted/' + id] = true;
+  else if(type === 'edit') upd['edited/' + id] = data;
+  else if(type === 'add') upd['added/' + id] = data;
+  try { await window._fbUpdate(path, upd); } catch(e){ console.error('Save mod failed:', e); }
+}
+
+function loadShotMods(shoot){
+  if(!window._fbGet) return;
+  window._fbGet(shoot.id + '-mods').then(snap=>{
+    const mods = snap.val();
+    if(!mods) return;
+
+    // Apply deletions
+    if(mods.deleted){
+      Object.keys(mods.deleted).forEach(id=>{
+        const row = document.querySelector(`.scene-row[data-id="${id}"]`);
+        if(row) row.remove();
+      });
+    }
+
+    // Apply edits
+    if(mods.edited){
+      Object.entries(mods.edited).forEach(([id, data])=>{
+        const row = document.querySelector(`.scene-row[data-id="${id}"]`);
+        if(!row) return;
+        const timeEl = row.querySelector('.stime');
+        const locEl = row.querySelector('.sloc');
+        const titleEl = row.querySelector('.stitle');
+        let descEl = row.querySelector('.sdesc');
+        const contentEl = row.querySelector('.scontent');
+        let tagsEl = row.querySelector('.tags');
+
+        if(timeEl && data.time) timeEl.textContent = data.time;
+        if(locEl && data.loc) locEl.textContent = data.loc;
+        if(titleEl && data.title) titleEl.textContent = data.title;
+
+        if(data.desc){
+          if(descEl) descEl.textContent = data.desc;
+          else { descEl = document.createElement('div'); descEl.className='sdesc'; descEl.textContent=data.desc; contentEl.insertBefore(descEl, tagsEl); }
+        } else if(descEl) descEl.remove();
+
+        if(data.tags && data.tags.length){
+          const tagHtml = data.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+          if(tagsEl) tagsEl.innerHTML = tagHtml;
+          else { tagsEl = document.createElement('div'); tagsEl.className='tags'; tagsEl.innerHTML=tagHtml; contentEl.appendChild(tagsEl); }
+        } else if(tagsEl) tagsEl.remove();
+      });
+    }
+
+    // Apply additions
+    if(mods.added){
+      Object.entries(mods.added).forEach(([id, data])=>{
+        // Skip if already in DOM (e.g. from previous load)
+        if(document.querySelector(`.scene-row[data-id="${id}"]`)) return;
+
+        const sessions = document.querySelectorAll('.session');
+        const session = sessions[data.sessionIdx] || sessions[sessions.length - 1];
+        if(!session) return;
+
+        const tags = data.tags || [];
+        const tagHtml = tags.map(t=>`<span class="tag">${t}</span>`).join('');
+        const rowHtml = `
+          <div class="scene-row" data-id="${id}" data-start="" data-end="" data-next="" onclick="handleCheck(this)">
+            <div class="chk"><svg width="11" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4.5l3 3L11 1" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="smeta"><div class="stime">${data.time||''}</div><div class="sloc">${data.loc||''}</div></div>
+            <div class="scontent">
+              <div class="stitle">${data.title||''}</div>
+              ${data.desc?`<div class="sdesc">${data.desc}</div>`:''}
+              ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
+            </div>
+            <div class="checked-stamp"></div>
+            <div class="row-actions">
+              <button class="row-action-btn row-edit" onclick="event.stopPropagation();openEditShot(this.closest('.scene-row'))" title="Edit">✏️</button>
+              <button class="row-action-btn row-del" onclick="event.stopPropagation();deleteShot(this.closest('.scene-row'))" title="Delete">🗑</button>
+            </div>
+          </div>`;
+
+        const temp = document.createElement('div');
+        temp.innerHTML = rowHtml;
+        session.appendChild(temp.firstElementChild);
+      });
+    }
+
+    updateProgress();
+  }).catch(e=>console.error('Load mods failed:', e));
 }
 
 // ═══ SYNC INDICATOR ═══
