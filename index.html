@@ -105,12 +105,12 @@ try {
   --border: var(--n300);
   --border2: var(--n200);
 
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 16px;
-  --sh-sm: 0 1px 3px rgba(0,0,0,.06);
-  --sh-md: 0 2px 12px rgba(0,0,0,.08);
-  --sh-lg: 0 8px 32px rgba(0,0,0,.12);
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --sh-sm: 0 1px 2px rgba(0,0,0,.04);
+  --sh-md: 0 1px 6px rgba(0,0,0,.06);
+  --sh-lg: 0 4px 20px rgba(0,0,0,.08);
   --min-touch: 44px;
 }
 [data-theme="dark"] {
@@ -223,7 +223,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 }
 .search-input:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(231,49,79,.1);}
 .search-input::placeholder{color:var(--text3);}
-.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--text3);pointer-events:none;}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;display:flex;align-items:center;}
 .search-clear{
   position:absolute;right:12px;top:50%;transform:translateY(-50%);
   width:28px;height:28px;border-radius:50%;border:none;
@@ -297,7 +297,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .month-hdr{
   min-height:var(--min-touch);height:52px;
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-md);padding:0 24px 0 16px;
+  border-radius:var(--r-md);padding:0 24px 0 20px;
   display:flex;align-items:center;justify-content:space-between;
   cursor:pointer;transition:all .2s;user-select:none;
   -webkit-tap-highlight-color:transparent;
@@ -807,23 +807,60 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 /* Toast */
 #toast{position:fixed;bottom:calc(22px + 60px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(16px);background:var(--pri);color:#fff;padding:10px 20px;border-radius:99px;font-size:12px;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;white-space:nowrap;box-shadow:var(--sh-lg);}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ═══ ICON SYSTEM ═══ */
+.ico{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;flex-shrink:0;line-height:0;}
+.ico svg{display:block;}
+.ico-sm svg{width:12px;height:12px;}
+.ico-lg svg{width:18px;height:18px;}
+.ico-xl svg{width:20px;height:20px;}
+
+/* Status pills — Linear style */
+.status-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:99px;
+  font-size:10px;font-weight:600;letter-spacing:.03em;
+  text-transform:uppercase;white-space:nowrap;
+  transition:all .2s;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.status-pill.pill-live{background:rgba(231,49,79,.1);color:var(--live);}
+.status-pill.pill-live .status-dot{background:var(--live);box-shadow:0 0 6px rgba(231,49,79,.5);animation:dot-pulse 2s infinite;}
+.status-pill.pill-upcoming{background:var(--upcoming-bg);color:var(--upcoming);}
+.status-pill.pill-upcoming .status-dot{background:var(--upcoming);}
+.status-pill.pill-wrapped{background:var(--wrapped-bg);color:var(--wrapped);}
+.status-pill.pill-wrapped .status-dot{background:var(--wrapped);}
+@keyframes dot-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
 /* ═══ SHOT EDIT MODE ═══ */
-.edit-fab{
-  position:fixed;bottom:calc(72px + env(safe-area-inset-bottom));right:20px;z-index:210;
-  width:48px;height:48px;border-radius:50%;border:none;
-  background:var(--surface2);border:1px solid var(--border);
-  color:var(--text2);font-size:18px;cursor:pointer;
+
+.row-kebab{position:absolute;top:8px;right:8px;z-index:5;}
+.row-kebab-btn{
+  width:28px;height:28px;border:none;border-radius:var(--r-sm);
+  background:transparent;cursor:pointer;color:var(--text3);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:var(--sh-lg);transition:all .2s;
-  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;opacity:.4;
 }
-.edit-fab:active{transform:scale(.92);}
-.edit-fab.active{background:var(--pri);border-color:var(--pri);color:#fff;}
-.row-actions{
-  display:none;position:absolute;top:8px;right:8px;
-  gap:4px;z-index:5;
+.row-kebab-btn:hover,.row-kebab-btn:active{opacity:1;background:var(--surface2);}
+.row-kebab-drop{
+  position:absolute;top:100%;right:0;margin-top:4px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);box-shadow:var(--sh-md);
+  min-width:120px;overflow:hidden;
+  opacity:0;pointer-events:none;transform:translateY(-4px);
+  transition:all .15s;z-index:10;
 }
-.shoot-wrap.edit-mode .row-actions{display:flex;}
+.row-kebab-drop.open{opacity:1;pointer-events:auto;transform:translateY(0);}
+[data-theme="dark"] .row-kebab-drop{background:var(--n800);border-color:var(--n700);}
+.row-kebab-item{
+  display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;
+  border:none;background:none;color:var(--text);font-size:12px;font-weight:500;
+  cursor:pointer;font-family:'Inter',sans-serif;transition:background .1s;
+  text-align:left;
+}
+.row-kebab-item:hover{background:var(--surface2);}
+.row-kebab-item.danger{color:var(--pri);}
+.row-kebab-item .ico{opacity:.5;}
 .row-action-btn{
   width:30px;height:30px;border:none;border-radius:var(--r-sm);
   background:var(--surface2);cursor:pointer;font-size:13px;
@@ -833,16 +870,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .row-action-btn:active{transform:scale(.9);}
 .row-action-btn.row-del{color:#e74c3c;}
 .row-action-btn.row-edit{color:var(--upcoming);}
-.shoot-wrap.edit-mode .scene-row{cursor:default;}
+
 .add-shot-btn{
-  display:none;width:100%;padding:12px;border:2px dashed var(--border2);
-  border-radius:var(--r-md);background:transparent;color:var(--text3);
-  font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;
-  font-family:'Inter',sans-serif;margin-top:4px;
+  display:flex;width:100%;padding:10px;border:1px dashed var(--border);
+  gap:6px;align-items:center;justify-content:center;
+  border-radius:var(--r-sm);background:transparent;color:var(--text3);
+  font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;
+  font-family:'Inter',sans-serif;margin-top:6px;
   -webkit-tap-highlight-color:transparent;
 }
-.add-shot-btn:active{background:var(--surface2);}
-.shoot-wrap.edit-mode .add-shot-btn{display:block;}
+.add-shot-btn:hover,.add-shot-btn:active{background:var(--surface2);}
 
 /* Shot Modal */
 .shot-modal-overlay{
@@ -894,7 +931,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
     <div class="dash-hdr-r">
       <div class="dash-clock" id="dash-clock">--:--</div>
-      <button class="hdr-btn" onclick="toggleDark()" id="dash-dark-btn">🌙</button>
+      <button class="hdr-btn" onclick="toggleDark()" id="dash-dark-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
     </div>
   </div>
 
@@ -914,15 +951,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <!-- Search + Filters — Redesigned -->
   <div class="search-bar">
     <div class="search-wrap">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span></span>
       <input class="search-input" id="search-input" type="text" placeholder="Search project, client, location..." oninput="filterDashboard()"/>
       <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
     </div>
     <div class="filter-row">
       <button class="filter-chip active" data-filter="all" onclick="setFilter('all',this)">All <span class="chip-count" id="chip-all">7</span></button>
-      <button class="filter-chip" data-filter="upcoming" onclick="setFilter('upcoming',this)">📅 Upcoming <span class="chip-count" id="chip-upcoming">0</span></button>
-      <button class="filter-chip" data-filter="live" onclick="setFilter('live',this)">🔴 Live <span class="chip-count" id="chip-live">0</span></button>
-      <button class="filter-chip" data-filter="wrapped" onclick="setFilter('wrapped',this)">✅ Wrapped <span class="chip-count" id="chip-wrapped">0</span></button>
+      <button class="filter-chip" data-filter="upcoming" onclick="setFilter('upcoming',this)"><span class="ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></span> Upcoming <span class="chip-count" id="chip-upcoming">0</span></button>
+      <button class="filter-chip" data-filter="live" onclick="setFilter('live',this)"><span class="status-dot" style="background:var(--live)"></span> Live <span class="chip-count" id="chip-live">0</span></button>
+      <button class="filter-chip" data-filter="wrapped" onclick="setFilter('wrapped',this)"><span class="status-dot" style="background:var(--wrapped)"></span> Wrapped <span class="chip-count" id="chip-wrapped">0</span></button>
       <button class="sort-btn" id="sort-btn" onclick="cycleSort()">↑ Earliest first</button>
     </div>
   </div>
@@ -931,7 +968,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div id="live-section"></div>
     <div id="monthly-groups"></div>
     <div id="no-results" class="no-results" style="display:none;">
-      <div class="no-results-icon">🔍</div>
+      <div class="no-results-icon"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span></div>
       <div class="no-results-text">No shoots match your search</div>
       <div class="no-results-sub">Try a different keyword or clear your filters</div>
     </div>
@@ -990,7 +1027,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <!-- ═══ SHOOT PAGE ═══ -->
 <div class="page" id="page-shoot">
   <div id="shoot-content"></div>
-  <button class="edit-fab" id="edit-fab" onclick="toggleEditMode()" title="Edit shots">✏️</button>
 </div>
 
 <!-- Shot Edit/Add Modal -->
@@ -1001,7 +1037,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div class="shot-field"><label>Location</label><input type="text" id="sm-loc" placeholder="e.g. DK1"/></div>
     <div class="shot-field"><label>Description</label><input type="text" id="sm-title" placeholder="e.g. Low 3/4 Profile — Slider"/></div>
     <div class="shot-field"><label>Notes</label><textarea id="sm-desc" placeholder="Camera and lighting notes..."></textarea></div>
-    <div class="shot-field"><label>Tags (comma-separated)</label><input type="text" id="sm-tags" placeholder="e.g. 🎥 Slider, ⏱ 15 min, 💡 Rim light"/></div>
     <input type="hidden" id="sm-mode" value="add"/>
     <input type="hidden" id="sm-target" value=""/>
     <div class="shot-modal-btns">
@@ -1018,6 +1053,44 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </div>
 
 <script>
+
+// ═══ LUCIDE SVG ICON SYSTEM ═══
+const ICO = {
+  clipboard: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>',
+  wrench: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+  coffee: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1"/><path d="M6 2v2"/></svg>',
+  'check-circle': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+  video: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>',
+  clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  lightbulb: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>',
+  user: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  pencil: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>',
+  trash: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>',
+  'chevron-right': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+  'chevron-down': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  plus: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>',
+  'map-pin': '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+  calendar: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>',
+  users: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  'more-vertical': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>',
+  'arrow-left': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>',
+  sun: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
+  moon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>',
+  search: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+  x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+  film: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>',
+  camera: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>',
+  mic: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>',
+  utensils: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>',
+  dumbbell: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>',
+  building: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>',
+  clapperboard: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9"/><path d="m12.4 3.4 3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>',
+};
+function ico(name, cls='') {
+  const s = ICO[name] || '';
+  return cls ? '<span class="ico '+cls+'">'+s+'</span>' : '<span class="ico">'+s+'</span>';
+}
+
 const SHOOTS = [
   {
     id: 'sunway-houses-may2026',
@@ -1132,8 +1205,8 @@ function applyDark(){
   document.documentElement.setAttribute('data-theme', dark?'dark':'');
   const b1 = document.getElementById('dash-dark-btn');
   const b2 = document.getElementById('shoot-dark-btn');
-  if(b1) b1.textContent = dark ? '☀️' : '🌙';
-  if(b2) b2.textContent = dark ? '☀️' : '🌙';
+  if(b1) b1.innerHTML = dark ? ico('sun') : ico('moon');
+  if(b2) b2.innerHTML = dark ? ico('sun') : ico('moon');
 }
 function toggleDark(){
   dark = !dark;
@@ -1161,8 +1234,8 @@ function daysUntil(dateStr){
 let currentFilter = 'all';
 let currentSort = 'date-asc';
 const sortModes = ['date-asc','date-desc','recent'];
-const sortLabels = {'date-asc':'↑ Earliest first','date-desc':'↓ Latest first','recent':'⏱ Recent activity'};
-const sortIcons = {'date-asc':'↑','date-desc':'↓','recent':'⏱'};
+const sortLabels = {'date-asc':'↑ Earliest first','date-desc':'↓ Latest first','recent':ico('clock')+' Recent activity'};
+const sortIcons = {'date-asc':'↑','date-desc':'↓','recent':ico('clock')+' '};
 
 function setFilter(filter, el){
   currentFilter = filter;
@@ -1328,7 +1401,7 @@ function renderDashboard(query='', filter='all', sort='date-asc'){
     const hasUserPref=collapseState.hasOwnProperty(key);
     const isCollapsed=hasUserPref?collapseState[key]:isPast;
 
-    const icon=isPast?'✅':'📅';
+    const icon=isPast?ico('check-circle')+' ':ico('calendar')+' ';
     let badgeClass='upcoming';
     if(mUp.length===0) badgeClass='wrapped';
     else if(mWr.length>0) badgeClass='mixed';
@@ -1388,7 +1461,7 @@ function buildCard(shoot){
 
   let priority='';
   if(status==='upcoming'){
-    if(du<=2) priority='<div class="p-priority soon">⚡ Soon</div>';
+    if(du<=2) priority='<div class="p-priority soon"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> SOON</div>';
     else if(du<=7) priority='<div class="p-priority this-week">This week</div>';
   }
 
@@ -1409,7 +1482,7 @@ function buildCard(shoot){
         ${daysLabel?`<div class="p-days">${daysLabel}</div>`:''}
       </div>
       <div class="card-kebab" onclick="event.stopPropagation()">
-        <button class="kebab-btn" onclick="toggleKebab(this)" aria-label="Actions">&#8942;</button>
+        <button class="kebab-btn" onclick="toggleKebab(this)" aria-label="Actions"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
         <div class="kebab-drop">
           <button class="kebab-item" onclick="closeAllKebabs();openEditShoot('${shoot.id}')">Edit</button>
           <button class="kebab-item danger" onclick="closeAllKebabs();openDeleteConfirm('${shoot.id}')">Delete</button>
@@ -1483,7 +1556,7 @@ function buildLiveCard(shoot){
       </div>
     </div>
     <div class="p-card-meta">
-      <span>📍 ${shoot.location}</span>
+      <span>${ico('map-pin')} ${shoot.location}</span>
       ${shoot.days>1?`<span class="p-meta-sep"></span><span>Day ${getCurrentDay(shoot)} of ${shoot.days}</span>`:''}
     </div>
   </div>`;
@@ -1622,7 +1695,7 @@ function shootTopbar(shoot, extraClass=''){
       <div class="bottom-bar-sub">${shoot.title}</div>
     </div>
     <div class="bottom-bar-actions">
-      <button class="bottom-icon-btn" onclick="toggleDark()" id="shoot-dark-btn">🌙</button>
+      <button class="bottom-icon-btn" onclick="toggleDark()" id="shoot-dark-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
     </div>
   </div>`;
 }
@@ -1691,9 +1764,12 @@ function sceneRow(id, start, end, next, time, loc, title, desc, tags, day2=false
       ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
     </div>
     <div class="checked-stamp"></div>
-    <div class="row-actions">
-      <button class="row-action-btn row-edit" onclick="event.stopPropagation();openEditShot(this.closest('.scene-row'))" title="Edit">✏️</button>
-      <button class="row-action-btn row-del" onclick="event.stopPropagation();deleteShot(this.closest('.scene-row'))" title="Delete">🗑</button>
+    <div class="row-kebab" onclick="event.stopPropagation()">
+      <button class="row-kebab-btn" onclick="toggleRowKebab(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+      <div class="row-kebab-drop">
+        <button class="row-kebab-item" onclick="closeAllRowKebabs();openEditShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></span>Edit</button>
+        <button class="row-kebab-item danger" onclick="closeAllRowKebabs();deleteShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></span>Delete</button>
+      </div>
     </div>
   </div>`;
 }
@@ -1720,86 +1796,86 @@ function getSunwayHTML(shoot){
     ${progressAndActivity()}
 
     <div class="session"><div class="session-hdr">Block 1 — Lagoon View · Facilities <span class="srange">8:00 AM – 10:30 AM</span></div>
-      ${breakRow('','📋','8:00–8:30 AM · Crew Meet Up + Briefing (Lagoon View Lobby)')}
-      ${sceneRow('s01','08:30','08:45','Gym','8:30–8:45 AM','Pool','Pool — Wide Shot','Wide establishing shot of the Lagoon View pool area.',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s02','08:45','09:00','Tennis Court','8:45–9:00 AM','Gym','Gym — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s03','09:00','09:15','Squash Court','9:00–9:15 AM','Tennis Court','Tennis Court — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
-      ${sceneRow('s04','09:15','09:30','Table Tennis Room','9:15–9:30 AM','Squash Court','Squash Court — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
-      ${sceneRow('s05','09:30','09:45','Cafeteria','9:30–9:45 AM','Table Tennis Room','Table Tennis Room — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
-      ${sceneRow('s06','09:45','10:00','Laundry Room','9:45–10:00 AM','Cafeteria','Cafeteria — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s07','10:00','10:15','Convenient Store','10:00–10:15 AM','Laundry Room','Laundry Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s08','10:15','10:30','Move to Rooms','10:15–10:30 AM','Convenient Store','Convenient Store — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Crew Meet Up + Briefing (Lagoon View Lobby)')}
+      ${sceneRow('s01','08:30','08:45','Gym','8:30–8:45 AM','Pool','Pool — Wide Shot','Wide establishing shot of the Lagoon View pool area.',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s02','08:45','09:00','Tennis Court','8:45–9:00 AM','Gym','Gym — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s03','09:00','09:15','Squash Court','9:00–9:15 AM','Tennis Court','Tennis Court — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min','🔑 Needs access'])}
+      ${sceneRow('s04','09:15','09:30','Table Tennis Room','9:15–9:30 AM','Squash Court','Squash Court — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min','🔑 Needs access'])}
+      ${sceneRow('s05','09:30','09:45','Cafeteria','9:30–9:45 AM','Table Tennis Room','Table Tennis Room — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min','🔑 Needs access'])}
+      ${sceneRow('s06','09:45','10:00','Laundry Room','9:45–10:00 AM','Cafeteria','Cafeteria — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s07','10:00','10:15','Convenient Store','10:00–10:15 AM','Laundry Room','Laundry Room — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s08','10:15','10:30','Move to Rooms','10:15–10:30 AM','Convenient Store','Convenient Store — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
       ${breakRow('move','🚶','10:30–10:45 AM · Move to Rooms')}
     </div>
 
     <div class="session"><div class="session-hdr">Block 2 — Lagoon View · Rooms <span class="srange">10:45 AM – 12:15 PM</span></div>
-      ${sceneRow('s09','10:45','11:00','Twin Sharing Room','10:45–11:00 AM','Triple Sharing Room','Triple Sharing Room — Wide Shot','White clean plain sheets required.',['📸 Wide','⏱ 15 min','🪴 Room props, lamps, plants, frames, bed shawl'])}
-      ${sceneRow('s10','11:00','11:15','Single No View','11:00–11:15 AM','Twin Sharing Room','Twin Sharing Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s11','11:15','11:30','Single Room','11:15–11:30 AM','Single No View','Single (No View) Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s12','11:30','11:45','Pantry & Dining','11:30–11:45 AM','Single Room','Single Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s13','11:45','12:00','Bathroom','11:45 AM–12:00 PM','Pantry & Dining','Pantry & Dining — Wide Shot','',['📸 Wide','⏱ 15 min','🍽 Mugs, plates'])}
-      ${sceneRow('s14','12:00','12:15','Lunch Break','12:00–12:15 PM','Bathroom','Bathroom — Wide Shot','',['📸 Wide','⏱ 15 min','🧴 Diffuser, hand soap, mug'])}
-      ${breakRow('lunch','🍽','12:15–1:00 PM · Lunch Break')}
+      ${sceneRow('s09','10:45','11:00','Twin Sharing Room','10:45–11:00 AM','Triple Sharing Room','Triple Sharing Room — Wide Shot','White clean plain sheets required.',[ico('camera')+' Wide',ico('clock')+' 15 min','🪴 Room props, lamps, plants, frames, bed shawl'])}
+      ${sceneRow('s10','11:00','11:15','Single No View','11:00–11:15 AM','Twin Sharing Room','Twin Sharing Room — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s11','11:15','11:30','Single Room','11:15–11:30 AM','Single No View','Single (No View) Room — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s12','11:30','11:45','Pantry & Dining','11:30–11:45 AM','Single Room','Single Room — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s13','11:45','12:00','Bathroom','11:45 AM–12:00 PM','Pantry & Dining','Pantry & Dining — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min',ico('utensils')+' Mugs, plates'])}
+      ${sceneRow('s14','12:00','12:15','Lunch Break','12:00–12:15 PM','Bathroom','Bathroom — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min','🧴 Diffuser, hand soap, mug'])}
+      ${breakRow('lunch',ico('coffee'),'12:15–1:00 PM · Lunch Break')}
     </div>
 
     <div class="session"><div class="session-hdr">Block 3 — Indah Villa · Facilities <span class="srange">1:15 PM – 2:15 PM</span></div>
       ${breakRow('move','🚶','1:00–1:15 PM · Move to Indah Villa')}
-      ${sceneRow('s15','13:15','13:30','Gym','1:15–1:30 PM','Pool','Indah Villa Pool — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s16','13:30','13:45','Multipurpose Room','1:30–1:45 PM','Gym','Indah Villa Gym — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s17','13:45','14:00','Convenient Store','1:45–2:00 PM','Multipurpose Room','Multipurpose Room — Wide Shot','',['📸 Wide','⏱ 15 min','🔑 Needs access'])}
-      ${sceneRow('s18','14:00','14:15','Move to Rooms','2:00–2:15 PM','Convenient Store','Indah Villa Convenient Store — Wide Shot','',['📸 Wide','⏱ 15 min'])}
+      ${sceneRow('s15','13:15','13:30','Gym','1:15–1:30 PM','Pool','Indah Villa Pool — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s16','13:30','13:45','Multipurpose Room','1:30–1:45 PM','Gym','Indah Villa Gym — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s17','13:45','14:00','Convenient Store','1:45–2:00 PM','Multipurpose Room','Multipurpose Room — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min','🔑 Needs access'])}
+      ${sceneRow('s18','14:00','14:15','Move to Rooms','2:00–2:15 PM','Convenient Store','Indah Villa Convenient Store — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
       ${breakRow('move','🚶','2:15–2:30 PM · Move to Rooms + Crew Set Up')}
     </div>
 
     <div class="session"><div class="session-hdr">Block 4 — Indah Villa · Rooms <span class="srange">2:30 PM – 3:45 PM</span></div>
-      ${sceneRow('s19','14:30','14:45','Living Room','2:30–2:45 PM','Twin Sharing NL107','Twin Sharing Room NL107 — Wide Shot','White clean plain sheets required.',['📸 Wide','⏱ 15 min','🪴 Room props, lamps, plants, frames, bed shawl'])}
-      ${sceneRow('s20','14:45','15:00','Pantry & Dining','2:45–3:00 PM','Living Room','Living Room — Wide Shot','',['📸 Wide','⏱ 15 min'])}
-      ${sceneRow('s21','15:00','15:15','Bathroom','3:00–3:15 PM','Pantry & Dining','Pantry & Dining — Wide Shot','',['📸 Wide','⏱ 15 min','🛋 Sofa pillow, shawl, plants, frames'])}
-      ${sceneRow('s22','15:15','15:30','Single Room SL605','3:15–3:30 PM','Bathroom','Bathroom — Wide Shot','',['📸 Wide','⏱ 15 min','🍽 Mugs, plates'])}
-      ${sceneRow('s23','15:30','15:45','Move to SUA','3:30–3:45 PM','Single Room SL605','Single Room SL605 — Wide Shot','',['📸 Wide','⏱ 15 min','🧴 Diffuser, hand soap, mug'])}
+      ${sceneRow('s19','14:30','14:45','Living Room','2:30–2:45 PM','Twin Sharing NL107','Twin Sharing Room NL107 — Wide Shot','White clean plain sheets required.',[ico('camera')+' Wide',ico('clock')+' 15 min','🪴 Room props, lamps, plants, frames, bed shawl'])}
+      ${sceneRow('s20','14:45','15:00','Pantry & Dining','2:45–3:00 PM','Living Room','Living Room — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s21','15:00','15:15','Bathroom','3:00–3:15 PM','Pantry & Dining','Pantry & Dining — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min','🛋 Sofa pillow, shawl, plants, frames'])}
+      ${sceneRow('s22','15:15','15:30','Single Room SL605','3:15–3:30 PM','Bathroom','Bathroom — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min',ico('utensils')+' Mugs, plates'])}
+      ${sceneRow('s23','15:30','15:45','Move to SUA','3:30–3:45 PM','Single Room SL605','Single Room SL605 — Wide Shot','',[ico('camera')+' Wide',ico('clock')+' 15 min','🧴 Diffuser, hand soap, mug'])}
       ${breakRow('move','🚶','3:45–4:00 PM · Move to SUA + Talent Meet Up + Crew Set Up')}
     </div>
 
     <div class="session"><div class="session-hdr">Block 5 — SUA · Rooms + Lifestyle w/ Talent <span class="srange">4:00 PM – 6:30 PM</span></div>
-      ${sceneRow('s24','16:00','16:30','Twin Sharing Room','4:00–4:30 PM','Four Sharing Room','Four Sharing Room — Wide + Lifestyle','All 3 Talents. White clean plain sheets required.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'])}
-      ${sceneRow('s25','16:30','17:00','Living Room','4:30–5:00 PM','Twin Sharing Room','Twin Sharing Room — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Casual 1'])}
-      ${sceneRow('s26','17:00','17:30','Pantry & Dining','5:00–5:30 PM','Living Room','Living Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🛋 Sofa pillow, shawl, plants, frames'])}
-      ${sceneRow('s27','17:30','18:00','Bathroom','5:30–6:00 PM','Pantry & Dining','Pantry & Dining — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🍽 Mugs, plates, cutleries, food'])}
-      ${sceneRow('s28','18:00','18:30','Wrap!','6:00–6:30 PM','Bathroom','Bathroom — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'])}
-      ${breakRow('wrap','✅','6:30 PM · Check Footage + Wrap — Day 1 Complete')}
+      ${sceneRow('s24','16:00','16:30','Twin Sharing Room','4:00–4:30 PM','Four Sharing Room','Four Sharing Room — Wide + Lifestyle','All 3 Talents. White clean plain sheets required.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'])}
+      ${sceneRow('s25','16:30','17:00','Living Room','4:30–5:00 PM','Twin Sharing Room','Twin Sharing Room — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Casual 1'])}
+      ${sceneRow('s26','17:00','17:30','Pantry & Dining','5:00–5:30 PM','Living Room','Living Room — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 1','🛋 Sofa pillow, shawl, plants, frames'])}
+      ${sceneRow('s27','17:30','18:00','Bathroom','5:30–6:00 PM','Pantry & Dining','Pantry & Dining — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 1',ico('utensils')+' Mugs, plates, cutleries, food'])}
+      ${sceneRow('s28','18:00','18:30','Wrap!','6:00–6:30 PM','Bathroom','Bathroom — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'])}
+      ${breakRow('wrap',ico('check-circle'),'6:30 PM · Check Footage + Wrap — Day 1 Complete')}
     </div>
 
-    <div class="day-divider day2">📅 Day 2 — Tuesday, 26 May 2026 · SUA + SUR · Crew Call 8:00 AM · Talent Group B 3:00 PM · Wrap Est. 5:45 PM</div>
+    <div class="day-divider day2">${ico('calendar')} Day 2 — Tuesday, 26 May 2026 · SUA + SUR · Crew Call 8:00 AM · Talent Group B 3:00 PM · Wrap Est. 5:45 PM</div>
 
     <div class="session day2"><div class="session-hdr">Block 6 — SUA · Facilities <span class="srange">8:00 AM – 11:00 AM</span></div>
-      ${breakRow('','📋','8:00–8:30 AM · Crew + Talent Group A Briefing (SUA Lobby)')}
-      ${sceneRow('d2s01','08:30','09:00','Student Lounge','8:30–9:00 AM','Badminton Court','Badminton Court — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Sports','🏸 Badminton rackets, shuttlecock'],true)}
-      ${sceneRow('d2s02','09:00','09:30','Study Room','9:00–9:30 AM','Student Lounge','Student Lounge — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','📚 Books, laptops, stationeries'],true)}
-      ${sceneRow('d2s03','09:30','10:00','Laundry Room','9:30–10:00 AM','Study Room','Study Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','💻 Laptops, books, stationeries'],true)}
-      ${sceneRow('d2s04','10:00','10:30','Parcel Box','10:00–10:30 AM','Laundry Room','Laundry Room — Wide + Lifestyle','Talent 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 · Casual 2','🧺 Laundry basket, shirt'],true)}
-      ${sceneRow('d2s05','10:30','11:00','Move to SUR','10:30–11:00 AM','Parcel Box','Parcel Box — Wide + Lifestyle','Talent 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 · Casual 2','📦 Parcels'],true)}
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Crew + Talent Group A Briefing (SUA Lobby)')}
+      ${sceneRow('d2s01','08:30','09:00','Student Lounge','8:30–9:00 AM','Badminton Court','Badminton Court — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Sports','🏸 Badminton rackets, shuttlecock'],true)}
+      ${sceneRow('d2s02','09:00','09:30','Study Room','9:00–9:30 AM','Student Lounge','Student Lounge — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 2','📚 Books, laptops, stationeries'],true)}
+      ${sceneRow('d2s03','09:30','10:00','Laundry Room','9:30–10:00 AM','Study Room','Study Room — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 2','💻 Laptops, books, stationeries'],true)}
+      ${sceneRow('d2s04','10:00','10:30','Parcel Box','10:00–10:30 AM','Laundry Room','Laundry Room — Wide + Lifestyle','Talent 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 · Casual 2','🧺 Laundry basket, shirt'],true)}
+      ${sceneRow('d2s05','10:30','11:00','Move to SUR','10:30–11:00 AM','Parcel Box','Parcel Box — Wide + Lifestyle','Talent 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 · Casual 2','📦 Parcels'],true)}
       ${breakRow('move','🚶','11:00–11:15 AM · Move to SUR')}
     </div>
 
     <div class="session day2"><div class="session-hdr">Block 7 — SUR · Facilities <span class="srange">11:15 AM – 2:15 PM</span></div>
-      ${sceneRow('d2s06','11:15','11:45','Squash Court','11:15–11:45 AM','Pool','SUR Pool — Wide + Lifestyle','Talent 1 & 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 2 · Sports','🏖 Towels, sunglasses'],true)}
-      ${sceneRow('d2s07','11:45','12:15','Multipurpose Court','11:45 AM–12:15 PM','Squash Court','Squash Court — Wide + Lifestyle','Talent 1 & 3.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 3 · Sports','🎾 Squash rackets, ball','🔑 Needs access'],true)}
-      ${sceneRow('d2s08','12:15','12:45','Laundry Room','12:15–12:45 PM','Multipurpose Court','Multipurpose Court — Wide + Lifestyle','Talent 2 & 3. Setup badminton + basketball net.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 & 3 · Sports','🏀 Basketball, badminton racquets'],true)}
-      ${sceneRow('d2s09','12:45','13:15','Study Room','12:45–1:15 PM','Laundry Room','SUR Laundry Room — Wide + Lifestyle','Talent 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 · Casual 2','🧺 Laundry basket, shirt'],true)}
-      ${sceneRow('d2s10','13:15','13:45','Cafeteria','1:15–1:45 PM','Study Room','SUR Study Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','💻 Laptops, books, stationeries'],true)}
-      ${sceneRow('d2s11','13:45','14:15','Lunch Break','1:45–2:15 PM','Cafeteria','SUR Cafeteria — Wide + Lifestyle','All 3 Talents. Prepare foods in advance.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 2','🍽 Food, drinks, cutleries, trays'],true)}
-      ${breakRow('lunch','🍽','2:15–2:45 PM · Lunch Break')}
+      ${sceneRow('d2s06','11:15','11:45','Squash Court','11:15–11:45 AM','Pool','SUR Pool — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Sports','🏖 Towels, sunglasses'],true)}
+      ${sceneRow('d2s07','11:45','12:15','Multipurpose Court','11:45 AM–12:15 PM','Squash Court','Squash Court — Wide + Lifestyle','Talent 1 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 3 · Sports','🎾 Squash rackets, ball','🔑 Needs access'],true)}
+      ${sceneRow('d2s08','12:15','12:45','Laundry Room','12:15–12:45 PM','Multipurpose Court','Multipurpose Court — Wide + Lifestyle','Talent 2 & 3. Setup badminton + basketball net.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Sports','🏀 Basketball, badminton racquets'],true)}
+      ${sceneRow('d2s09','12:45','13:15','Study Room','12:45–1:15 PM','Laundry Room','SUR Laundry Room — Wide + Lifestyle','Talent 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 · Casual 2','🧺 Laundry basket, shirt'],true)}
+      ${sceneRow('d2s10','13:15','13:45','Cafeteria','1:15–1:45 PM','Study Room','SUR Study Room — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 2','💻 Laptops, books, stationeries'],true)}
+      ${sceneRow('d2s11','13:45','14:15','Lunch Break','1:45–2:15 PM','Cafeteria','SUR Cafeteria — Wide + Lifestyle','All 3 Talents. Prepare foods in advance.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 2',ico('utensils')+' Food, drinks, cutleries, trays'],true)}
+      ${breakRow('lunch',ico('coffee'),'2:15–2:45 PM · Lunch Break')}
     </div>
 
     <div class="session day2"><div class="session-hdr">Block 8 — SUR (Milano) · Rooms <span class="srange">3:00 PM – 5:45 PM</span></div>
       ${breakRow('move','🚶','2:45–3:00 PM · Move to Rooms + Crew Set Up + Talent Group B Meet Up')}
-      ${sceneRow('d2s12','15:00','15:30','Move to another unit','3:00–3:30 PM','Twin Sharing Room','Twin Sharing Room — Wide + Lifestyle','Talent 2 & 3. White clean plain sheets required.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 & 3 · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'],true)}
+      ${sceneRow('d2s12','15:00','15:30','Move to another unit','3:00–3:30 PM','Twin Sharing Room','Twin Sharing Room — Wide + Lifestyle','Talent 2 & 3. White clean plain sheets required.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'],true)}
       ${breakRow('move','🚶','3:30–3:45 PM · Move to another unit + Crew Set Up')}
-      ${sceneRow('d2s13','15:45','16:15','Living Room','3:45–4:15 PM','Twin Sharing (Small)','Twin Sharing Room (Small) — Wide + Lifestyle','Talent 1 & 3.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 1 & 3 · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'],true)}
-      ${sceneRow('d2s14','16:15','16:45','Pantry & Dining','4:15–4:45 PM','Living Room','Living Room — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🛋 Sofa pillow, shawl, plants, frames, books'],true)}
-      ${sceneRow('d2s15','16:45','17:15','Bathroom','4:45–5:15 PM','Pantry & Dining','Pantry & Dining — Wide + Lifestyle','All 3 Talents.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 Talents · Casual 1','🍽 Mugs, plates, cutleries, food'],true)}
-      ${sceneRow('d2s16','17:15','17:45','Wrap!','5:15–5:45 PM','Bathroom','Bathroom — Wide + Lifestyle','Talent 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Talent 2 · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
-      ${breakRow('wrap','✅','5:45 PM · Check Footage + Wrap — Day 2 Complete 🎉')}
+      ${sceneRow('d2s13','15:45','16:15','Living Room','3:45–4:15 PM','Twin Sharing (Small)','Twin Sharing Room (Small) — Wide + Lifestyle','Talent 1 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 3 · Casual 1','🪴 Room props, lamps, plants, frames, bed shawl'],true)}
+      ${sceneRow('d2s14','16:15','16:45','Pantry & Dining','4:15–4:45 PM','Living Room','Living Room — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 1','🛋 Sofa pillow, shawl, plants, frames, books'],true)}
+      ${sceneRow('d2s15','16:45','17:15','Bathroom','4:45–5:15 PM','Pantry & Dining','Pantry & Dining — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Casual 1',ico('utensils')+' Mugs, plates, cutleries, food'],true)}
+      ${sceneRow('d2s16','17:15','17:45','Wrap!','5:15–5:45 PM','Bathroom','Bathroom — Wide + Lifestyle','Talent 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
+      ${breakRow('wrap',ico('check-circle'),'5:45 PM · Check Footage + Wrap — Day 2 Complete 🎉')}
     </div>
 
     <div class="shoot-footer">Sunway Houses Photoshoot · 25–26 May 2026 · Oblique Production · Confidential</div>
@@ -1818,20 +1894,20 @@ function getParkcityHTML(shoot){
     ${progressAndActivity()}
 
     <div class="session"><div class="session-hdr">Morning Session <span class="srange">10:00 AM – 1:30 PM</span></div>
-      ${breakRow('','📋','10:00–10:15 AM · Crew Setup + Briefing (Parkcity Chiro)')}
-      ${sceneRow('p01','10:15','11:15','Video 2 — Questions Hook','10:15–11:15 AM','Chiro Room','Video 1 — Chiropractic Session with Explanation','Nicholas + Parkcity Dog. Diagnosing, explaining, B-rolls: hands adjusting, screens/reports.',['📸 Wide + Closeups','⏱ 60 min','🎙 Nicholas, Parkcity Dog','🦴 Chiro tools, X-rays'])}
-      ${sceneRow('p02','11:15','12:15','Ending CTA','11:15 AM–12:15 PM','Office','Video 2 — "The Questions I Always Get as a Pet Chiropractor"','Nicholas straight-to-camera. Hook → Setup → Conflict → Turn → Close.',['📸 Wide, straight-to-cam','⏱ 60 min','🎙 Nicholas, Parkcity Dog','🦴 Chiro tools'])}
-      ${sceneRow('p03','11:15','12:15','Ending CTA','11:15 AM–12:15 PM','Office','Video 3 — "Your Dog\'s Behaviour Problem Might Be a Body Problem"','Jun straight-to-camera. Intro → Credential → Ending.',['📸 Wide, straight-to-cam','⏱ 60 min','🎙 Jun, Parkcity Dog','🏋️ Fitness/behaviour tools'])}
-      ${sceneRow('p04','12:15','12:30','Video 4 — KL First','12:15–12:30 PM','Registration Area','Ending #1 & #2 — Soft CTA: Triple Diagnostic Offer','Evergreen ending. Nicholas + Jun on camera.',['📸 Wide, straight-to-cam','⏱ 15 min','🎙 Nicholas, Jun','♻️ Evergreen'])}
-      ${sceneRow('p05','12:30','13:30','Lunch Break','12:30–1:30 PM','Areas inside clinic','Video 4 — "KL\'s First Pet Chiropractic & Canine Fitness Training Center"','Brand positioning. Hook → Dual intro → Why first → Offer → Ending. B-rolls: working routine.',['📸 Wide','⏱ 60 min','🎙 Nicholas, Jun','🦴 Chiro/fitness tools'])}
-      ${breakRow('lunch','🍽','1:30–2:00 PM · Lunch Break')}
+      ${breakRow('',ico('clipboard'),'10:00–10:15 AM · Crew Setup + Briefing (Parkcity Chiro)')}
+      ${sceneRow('p01','10:15','11:15','Video 2 — Questions Hook','10:15–11:15 AM','Chiro Room','Video 1 — Chiropractic Session with Explanation','Nicholas + Parkcity Dog. Diagnosing, explaining, B-rolls: hands adjusting, screens/reports.',[ico('camera')+' Wide + Closeups',ico('clock')+' 60 min',ico('mic')+' Nicholas, Parkcity Dog','🦴 Chiro tools, X-rays'])}
+      ${sceneRow('p02','11:15','12:15','Ending CTA','11:15 AM–12:15 PM','Office','Video 2 — "The Questions I Always Get as a Pet Chiropractor"','Nicholas straight-to-camera. Hook → Setup → Conflict → Turn → Close.',[ico('camera')+' Wide, straight-to-cam',ico('clock')+' 60 min',ico('mic')+' Nicholas, Parkcity Dog','🦴 Chiro tools'])}
+      ${sceneRow('p03','11:15','12:15','Ending CTA','11:15 AM–12:15 PM','Office','Video 3 — "Your Dog\'s Behaviour Problem Might Be a Body Problem"','Jun straight-to-camera. Intro → Credential → Ending.',[ico('camera')+' Wide, straight-to-cam',ico('clock')+' 60 min',ico('mic')+' Jun, Parkcity Dog',ico('dumbbell')+' Fitness/behaviour tools'])}
+      ${sceneRow('p04','12:15','12:30','Video 4 — KL First','12:15–12:30 PM','Registration Area','Ending #1 & #2 — Soft CTA: Triple Diagnostic Offer','Evergreen ending. Nicholas + Jun on camera.',[ico('camera')+' Wide, straight-to-cam',ico('clock')+' 15 min',ico('mic')+' Nicholas, Jun','♻️ Evergreen'])}
+      ${sceneRow('p05','12:30','13:30','Lunch Break','12:30–1:30 PM','Areas inside clinic','Video 4 — "KL\'s First Pet Chiropractic & Canine Fitness Training Center"','Brand positioning. Hook → Dual intro → Why first → Offer → Ending. B-rolls: working routine.',[ico('camera')+' Wide',ico('clock')+' 60 min',ico('mic')+' Nicholas, Jun','🦴 Chiro/fitness tools'])}
+      ${breakRow('lunch',ico('coffee'),'1:30–2:00 PM · Lunch Break')}
     </div>
 
     <div class="session"><div class="session-hdr">Afternoon Session <span class="srange">2:00 PM – 4:15 PM</span></div>
-      ${breakRow('','📋','2:00 PM · Sean + Dogs Arrive + Briefing (Poodle + Chihuahua)')}
-      ${sceneRow('p06','14:15','15:15','Fitness Session','2:15–3:15 PM','Chiro Room','Chiropractic Session — Poodle (Sean as owner)','Nicholas interacting with + diagnosing Poodle. B-rolls: adjusting, screens/reports.',['📸 Wide + Closeups','⏱ 60 min','🎙 Nicholas, Sean, Poodle','🦴 Chiro tools, X-rays'])}
-      ${sceneRow('p07','15:15','16:15','Wrap','3:15–4:15 PM','Fitness Room','Fitness Session — Chihuahua (Sean as owner)','Jun interacting with + diagnosing Chihuahua. B-rolls: movements, reports.',['📸 Wide + Closeups','⏱ 60 min','🎙 Jun, Nicholas, Sean, Chihuahua','🏋️ Fitness tools'])}
-      ${breakRow('wrap','✅','4:15 PM · Production Footage Check + Wrap 🎉')}
+      ${breakRow('',ico('clipboard'),'2:00 PM · Sean + Dogs Arrive + Briefing (Poodle + Chihuahua)')}
+      ${sceneRow('p06','14:15','15:15','Fitness Session','2:15–3:15 PM','Chiro Room','Chiropractic Session — Poodle (Sean as owner)','Nicholas interacting with + diagnosing Poodle. B-rolls: adjusting, screens/reports.',[ico('camera')+' Wide + Closeups',ico('clock')+' 60 min',ico('mic')+' Nicholas, Sean, Poodle','🦴 Chiro tools, X-rays'])}
+      ${sceneRow('p07','15:15','16:15','Wrap','3:15–4:15 PM','Fitness Room','Fitness Session — Chihuahua (Sean as owner)','Jun interacting with + diagnosing Chihuahua. B-rolls: movements, reports.',[ico('camera')+' Wide + Closeups',ico('clock')+' 60 min',ico('mic')+' Jun, Nicholas, Sean, Chihuahua',ico('dumbbell')+' Fitness tools'])}
+      ${breakRow('wrap',ico('check-circle'),'4:15 PM · Production Footage Check + Wrap 🎉')}
     </div>
 
     <div class="shoot-footer">Parkcity Chiro Videoshoot · 14 May 2026 · Oblique Production · Confidential</div>
@@ -1850,52 +1926,52 @@ function getCuroHTML(shoot){
     ${progressAndActivity()}
 
     <div class="session"><div class="session-hdr">Morning Session <span class="srange">9:30 AM – 12:35 PM</span></div>
-      ${breakRow('','📋','9:30–10:00 AM · Crew Setup + Short Briefing (Klinik Medilove Entrance)')}
-      ${sceneRow('c01','10:00','10:30','Mum + Son arrive','10:00–10:30 AM','Outdoors (EXT)','B-Rolls — Bright Warm Daylight','Sunrays/leaves closeups. Wide shot of skies.',['📸 Wide + Closeups','⏱ 30 min'])}
-      ${breakRow('','📋','10:30–10:45 AM · Talent: Mother + Son arrive + briefing (Contact: 012-910 1384)')}
-      ${sceneRow('c02','10:45','11:00','Walk to walkway','10:45–10:50 AM','Reception (INT)','Scene 5-1 — QR Scan','Phone focuses on QR, scan animation, app loads: "Your queue: #8".',['📸 Phone closeup','⏱ 5 min','📱 Phone, App interface'])}
-      ${sceneRow('c03','11:00','11:05','Walk to Upper Walkway','11:00–11:00 AM','Outside Clinic (EXT)','Scene 5-2 — Mum + Child Exit Clinic','Mum and child EXIT through clinic doors.',['📸 Wide','⏱ 10 min','🎙 Mum, Child'])}
-      ${sceneRow('c04','11:05','11:15','Park — Mum smiles','11:05–11:15 AM','Upper Walkway (EXT)','Scene 5-4 — Child Chatters','Child immediately starts chattering, pointing outside.',['📸 Mid shot + follow','⏱ 10 min','🎙 Child','🎬 Slow mo'])}
-      ${sceneRow('c05','11:15','11:25','Walking — Settle outside','11:15–11:25 AM','Upper Walkway (EXT)','Scene 5-5 — Mum Smiles','Tension visibly drains from her face.',['📸 Mum closeups + follow','⏱ 10 min','🎙 Mum','🎬 Slow mo'])}
-      ${sceneRow('c06','11:25','11:35','Child animated','11:25–11:35 AM','Upper Walkway (EXT)','Scene 5-6 — Settle on Bench','They settle onto a bench or open area outside.',['📸 Wide','⏱ 10 min','🎙 Mum, Child'])}
-      ${sceneRow('c07','11:35','11:45','Mum glances phone','11:35–11:45 AM','Upper Walkway (EXT)','Scene 5-7 — Child Happy + Animated','Child is happy and animated.',['📸 Child closeup','⏱ 10 min','🎙 Child'])}
-      ${sceneRow('c08','11:45','11:55','Phone seated','11:45–11:55 AM','Upper Walkway (EXT)','Scene 5-8a — Mum Glances Phone (Standing)','Mum glances at phone, looks up, calm, in control, present.',['📸 Mum looking at phone closeup','⏱ 10 min','🎙 Mum','📱 Phone'])}
-      ${sceneRow('c09','11:55','12:05','Walk back to clinic','11:55 AM–12:05 PM','Upper Walkway (EXT)','Scene 5-8b — Seated, Smiles with Child','Mum glances phone, smiles. Text-on-screen fades in: "Scan to check your queue time."',['📸 Wide > slowly blur out','⏱ 10 min','🎙 Mum, Child','📱 Phone'])}
+      ${breakRow('',ico('clipboard'),'9:30–10:00 AM · Crew Setup + Short Briefing (Klinik Medilove Entrance)')}
+      ${sceneRow('c01','10:00','10:30','Mum + Son arrive','10:00–10:30 AM','Outdoors (EXT)','B-Rolls — Bright Warm Daylight','Sunrays/leaves closeups. Wide shot of skies.',[ico('camera')+' Wide + Closeups',ico('clock')+' 30 min'])}
+      ${breakRow('',ico('clipboard'),'10:30–10:45 AM · Talent: Mother + Son arrive + briefing (Contact: 012-910 1384)')}
+      ${sceneRow('c02','10:45','11:00','Walk to walkway','10:45–10:50 AM','Reception (INT)','Scene 5-1 — QR Scan','Phone focuses on QR, scan animation, app loads: "Your queue: #8".',[ico('camera')+' Phone closeup',ico('clock')+' 5 min','📱 Phone, App interface'])}
+      ${sceneRow('c03','11:00','11:05','Walk to Upper Walkway','11:00–11:00 AM','Outside Clinic (EXT)','Scene 5-2 — Mum + Child Exit Clinic','Mum and child EXIT through clinic doors.',[ico('camera')+' Wide',ico('clock')+' 10 min',ico('mic')+' Mum, Child'])}
+      ${sceneRow('c04','11:05','11:15','Park — Mum smiles','11:05–11:15 AM','Upper Walkway (EXT)','Scene 5-4 — Child Chatters','Child immediately starts chattering, pointing outside.',[ico('camera')+' Mid shot + follow',ico('clock')+' 10 min',ico('mic')+' Child',ico('clapperboard','ico-xl')+' Slow mo'])}
+      ${sceneRow('c05','11:15','11:25','Walking — Settle outside','11:15–11:25 AM','Upper Walkway (EXT)','Scene 5-5 — Mum Smiles','Tension visibly drains from her face.',[ico('camera')+' Mum closeups + follow',ico('clock')+' 10 min',ico('mic')+' Mum',ico('clapperboard','ico-xl')+' Slow mo'])}
+      ${sceneRow('c06','11:25','11:35','Child animated','11:25–11:35 AM','Upper Walkway (EXT)','Scene 5-6 — Settle on Bench','They settle onto a bench or open area outside.',[ico('camera')+' Wide',ico('clock')+' 10 min',ico('mic')+' Mum, Child'])}
+      ${sceneRow('c07','11:35','11:45','Mum glances phone','11:35–11:45 AM','Upper Walkway (EXT)','Scene 5-7 — Child Happy + Animated','Child is happy and animated.',[ico('camera')+' Child closeup',ico('clock')+' 10 min',ico('mic')+' Child'])}
+      ${sceneRow('c08','11:45','11:55','Phone seated','11:45–11:55 AM','Upper Walkway (EXT)','Scene 5-8a — Mum Glances Phone (Standing)','Mum glances at phone, looks up, calm, in control, present.',[ico('camera')+' Mum looking at phone closeup',ico('clock')+' 10 min',ico('mic')+' Mum','📱 Phone'])}
+      ${sceneRow('c09','11:55','12:05','Walk back to clinic','11:55 AM–12:05 PM','Upper Walkway (EXT)','Scene 5-8b — Seated, Smiles with Child','Mum glances phone, smiles. Text-on-screen fades in: "Scan to check your queue time."',[ico('camera')+' Wide > slowly blur out',ico('clock')+' 10 min',ico('mic')+' Mum, Child','📱 Phone'])}
       ${breakRow('move','🚶','12:05–12:10 PM · Walk back to clinic + Elderly man arrives + brief (Aziz: 019-260 1501)')}
-      ${sceneRow('c10','12:10','12:20','Scene 1-2 — Door push','12:10–12:20 PM','Clinic Entrance (EXT)','Scene 1-1 — Mum + Child Walk In','Mum and child walk into clinic together.',['📸 Wide follow','⏱ 10 min','🎙 Mum, Child'])}
-      ${sceneRow('c11','12:20','12:30','Man + Woman arrive','12:20–12:30 PM','Clinic Entrance (EXT)','Scene 1-2 — Push Open Door, Both Freeze','She pushes open the glass door, both freeze.',['📸 Closeup door handles','⏱ 10 min','🎙 Mum'])}
-      ${breakRow('','📋','12:30 PM · Man (Tim) + Woman (Javin) arrive + brief')}
+      ${sceneRow('c10','12:10','12:20','Scene 1-2 — Door push','12:10–12:20 PM','Clinic Entrance (EXT)','Scene 1-1 — Mum + Child Walk In','Mum and child walk into clinic together.',[ico('camera')+' Wide follow',ico('clock')+' 10 min',ico('mic')+' Mum, Child'])}
+      ${sceneRow('c11','12:20','12:30','Man + Woman arrive','12:20–12:30 PM','Clinic Entrance (EXT)','Scene 1-2 — Push Open Door, Both Freeze','She pushes open the glass door, both freeze.',[ico('camera')+' Closeup door handles',ico('clock')+' 10 min',ico('mic')+' Mum'])}
+      ${breakRow('',ico('clipboard'),'12:30 PM · Man (Tim) + Woman (Javin) arrive + brief')}
     </div>
 
     <div class="session"><div class="session-hdr">Afternoon Session <span class="srange">12:30 PM – 5:00 PM</span></div>
-      ${sceneRow('c12','12:30','12:40','Scene 2-4b cough','12:30–12:40 PM','Waiting Area (INT)','Scene 2-4a — Elderly Man Coughs into Tissue','Patient: Elderly man, 50s, deeply coughs into tissue.',['📸 Mid shot, camera pans','⏱ 10 min','🎙 Elderly','🧻 Tissues'])}
-      ${sceneRow('c13','12:40','12:50','Scene 2-5 phlegm','12:40–12:50 PM','Waiting Area (INT)','Scene 2-4b — Elderly Man Patient Closeup','Patient closeup.',['📸 Patient closeup','⏱ 10 min','🎙 Elderly','🧻 Tissues'])}
-      ${sceneRow('c14','12:50','13:00','Scene 1-5a','12:50–1:00 PM','Waiting Area (INT)','Scene 2-5 — Tissue Reveals Bloody Phlegm','Props prepared in advance.',['📸 Overshoulder, tissue closeup','⏱ 10 min','🎙 Elderly','🧻 Tissue, bloody phlegm (prepared)'])}
-      ${sceneRow('c15','13:00','13:10','Scene 1-5b','1:00–1:10 PM','Waiting Area (INT)','Scene 1-5a — Walking Reveal, Packed Waiting Room','Walking from behind, reveal rows of patients.',['📸 Low wide follow, child eye level','⏱ 10 min','🎙 Mum, Child, Man, Woman, Elderly'])}
-      ${sceneRow('c16','13:10','13:20','Scene 2-1','1:10–1:20 PM','Waiting Area (INT)','Scene 1-5b — Walking from Front','Rows of patients by the side, mum and child uneasy.',['📸 Wide follow','⏱ 10 min','🎙 Mum, Child, Man, Woman, Elderly'])}
-      ${sceneRow('c17','13:20','13:30','Scene 3-1a closeup','1:20–1:30 PM','Waiting Area (INT)','Scene 2-1 — Patient Expressions + Symptoms','Wide pan of patients.',['📸 Wide pan','⏱ 10 min','🎙 Man, Woman, Elderly'])}
-      ${sceneRow('c18','13:30','13:40','Scene 3-1b overlooking','1:30–1:40 PM','Waiting Area (INT)','Scene 3-1a — Mum Scanning Room','Mum face, scanning room, jaw tightens slightly.',['📸 Mum closeups','⏱ 10 min','🎙 Mum'])}
-      ${sceneRow('c19','13:40','13:50','Scene 3-4b','1:40–1:50 PM','Waiting Area (INT)','Scene 3-1b — Mum Overlooking Clinic','Overshoulder, camera follows head turning.',['📸 Overshoulder','⏱ 10 min','🎙 All talents'])}
-      ${sceneRow('c20','13:50','14:00','Footage check','1:50–2:00 PM','Waiting Area (INT)','Scene 3-4b — Mum Looks Back at Room','Mid shot showing mum and child.',['📸 Mid shot','⏱ 10 min','🎙 All talents'])}
-      ${breakRow('','📋','2:00 PM · Production footage check · Elderly man wrap')}
-      ${breakRow('lunch','🍽','2:00–2:30 PM · Lunch Break')}
-      ${sceneRow('c21','14:30','14:40','Scene 1-4 child','2:30–2:40 PM','Clinic Entrance (INT)','Scene 1-3 — Door Opens, Mum Hesitates','Door opens. Mom hesitates. Some patients behind.',['📸 Mum closeups','⏱ 10 min','🎙 Mum'])}
-      ${sceneRow('c22','14:40','14:50','Scene 3-2 arm pull','2:40–2:50 PM','Clinic Entrance (INT)','Scene 1-4 — Child Looks Uneasy','Child closeups.',['📸 Child closeups','⏱ 10 min','🎙 Child'])}
-      ${sceneRow('c23','14:50','15:00','Scene 3-3','2:50–3:00 PM','Waiting Area (INT)','Scene 3-2 — Arm Pulls Child Closer','Mid shot, mum and child.',['📸 Mid shot','⏱ 10 min','🎙 Mum, Child'])}
-      ${sceneRow('c24','15:00','15:10','Scene 3-4a','3:00–3:10 PM','Waiting Area (INT)','Scene 3-3 — Child Looks Up Sensing Something','Child holding mom tighter. Mum POV, high angle.',['📸 High angle looking at child','⏱ 10 min','🎙 Child'])}
-      ${sceneRow('c25','15:10','15:20','Scene 3-5','3:10–3:20 PM','Waiting Area (INT)','Scene 3-4a — Mum Looks Down at Child','Child POV, low angle looking at mum.',['📸 Low angle looking at mum','⏱ 10 min','🎙 Mum, Child'])}
-      ${sceneRow('c26','15:20','15:30','Scene 3-6 hesitating','3:20–3:30 PM','Waiting Area (INT)','Scene 3-5 — Hand on Door Frame, Half In Half Out','Hand touching handles/buttons closeups.',['📸 Hand closeups','⏱ 10 min','🎙 Mum'])}
-      ${sceneRow('c27','15:30','15:40','Scene 4-3 notices screen','3:30–3:40 PM','Waiting Area (INT)','Scene 3-6 — Mum Hesitating, Worried','Mum closeup, side angle.',['📸 Mum closeup, side angle','⏱ 10 min','🎙 Mum'])}
-      ${sceneRow('c28','15:40','15:50','Scene 4-4 reaches phone','3:40–3:50 PM','Waiting Area (INT)','Scene 4-3 — Camera Pulls Back, Mum Notices Screen','Curiosity then recognition. Dolly out.',['📸 Mum closeup + dolly out','⏱ 10 min','🎙 Mum'])}
-      ${sceneRow('c29','15:50','16:00','Scene 3-7 empty chair','3:50–4:00 PM','Waiting Area (INT)','Scene 4-4 — She Reaches for Phone to Scan','Phone closeup.',['📸 Phone closeup','⏱ 10 min','🎙 Mum','📱 Phone'])}
-      ${breakRow('','📋','4:00 PM · Production footage check · Mum + Son wrap')}
-      ${sceneRow('c30','16:00','16:10','Scene 2-2a man coughs','4:00–4:10 PM','Waiting Area (INT)','Scene 3-7 — Empty Chair Between Sick Patients','Text-on-screen: "Would you wait… and risk your child\'s health?"',['📸 Wide still + dolly in','⏱ 10 min','🎙 Man, Woman'])}
-      ${sceneRow('c31','16:10','16:20','Scene 2-2b closeup','4:10–4:20 PM','Waiting Area (INT)','Scene 2-2a — Man, 40s, Hunched, Shivering, Eyes Red','Mid shot, camera pans to patient.',['📸 Mid shot, pan','⏱ 10 min','🎙 Man','🧻 Balled wet tissues'])}
-      ${sceneRow('c32','16:20','16:30','Scene 2-3a woman sneezes','4:20–4:30 PM','Waiting Area (INT)','Scene 2-2b — Man Patient Closeup','',['📸 Patient closeup','⏱ 10 min','🎙 Man','🧻 Balled wet tissues'])}
-      ${sceneRow('c33','16:30','16:40','Scene 2-3b closeup','4:30–4:40 PM','Waiting Area (INT)','Scene 2-3a — Woman, 30s, Mask Half-Down, Mid-Sneeze','Mid shot, camera pans.',['📸 Mid shot, pan','⏱ 10 min','🎙 Woman','😷 Mask'])}
-      ${sceneRow('c34','16:40','16:50','Bear mascot scenes','4:40–4:50 PM','Waiting Area (INT)','Scene 2-3b — Woman Patient Closeup','',['📸 Patient closeup','⏱ 10 min','🎙 Woman','😷 Mask'])}
-      ${sceneRow('c35','16:50','17:00','Footage check + Wrap','4:50–5:00 PM','Reception (INT)','Scenes 4-1 & 4-2 — Curo Bear Mascot (Post Production)','Bear mascot pops up at reception, holds sign with QR code. Will add bear mascot in post.',['📸 Wide still + dolly in','⏱ 10 min','⚡ Post-production: Bear mascot'])}
-      ${breakRow('wrap','✅','5:00 PM · Production Footage Check + Wrap 🎉')}
+      ${sceneRow('c12','12:30','12:40','Scene 2-4b cough','12:30–12:40 PM','Waiting Area (INT)','Scene 2-4a — Elderly Man Coughs into Tissue','Patient: Elderly man, 50s, deeply coughs into tissue.',[ico('camera')+' Mid shot, camera pans',ico('clock')+' 10 min',ico('mic')+' Elderly','🧻 Tissues'])}
+      ${sceneRow('c13','12:40','12:50','Scene 2-5 phlegm','12:40–12:50 PM','Waiting Area (INT)','Scene 2-4b — Elderly Man Patient Closeup','Patient closeup.',[ico('camera')+' Patient closeup',ico('clock')+' 10 min',ico('mic')+' Elderly','🧻 Tissues'])}
+      ${sceneRow('c14','12:50','13:00','Scene 1-5a','12:50–1:00 PM','Waiting Area (INT)','Scene 2-5 — Tissue Reveals Bloody Phlegm','Props prepared in advance.',[ico('camera')+' Overshoulder, tissue closeup',ico('clock')+' 10 min',ico('mic')+' Elderly','🧻 Tissue, bloody phlegm (prepared)'])}
+      ${sceneRow('c15','13:00','13:10','Scene 1-5b','1:00–1:10 PM','Waiting Area (INT)','Scene 1-5a — Walking Reveal, Packed Waiting Room','Walking from behind, reveal rows of patients.',[ico('camera')+' Low wide follow, child eye level',ico('clock')+' 10 min',ico('mic')+' Mum, Child, Man, Woman, Elderly'])}
+      ${sceneRow('c16','13:10','13:20','Scene 2-1','1:10–1:20 PM','Waiting Area (INT)','Scene 1-5b — Walking from Front','Rows of patients by the side, mum and child uneasy.',[ico('camera')+' Wide follow',ico('clock')+' 10 min',ico('mic')+' Mum, Child, Man, Woman, Elderly'])}
+      ${sceneRow('c17','13:20','13:30','Scene 3-1a closeup','1:20–1:30 PM','Waiting Area (INT)','Scene 2-1 — Patient Expressions + Symptoms','Wide pan of patients.',[ico('camera')+' Wide pan',ico('clock')+' 10 min',ico('mic')+' Man, Woman, Elderly'])}
+      ${sceneRow('c18','13:30','13:40','Scene 3-1b overlooking','1:30–1:40 PM','Waiting Area (INT)','Scene 3-1a — Mum Scanning Room','Mum face, scanning room, jaw tightens slightly.',[ico('camera')+' Mum closeups',ico('clock')+' 10 min',ico('mic')+' Mum'])}
+      ${sceneRow('c19','13:40','13:50','Scene 3-4b','1:40–1:50 PM','Waiting Area (INT)','Scene 3-1b — Mum Overlooking Clinic','Overshoulder, camera follows head turning.',[ico('camera')+' Overshoulder',ico('clock')+' 10 min',ico('mic')+' All talents'])}
+      ${sceneRow('c20','13:50','14:00','Footage check','1:50–2:00 PM','Waiting Area (INT)','Scene 3-4b — Mum Looks Back at Room','Mid shot showing mum and child.',[ico('camera')+' Mid shot',ico('clock')+' 10 min',ico('mic')+' All talents'])}
+      ${breakRow('',ico('clipboard'),'2:00 PM · Production footage check · Elderly man wrap')}
+      ${breakRow('lunch',ico('coffee'),'2:00–2:30 PM · Lunch Break')}
+      ${sceneRow('c21','14:30','14:40','Scene 1-4 child','2:30–2:40 PM','Clinic Entrance (INT)','Scene 1-3 — Door Opens, Mum Hesitates','Door opens. Mom hesitates. Some patients behind.',[ico('camera')+' Mum closeups',ico('clock')+' 10 min',ico('mic')+' Mum'])}
+      ${sceneRow('c22','14:40','14:50','Scene 3-2 arm pull','2:40–2:50 PM','Clinic Entrance (INT)','Scene 1-4 — Child Looks Uneasy','Child closeups.',[ico('camera')+' Child closeups',ico('clock')+' 10 min',ico('mic')+' Child'])}
+      ${sceneRow('c23','14:50','15:00','Scene 3-3','2:50–3:00 PM','Waiting Area (INT)','Scene 3-2 — Arm Pulls Child Closer','Mid shot, mum and child.',[ico('camera')+' Mid shot',ico('clock')+' 10 min',ico('mic')+' Mum, Child'])}
+      ${sceneRow('c24','15:00','15:10','Scene 3-4a','3:00–3:10 PM','Waiting Area (INT)','Scene 3-3 — Child Looks Up Sensing Something','Child holding mom tighter. Mum POV, high angle.',[ico('camera')+' High angle looking at child',ico('clock')+' 10 min',ico('mic')+' Child'])}
+      ${sceneRow('c25','15:10','15:20','Scene 3-5','3:10–3:20 PM','Waiting Area (INT)','Scene 3-4a — Mum Looks Down at Child','Child POV, low angle looking at mum.',[ico('camera')+' Low angle looking at mum',ico('clock')+' 10 min',ico('mic')+' Mum, Child'])}
+      ${sceneRow('c26','15:20','15:30','Scene 3-6 hesitating','3:20–3:30 PM','Waiting Area (INT)','Scene 3-5 — Hand on Door Frame, Half In Half Out','Hand touching handles/buttons closeups.',[ico('camera')+' Hand closeups',ico('clock')+' 10 min',ico('mic')+' Mum'])}
+      ${sceneRow('c27','15:30','15:40','Scene 4-3 notices screen','3:30–3:40 PM','Waiting Area (INT)','Scene 3-6 — Mum Hesitating, Worried','Mum closeup, side angle.',[ico('camera')+' Mum closeup, side angle',ico('clock')+' 10 min',ico('mic')+' Mum'])}
+      ${sceneRow('c28','15:40','15:50','Scene 4-4 reaches phone','3:40–3:50 PM','Waiting Area (INT)','Scene 4-3 — Camera Pulls Back, Mum Notices Screen','Curiosity then recognition. Dolly out.',[ico('camera')+' Mum closeup + dolly out',ico('clock')+' 10 min',ico('mic')+' Mum'])}
+      ${sceneRow('c29','15:50','16:00','Scene 3-7 empty chair','3:50–4:00 PM','Waiting Area (INT)','Scene 4-4 — She Reaches for Phone to Scan','Phone closeup.',[ico('camera')+' Phone closeup',ico('clock')+' 10 min',ico('mic')+' Mum','📱 Phone'])}
+      ${breakRow('',ico('clipboard'),'4:00 PM · Production footage check · Mum + Son wrap')}
+      ${sceneRow('c30','16:00','16:10','Scene 2-2a man coughs','4:00–4:10 PM','Waiting Area (INT)','Scene 3-7 — Empty Chair Between Sick Patients','Text-on-screen: "Would you wait… and risk your child\'s health?"',[ico('camera')+' Wide still + dolly in',ico('clock')+' 10 min',ico('mic')+' Man, Woman'])}
+      ${sceneRow('c31','16:10','16:20','Scene 2-2b closeup','4:10–4:20 PM','Waiting Area (INT)','Scene 2-2a — Man, 40s, Hunched, Shivering, Eyes Red','Mid shot, camera pans to patient.',[ico('camera')+' Mid shot, pan',ico('clock')+' 10 min',ico('mic')+' Man','🧻 Balled wet tissues'])}
+      ${sceneRow('c32','16:20','16:30','Scene 2-3a woman sneezes','4:20–4:30 PM','Waiting Area (INT)','Scene 2-2b — Man Patient Closeup','',[ico('camera')+' Patient closeup',ico('clock')+' 10 min',ico('mic')+' Man','🧻 Balled wet tissues'])}
+      ${sceneRow('c33','16:30','16:40','Scene 2-3b closeup','4:30–4:40 PM','Waiting Area (INT)','Scene 2-3a — Woman, 30s, Mask Half-Down, Mid-Sneeze','Mid shot, camera pans.',[ico('camera')+' Mid shot, pan',ico('clock')+' 10 min',ico('mic')+' Woman','😷 Mask'])}
+      ${sceneRow('c34','16:40','16:50','Bear mascot scenes','4:40–4:50 PM','Waiting Area (INT)','Scene 2-3b — Woman Patient Closeup','',[ico('camera')+' Patient closeup',ico('clock')+' 10 min',ico('mic')+' Woman','😷 Mask'])}
+      ${sceneRow('c35','16:50','17:00','Footage check + Wrap','4:50–5:00 PM','Reception (INT)','Scenes 4-1 & 4-2 — Curo Bear Mascot (Post Production)','Bear mascot pops up at reception, holds sign with QR code. Will add bear mascot in post.',[ico('camera')+' Wide still + dolly in',ico('clock')+' 10 min',ico('lightbulb')+' Post-production: Bear mascot'])}
+      ${breakRow('wrap',ico('check-circle'),'5:00 PM · Production Footage Check + Wrap 🎉')}
     </div>
 
     <div class="shoot-footer">Curo Brand Videoshoot · 13 May 2026 · Oblique Production · Confidential</div>
@@ -1914,52 +1990,52 @@ function getRecceHTML(shoot){
     ${progressAndActivity()}
 
     <div class="session"><div class="session-hdr">Morning — FASS Facilities <span class="srange">11:00 AM – 1:10 PM</span></div>
-      ${breakRow('','📋','11:00–11:10 AM · Meet up at FASS Sunway Square')}
-      ${sceneRow('r01','11:10','11:20','Design Studio','11:10–11:20 AM','Ceramic Room','Ceramic Room','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r02','11:20','11:30','Digital Workshop','11:20–11:30 AM','Design Studio','Design Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r03','11:30','11:40','Drafting Studio','11:30–11:40 AM','Digital Workshop','Digital Workshop','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r04','11:40','11:50','Fabrication Lab','11:40–11:50 AM','Drafting Studio','Drafting Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r05','11:50','12:00','Film Shooting Studio','11:50 AM–12:00 PM','Fabrication Lab','Fabrication Lab','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r06','12:00','12:10','Post Production Studio','12:00–12:10 PM','Film Shooting Studio','Film Shooting Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r07','12:10','12:20','Project Studio','12:10–12:20 PM','Post Production Studio','Post Production Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r08','12:20','12:30','Radio Station','12:20–12:30 PM','Project Studio','Project Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r09','12:30','12:40','Recital Hall','12:30–12:40 PM','Radio Station','Radio Station','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r10','12:40','12:50','Recording Studio','12:40–12:50 PM','Recital Hall','Recital Hall','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r11','12:50','13:00','Webcast Studio','12:50–1:00 PM','Recording Studio','Recording Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${sceneRow('r12','13:00','13:10','Lunch','1:00–1:10 PM','Webcast Studio','Webcast Studio','Recce — check layout, lighting conditions, access.',['📍 Recce','⏱ 10 min'])}
-      ${breakRow('lunch','🍽','1:10–2:30 PM · Lunch Break')}
+      ${breakRow('',ico('clipboard'),'11:00–11:10 AM · Meet up at FASS Sunway Square')}
+      ${sceneRow('r01','11:10','11:20','Design Studio','11:10–11:20 AM','Ceramic Room','Ceramic Room','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r02','11:20','11:30','Digital Workshop','11:20–11:30 AM','Design Studio','Design Studio','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r03','11:30','11:40','Drafting Studio','11:30–11:40 AM','Digital Workshop','Digital Workshop','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r04','11:40','11:50','Fabrication Lab','11:40–11:50 AM','Drafting Studio','Drafting Studio','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r05','11:50','12:00','Film Shooting Studio','11:50 AM–12:00 PM','Fabrication Lab','Fabrication Lab','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r06','12:00','12:10','Post Production Studio','12:00–12:10 PM','Film Shooting Studio','Film Shooting Studio','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r07','12:10','12:20','Project Studio','12:10–12:20 PM','Post Production Studio','Post Production Studio','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r08','12:20','12:30','Radio Station','12:20–12:30 PM','Project Studio','Project Studio','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r09','12:30','12:40','Recital Hall','12:30–12:40 PM','Radio Station','Radio Station','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r10','12:40','12:50','Recording Studio','12:40–12:50 PM','Recital Hall','Recital Hall','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r11','12:50','13:00','Webcast Studio','12:50–1:00 PM','Recording Studio','Recording Studio','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${sceneRow('r12','13:00','13:10','Lunch','1:00–1:10 PM','Webcast Studio','Webcast Studio','Recce — check layout, lighting conditions, access.',[ico('map-pin')+' Recce',ico('clock')+' 10 min'])}
+      ${breakRow('lunch',ico('coffee'),'1:10–2:30 PM · Lunch Break')}
     </div>
 
     <div class="session"><div class="session-hdr">Afternoon — Sunway Square Levels 1–6 <span class="srange">2:30 PM – 6:10 PM</span></div>
-      ${breakRow('','📋','Level 1')}
-      ${sceneRow('r13','14:30','14:40','Square Gallery','2:30–2:40 PM','L1 — Grand Lobby','Grand Lobby','Recce — check layout, lighting, access, photo angles.',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
-      ${sceneRow('r14','14:40','14:50','Trading Room','2:40–2:50 PM','L1 — Square Gallery','Square Gallery','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
-      ${sceneRow('r15','14:50','15:00','Health & Safety Office','2:50–3:00 PM','L1 — Trading Room','Trading Room','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
-      ${sceneRow('r16','15:00','15:10','Grandstand','3:00–3:10 PM','L1 — Health & Safety Office','Health & Safety Office','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
-      ${sceneRow('r17','15:10','15:20','Move to Level 2','3:10–3:20 PM','L1 — Grandstand','Grandstand','',['📍 Recce','⏱ 10 min','🏢 Level 1'])}
-      ${breakRow('','📋','Level 2')}
-      ${sceneRow('r18','15:20','15:30','Study Area','3:20–3:30 PM','L2 — LT360','LT360','',['📍 Recce','⏱ 10 min','🏢 Level 2'])}
-      ${sceneRow('r19','15:30','15:40','Lounge L2','3:30–3:40 PM','L2 — Study Area','Study Area','',['📍 Recce','⏱ 10 min','🏢 Level 2'])}
-      ${sceneRow('r20','15:40','15:50','Move to Level 3','3:40–3:50 PM','L2 — Lounge L2','Lounge L2','',['📍 Recce','⏱ 10 min','🏢 Level 2'])}
-      ${breakRow('','📋','Level 3')}
-      ${sceneRow('r21','15:50','16:00','Collaborative Classroom','3:50–4:00 PM','L3 — Behavioral Lab','Behavioral Lab','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
-      ${sceneRow('r22','16:00','16:10','SBS Admin Office','4:00–4:10 PM','L3 — Collaborative Classroom','Collaborative Classroom','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
-      ${sceneRow('r23','16:10','16:20','Q Deck','4:10–4:20 PM','L3 — SBS Admin Office','SBS Admin Office','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
-      ${sceneRow('r24','16:20','16:30','The Atrium','4:20–4:30 PM','L3 — Q Deck','Q Deck','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
-      ${sceneRow('r25','16:30','16:40',"Cheah's Square",'4:30–4:40 PM','L3 — The Atrium','The Atrium','',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
-      ${sceneRow('r26','16:40','16:50','Move to Level 4','4:40–4:50 PM',"L3 — Cheah's Square","Cheah's Square",'',['📍 Recce','⏱ 10 min','🏢 Level 3'])}
-      ${breakRow('','📋','Level 4')}
-      ${sceneRow('r27','16:50','17:00','Q Co-Working','4:50–5:00 PM','L4 — Recital Hall','Recital Hall','',['📍 Recce','⏱ 10 min','🏢 Level 4'])}
-      ${sceneRow('r28','17:00','17:10','Move to Level 5','5:00–5:10 PM','L4 — Q Co-Working','Q Co-Working','',['📍 Recce','⏱ 10 min','🏢 Level 4'])}
-      ${breakRow('','📋','Level 5')}
-      ${sceneRow('r29','17:10','17:20','Exam Hall','5:10–5:20 PM','L5 — LT 5','LT 5','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
-      ${sceneRow('r30','17:20','17:30','JCPAC Grand Lobby','5:20–5:30 PM','L5 — Exam Hall','Exam Hall','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
-      ${sceneRow('r31','17:30','17:40','Cafe (Coming Soon)','5:30–5:40 PM','L5 — JCPAC Grand Lobby','JCPAC Grand Lobby','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
-      ${sceneRow('r32','17:40','17:50','Move to Level 6','5:40–5:50 PM','L5 — Cafe (Coming Soon)','Cafe (Coming Soon)','',['📍 Recce','⏱ 10 min','🏢 Level 5'])}
-      ${breakRow('','📋','Level 6')}
-      ${sceneRow('r33','17:50','18:00','Sky Light','5:50–6:00 PM','L6 — IT Learning Labs','IT Learning Labs','',['📍 Recce','⏱ 10 min','🏢 Level 6'])}
-      ${sceneRow('r34','18:00','18:10','Wrap!','6:00–6:10 PM','L6 — Sky Light','Sky Light','',['📍 Recce','⏱ 10 min','🏢 Level 6'])}
-      ${breakRow('wrap','✅','6:10 PM · Recce Complete 🎉')}
+      ${breakRow('',ico('clipboard'),'Level 1')}
+      ${sceneRow('r13','14:30','14:40','Square Gallery','2:30–2:40 PM','L1 — Grand Lobby','Grand Lobby','Recce — check layout, lighting, access, photo angles.',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 1'])}
+      ${sceneRow('r14','14:40','14:50','Trading Room','2:40–2:50 PM','L1 — Square Gallery','Square Gallery','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 1'])}
+      ${sceneRow('r15','14:50','15:00','Health & Safety Office','2:50–3:00 PM','L1 — Trading Room','Trading Room','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 1'])}
+      ${sceneRow('r16','15:00','15:10','Grandstand','3:00–3:10 PM','L1 — Health & Safety Office','Health & Safety Office','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 1'])}
+      ${sceneRow('r17','15:10','15:20','Move to Level 2','3:10–3:20 PM','L1 — Grandstand','Grandstand','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 1'])}
+      ${breakRow('',ico('clipboard'),'Level 2')}
+      ${sceneRow('r18','15:20','15:30','Study Area','3:20–3:30 PM','L2 — LT360','LT360','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 2'])}
+      ${sceneRow('r19','15:30','15:40','Lounge L2','3:30–3:40 PM','L2 — Study Area','Study Area','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 2'])}
+      ${sceneRow('r20','15:40','15:50','Move to Level 3','3:40–3:50 PM','L2 — Lounge L2','Lounge L2','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 2'])}
+      ${breakRow('',ico('clipboard'),'Level 3')}
+      ${sceneRow('r21','15:50','16:00','Collaborative Classroom','3:50–4:00 PM','L3 — Behavioral Lab','Behavioral Lab','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 3'])}
+      ${sceneRow('r22','16:00','16:10','SBS Admin Office','4:00–4:10 PM','L3 — Collaborative Classroom','Collaborative Classroom','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 3'])}
+      ${sceneRow('r23','16:10','16:20','Q Deck','4:10–4:20 PM','L3 — SBS Admin Office','SBS Admin Office','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 3'])}
+      ${sceneRow('r24','16:20','16:30','The Atrium','4:20–4:30 PM','L3 — Q Deck','Q Deck','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 3'])}
+      ${sceneRow('r25','16:30','16:40',"Cheah's Square",'4:30–4:40 PM','L3 — The Atrium','The Atrium','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 3'])}
+      ${sceneRow('r26','16:40','16:50','Move to Level 4','4:40–4:50 PM',"L3 — Cheah's Square","Cheah's Square",'',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 3'])}
+      ${breakRow('',ico('clipboard'),'Level 4')}
+      ${sceneRow('r27','16:50','17:00','Q Co-Working','4:50–5:00 PM','L4 — Recital Hall','Recital Hall','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 4'])}
+      ${sceneRow('r28','17:00','17:10','Move to Level 5','5:00–5:10 PM','L4 — Q Co-Working','Q Co-Working','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 4'])}
+      ${breakRow('',ico('clipboard'),'Level 5')}
+      ${sceneRow('r29','17:10','17:20','Exam Hall','5:10–5:20 PM','L5 — LT 5','LT 5','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 5'])}
+      ${sceneRow('r30','17:20','17:30','JCPAC Grand Lobby','5:20–5:30 PM','L5 — Exam Hall','Exam Hall','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 5'])}
+      ${sceneRow('r31','17:30','17:40','Cafe (Coming Soon)','5:30–5:40 PM','L5 — JCPAC Grand Lobby','JCPAC Grand Lobby','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 5'])}
+      ${sceneRow('r32','17:40','17:50','Move to Level 6','5:40–5:50 PM','L5 — Cafe (Coming Soon)','Cafe (Coming Soon)','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 5'])}
+      ${breakRow('',ico('clipboard'),'Level 6')}
+      ${sceneRow('r33','17:50','18:00','Sky Light','5:50–6:00 PM','L6 — IT Learning Labs','IT Learning Labs','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 6'])}
+      ${sceneRow('r34','18:00','18:10','Wrap!','6:00–6:10 PM','L6 — Sky Light','Sky Light','',[ico('map-pin')+' Recce',ico('clock')+' 10 min',ico('building')+' Level 6'])}
+      ${breakRow('wrap',ico('check-circle'),'6:10 PM · Recce Complete 🎉')}
     </div>
 
     <div class="shoot-footer">Sunway Campus Recce · 28 May 2026 · Oblique Production · Confidential</div>
@@ -1978,52 +2054,52 @@ function getPeticoHTML(shoot){
     ${progressAndActivity()}
 
     <div class="session"><div class="session-hdr">Video 05 — A Petico Order Is On Its Way <span class="srange">10:00 AM – 12:00 PM</span></div>
-      ${breakRow('','📋','10:00–10:30 AM · Crew Briefing + Props Check + Phone Screen Staging')}
-      ${sceneRow('pt01','10:30','11:00','Front Door — Doorbell','10:30–11:00 AM','Living Room','Riley Resting + Waiting — Cinematic','Riley resting, looking out window. Slow documentary zoom. Riley waiting by door. Doorbell reaction — capture genuine.',['🎬 Cinematic','⏱ 30 min','🎙 Riley','📦 Petico box (medium)','💡 Riley closeup: tail wag, tongue out'])}
-      ${sceneRow('pt02','11:00','11:30','B-Rolls — Riley resting','11:00–11:30 AM','Front Door','Owner Checks Phone + Box Arrives — Cinematic','Owner checks phone — order dispatched. Doorbell, Riley lifts head. Petico box arrives. Owner unpacks, Riley investigates.',['🎬 Cinematic','⏱ 30 min','🎙 Riley + Owner','📦 Petico box (medium), dog treats','💡 Riley runs to doorbell'])}
-      ${sceneRow('pt03','11:30','12:00','The Dog Narrator','11:30 AM–12:00 PM','Living Room','B-Rolls — Riley','Riley resting, looking at owner, sniffed floor/door, tail wag, settled/sitting. Close-up, slow zoom.',['🎬 Cinematic B-rolls','⏱ 30 min','🎙 Riley'])}
+      ${breakRow('',ico('clipboard'),'10:00–10:30 AM · Crew Briefing + Props Check + Phone Screen Staging')}
+      ${sceneRow('pt01','10:30','11:00','Front Door — Doorbell','10:30–11:00 AM','Living Room','Riley Resting + Waiting — Cinematic','Riley resting, looking out window. Slow documentary zoom. Riley waiting by door. Doorbell reaction — capture genuine.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 30 min',ico('mic')+' Riley','📦 Petico box (medium)',ico('lightbulb')+' Riley closeup: tail wag, tongue out'])}
+      ${sceneRow('pt02','11:00','11:30','B-Rolls — Riley resting','11:00–11:30 AM','Front Door','Owner Checks Phone + Box Arrives — Cinematic','Owner checks phone — order dispatched. Doorbell, Riley lifts head. Petico box arrives. Owner unpacks, Riley investigates.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 30 min',ico('mic')+' Riley + Owner','📦 Petico box (medium), dog treats',ico('lightbulb')+' Riley runs to doorbell'])}
+      ${sceneRow('pt03','11:30','12:00','The Dog Narrator','11:30 AM–12:00 PM','Living Room','B-Rolls — Riley','Riley resting, looking at owner, sniffed floor/door, tail wag, settled/sitting. Close-up, slow zoom.',[ico('clapperboard','ico-xl')+' Cinematic B-rolls',ico('clock')+' 30 min',ico('mic')+' Riley'])}
     </div>
 
     <div class="session"><div class="session-hdr">Video 01 — The Dog Narrator <span class="srange">12:00 PM – 1:30 PM</span></div>
-      ${sceneRow('pt04','12:00','12:15','Wish list scene','12:00–12:15 PM','Living Room / Sofa','Pet on Couch — Stares at Camera','Pet on couch, stares directly at camera. Slow blink. Camera floor-level throughout. Capture bowl tap, eating sounds, nail-on-floor sounds.',['🎬 Insta 360','⏱ 15 min','🎙 Riley + Owner','💡 Camera floor-level'])}
-      ${sceneRow('pt05','12:15','12:30','Owner finds list','12:15–12:30 PM','Living Room / Sofa','Pet "Writes" Wish List','Pet "writes" down wish list on paper. Cat slow blink to camera = money shot. Long takes near products. Let pet settle first.',['🎬 Insta 360','⏱ 15 min','🎙 Riley + Owner','📱 Notes app wish list, Petico box (small)'])}
-      ${sceneRow('pt06','12:30','12:45','Petico website scroll','12:30–12:45 PM','Living Room','Owner Finds List — Double Take','Owner finds list. Double take. Looks at pet. Pet blinks back. Pre-load Petico Club with points.',['⏱ 15 min','🎙 Riley + Owner','📦 Petico Club products A, B, C (physical)'])}
-      ${sceneRow('pt07','12:45','13:00','Box arrives','12:45–1:00 PM','Living Room','Opens Petico Website — Scrolls, Adds Items','Opens Petico website, scrolls, adds items. Fast, easy.',['⏱ 15 min','🎙 Riley + Owner','📱 Phone screen'])}
-      ${sceneRow('pt08','13:00','13:15','Pet slow blink + b-rolls','1:00–1:15 PM','Living Room','Box Arrives — Pet Investigates','Box arrives. Pet investigates. Treats. Toy. Pet eats, plays.',['⏱ 15 min','🎙 Riley + Owner','📦 Petico box'])}
-      ${sceneRow('pt09','13:15','13:30','Lunch Break','1:15–1:30 PM','Living Room','Pet Looks at Camera — Slow Blink + B-Rolls','Pet looks at camera. Slow blink. Pet and owner interact.',['⏱ 15 min','🎙 Riley + Owner'])}
-      ${breakRow('lunch','🍽','1:30–2:00 PM · Lunch Break · Aina + Cat Arrive')}
+      ${sceneRow('pt04','12:00','12:15','Wish list scene','12:00–12:15 PM','Living Room / Sofa','Pet on Couch — Stares at Camera','Pet on couch, stares directly at camera. Slow blink. Camera floor-level throughout. Capture bowl tap, eating sounds, nail-on-floor sounds.',[ico('clapperboard','ico-xl')+' Insta 360',ico('clock')+' 15 min',ico('mic')+' Riley + Owner',ico('lightbulb')+' Camera floor-level'])}
+      ${sceneRow('pt05','12:15','12:30','Owner finds list','12:15–12:30 PM','Living Room / Sofa','Pet "Writes" Wish List','Pet "writes" down wish list on paper. Cat slow blink to camera = money shot. Long takes near products. Let pet settle first.',[ico('clapperboard','ico-xl')+' Insta 360',ico('clock')+' 15 min',ico('mic')+' Riley + Owner','📱 Notes app wish list, Petico box (small)'])}
+      ${sceneRow('pt06','12:30','12:45','Petico website scroll','12:30–12:45 PM','Living Room','Owner Finds List — Double Take','Owner finds list. Double take. Looks at pet. Pet blinks back. Pre-load Petico Club with points.',[ico('clock')+' 15 min',ico('mic')+' Riley + Owner','📦 Petico Club products A, B, C (physical)'])}
+      ${sceneRow('pt07','12:45','13:00','Box arrives','12:45–1:00 PM','Living Room','Opens Petico Website — Scrolls, Adds Items','Opens Petico website, scrolls, adds items. Fast, easy.',[ico('clock')+' 15 min',ico('mic')+' Riley + Owner','📱 Phone screen'])}
+      ${sceneRow('pt08','13:00','13:15','Pet slow blink + b-rolls','1:00–1:15 PM','Living Room','Box Arrives — Pet Investigates','Box arrives. Pet investigates. Treats. Toy. Pet eats, plays.',[ico('clock')+' 15 min',ico('mic')+' Riley + Owner','📦 Petico box'])}
+      ${sceneRow('pt09','13:15','13:30','Lunch Break','1:15–1:30 PM','Living Room','Pet Looks at Camera — Slow Blink + B-Rolls','Pet looks at camera. Slow blink. Pet and owner interact.',[ico('clock')+' 15 min',ico('mic')+' Riley + Owner'])}
+      ${breakRow('lunch',ico('coffee'),'1:30–2:00 PM · Lunch Break · Aina + Cat Arrive')}
     </div>
 
     <div class="session"><div class="session-hdr">Video 08 — Panic vs Peace (Split Screen) <span class="srange">2:00 PM – 3:10 PM</span></div>
-      ${sceneRow('pt10','14:00','14:10','Shakes it — panics','2:00–2:10 PM','Kitchen / Dining','Discovers Empty Container — PANIC','Discovers empty container, shakes it, not much left → panics, grabs keys, rushes out.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','🔑 Keys, container with few foods left'])}
-      ${sceneRow('pt11','14:10','14:20','Calmly browses Petico','2:10–2:20 PM','Kitchen / Dining','Same Owner, Different Day — PEACE','Same owner, different day. Discovers empty container. Calmly browsing Petico website.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','📱 Keys, container, phone screen'])}
-      ${sceneRow('pt12','14:20','14:30','Add to cart Petico','2:20–2:30 PM','Kitchen / Dining','Frantically Checking Where to Buy — PANIC','Frantically checking where to buy. Next day (put a date). Earliest. Face drops.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner'])}
-      ${sceneRow('pt13','14:30','14:40','Cat stares at owner','2:30–2:40 PM','Kitchen / Dining','Add to Cart — Same Day Delivery — PEACE','Add to cart on Petico. Confirms order. Same Day Delivery. Done in seconds.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','📱 Phone screen'])}
-      ${sceneRow('pt14','14:40','14:50','Cat eating, owner relaxed','2:40–2:50 PM','Kitchen / Dining','Cat Gives Full Stare — Owner Stressed','Cat gives owner the full stare. Owner stressed.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner'])}
-      ${sceneRow('pt15','14:50','15:00','Ending — cat + owner','2:50–3:00 PM','Kitchen / Dining','Cat Eating, Owner Relaxed','Cat eating from full bowl. Owner relaxed on couch.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner','🍽 Food bowl'])}
-      ${sceneRow('pt16','15:00','15:10','Riley Morning Routine','3:00–3:10 PM','Living Room','Ending — Cat and Owner Interact','Cat and owner interact. Closing shot.',['🎬 Cinematic','⏱ 10 min','🎙 Cat + Owner'])}
+      ${sceneRow('pt10','14:00','14:10','Shakes it — panics','2:00–2:10 PM','Kitchen / Dining','Discovers Empty Container — PANIC','Discovers empty container, shakes it, not much left → panics, grabs keys, rushes out.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 10 min',ico('mic')+' Cat + Owner','🔑 Keys, container with few foods left'])}
+      ${sceneRow('pt11','14:10','14:20','Calmly browses Petico','2:10–2:20 PM','Kitchen / Dining','Same Owner, Different Day — PEACE','Same owner, different day. Discovers empty container. Calmly browsing Petico website.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 10 min',ico('mic')+' Cat + Owner','📱 Keys, container, phone screen'])}
+      ${sceneRow('pt12','14:20','14:30','Add to cart Petico','2:20–2:30 PM','Kitchen / Dining','Frantically Checking Where to Buy — PANIC','Frantically checking where to buy. Next day (put a date). Earliest. Face drops.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 10 min',ico('mic')+' Cat + Owner'])}
+      ${sceneRow('pt13','14:30','14:40','Cat stares at owner','2:30–2:40 PM','Kitchen / Dining','Add to Cart — Same Day Delivery — PEACE','Add to cart on Petico. Confirms order. Same Day Delivery. Done in seconds.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 10 min',ico('mic')+' Cat + Owner','📱 Phone screen'])}
+      ${sceneRow('pt14','14:40','14:50','Cat eating, owner relaxed','2:40–2:50 PM','Kitchen / Dining','Cat Gives Full Stare — Owner Stressed','Cat gives owner the full stare. Owner stressed.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 10 min',ico('mic')+' Cat + Owner'])}
+      ${sceneRow('pt15','14:50','15:00','Ending — cat + owner','2:50–3:00 PM','Kitchen / Dining','Cat Eating, Owner Relaxed','Cat eating from full bowl. Owner relaxed on couch.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 10 min',ico('mic')+' Cat + Owner',ico('utensils')+' Food bowl'])}
+      ${sceneRow('pt16','15:00','15:10','Riley Morning Routine','3:00–3:10 PM','Living Room','Ending — Cat and Owner Interact','Cat and owner interact. Closing shot.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 10 min',ico('mic')+' Cat + Owner'])}
     </div>
 
     <div class="session"><div class="session-hdr">Video 06 — Riley's Morning Routine <span class="srange">2:00 PM – 3:00 PM</span></div>
-      ${sceneRow('pt17a','14:00','14:30','Dog play + toys','2:00–2:30 PM','Living Room / Kitchen','Dog Following Owner + Eating — Pet POV','Dog following owner, eating. Insta 360.',['🎬 Pet POV / Insta 360','⏱ 30 min','🎙 Riley + Owner','🍽 Insta 360, food bowl'])}
-      ${sceneRow('pt17b','14:30','14:45','Dog walk outdoor','2:30–2:45 PM','Living Room / Kitchen','Dog Pee + Play Toys — Pet POV','Dog pee, play toys.',['🎬 Pet POV / Insta 360','⏱ 15 min','🎙 Riley + Owner','🧹 Insta 360, pee pad, food, flea comb'])}
-      ${sceneRow('pt17c','14:45','15:00','Cat Narrator','2:45–3:00 PM','Outdoor (Facilities)','Dog Running Around + Walk — Pet POV','Dog running around, owner takes dog for a walk.',['🎬 Pet POV / Insta 360','⏱ 15 min','🎙 Riley + Owner','📹 Insta 360'])}
+      ${sceneRow('pt17a','14:00','14:30','Dog play + toys','2:00–2:30 PM','Living Room / Kitchen','Dog Following Owner + Eating — Pet POV','Dog following owner, eating. Insta 360.',[ico('clapperboard','ico-xl')+' Pet POV / Insta 360',ico('clock')+' 30 min',ico('mic')+' Riley + Owner',ico('utensils')+' Insta 360, food bowl'])}
+      ${sceneRow('pt17b','14:30','14:45','Dog walk outdoor','2:30–2:45 PM','Living Room / Kitchen','Dog Pee + Play Toys — Pet POV','Dog pee, play toys.',[ico('clapperboard','ico-xl')+' Pet POV / Insta 360',ico('clock')+' 15 min',ico('mic')+' Riley + Owner','🧹 Insta 360, pee pad, food, flea comb'])}
+      ${sceneRow('pt17c','14:45','15:00','Cat Narrator','2:45–3:00 PM','Outdoor (Facilities)','Dog Running Around + Walk — Pet POV','Dog running around, owner takes dog for a walk.',[ico('clapperboard','ico-xl')+' Pet POV / Insta 360',ico('clock')+' 15 min',ico('mic')+' Riley + Owner','📹 Insta 360'])}
     </div>
 
     <div class="session"><div class="session-hdr">Video 01 — The Cat Narrator <span class="srange">3:10 PM – 4:10 PM</span></div>
-      ${sceneRow('pt18','15:10','15:25','Cat wish list','3:10–3:25 PM','Living Room / Sofa','Cat on Couch — Stares at Camera','Pet on couch, stares directly at camera. Slow blink. Camera floor-level. Capture bowl tap, eating sounds.',['🎬 Insta 360','⏱ 15 min','🎙 Cat + Owner','💡 Camera floor-level'])}
-      ${sceneRow('pt19','15:25','15:40','Owner finds cat list','3:25–3:40 PM','Living Room / Sofa','Cat "Writes" Wish List','Cat slow blink to camera = money shot. Long takes near products. Let cat settle first.',['🎬 Insta 360','⏱ 15 min','🎙 Cat + Owner','📱 Notes app wish list, Petico box (small)'])}
-      ${sceneRow('pt20','15:40','15:55','Cat Petico scroll','3:40–3:55 PM','Living Room','Owner Finds List — Double Take, Cat Blinks','Owner finds list. Looks at cat. Cat blinks back. Pre-load Petico Club with points.',['⏱ 15 min','🎙 Cat + Owner','📦 Petico Club products A, B, C'])}
-      ${sceneRow('pt21','15:55','16:10','Cat box arrives','3:55–4:10 PM','Living Room','Opens Petico Website — Adds Items','Opens Petico website, scrolls, adds items.',['⏱ 15 min','🎙 Cat + Owner','📱 Phone screen'])}
-      ${sceneRow('pt22','16:10','16:25','Cat b-rolls','4:10–4:25 PM','Living Room','Cat Box Arrives — Investigates','Box arrives. Cat investigates. Treats. Toy.',['⏱ 15 min','🎙 Cat + Owner','📦 Petico box'])}
-      ${sceneRow('pt23','16:25','16:40','Cinematic Slow Zoom','4:25–4:40 PM','Living Room','Cat Slow Blink — B-Rolls','Cat looks at camera. Slow blink. Cat and owner interact.',['⏱ 15 min','🎙 Cat + Owner'])}
+      ${sceneRow('pt18','15:10','15:25','Cat wish list','3:10–3:25 PM','Living Room / Sofa','Cat on Couch — Stares at Camera','Pet on couch, stares directly at camera. Slow blink. Camera floor-level. Capture bowl tap, eating sounds.',[ico('clapperboard','ico-xl')+' Insta 360',ico('clock')+' 15 min',ico('mic')+' Cat + Owner',ico('lightbulb')+' Camera floor-level'])}
+      ${sceneRow('pt19','15:25','15:40','Owner finds cat list','3:25–3:40 PM','Living Room / Sofa','Cat "Writes" Wish List','Cat slow blink to camera = money shot. Long takes near products. Let cat settle first.',[ico('clapperboard','ico-xl')+' Insta 360',ico('clock')+' 15 min',ico('mic')+' Cat + Owner','📱 Notes app wish list, Petico box (small)'])}
+      ${sceneRow('pt20','15:40','15:55','Cat Petico scroll','3:40–3:55 PM','Living Room','Owner Finds List — Double Take, Cat Blinks','Owner finds list. Looks at cat. Cat blinks back. Pre-load Petico Club with points.',[ico('clock')+' 15 min',ico('mic')+' Cat + Owner','📦 Petico Club products A, B, C'])}
+      ${sceneRow('pt21','15:55','16:10','Cat box arrives','3:55–4:10 PM','Living Room','Opens Petico Website — Adds Items','Opens Petico website, scrolls, adds items.',[ico('clock')+' 15 min',ico('mic')+' Cat + Owner','📱 Phone screen'])}
+      ${sceneRow('pt22','16:10','16:25','Cat b-rolls','4:10–4:25 PM','Living Room','Cat Box Arrives — Investigates','Box arrives. Cat investigates. Treats. Toy.',[ico('clock')+' 15 min',ico('mic')+' Cat + Owner','📦 Petico box'])}
+      ${sceneRow('pt23','16:25','16:40','Cinematic Slow Zoom','4:25–4:40 PM','Living Room','Cat Slow Blink — B-Rolls','Cat looks at camera. Slow blink. Cat and owner interact.',[ico('clock')+' 15 min',ico('mic')+' Cat + Owner'])}
     </div>
 
     <div class="session"><div class="session-hdr">Video 02 — Cinematic Slow Zoom <span class="srange">3:10 PM – 4:30 PM</span></div>
-      ${sceneRow('pt24','15:10','15:40','Owner pets animal','3:10–3:40 PM','Living Room','Opening Extreme Close-up — Riley Sleeping','Opening extreme close-up. Riley sleeping/resting. Slow zoom, morning light. Long unguided takes. Camera floor-to-low height.',['🎬 Cinematic','⏱ 30 min','🎙 Riley'])}
-      ${sceneRow('pt25','15:40','16:10','B-rolls — cinematic','3:40–4:10 PM','Living Room','Owner Pets Animal — Slow Warm Moment','Owner hand pets animal. Pet looks up. Slow warm moment. Owner on phone — Petico website visible over shoulder.',['🎬 Cinematic','⏱ 30 min','🎙 Riley + Owner','📱 Petico website on phone','💡 Floor-level for pet-looking-up shot'])}
-      ${sceneRow('pt26','16:10','16:30','Wrap','4:10–4:30 PM','Living Room','B-Rolls — Cinematic','Pet sleeping close-up, slow zoom. Pet looking out window, looking at owner. Pet POV, owner hand entering frame.',['🎬 Cinematic B-rolls','⏱ 20 min','🎙 Riley + Owner'])}
-      ${breakRow('wrap','✅','4:30 PM · Check Footage + Wrap 🎉')}
+      ${sceneRow('pt24','15:10','15:40','Owner pets animal','3:10–3:40 PM','Living Room','Opening Extreme Close-up — Riley Sleeping','Opening extreme close-up. Riley sleeping/resting. Slow zoom, morning light. Long unguided takes. Camera floor-to-low height.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 30 min',ico('mic')+' Riley'])}
+      ${sceneRow('pt25','15:40','16:10','B-rolls — cinematic','3:40–4:10 PM','Living Room','Owner Pets Animal — Slow Warm Moment','Owner hand pets animal. Pet looks up. Slow warm moment. Owner on phone — Petico website visible over shoulder.',[ico('clapperboard','ico-xl')+' Cinematic',ico('clock')+' 30 min',ico('mic')+' Riley + Owner','📱 Petico website on phone',ico('lightbulb')+' Floor-level for pet-looking-up shot'])}
+      ${sceneRow('pt26','16:10','16:30','Wrap','4:10–4:30 PM','Living Room','B-Rolls — Cinematic','Pet sleeping close-up, slow zoom. Pet looking out window, looking at owner. Pet POV, owner hand entering frame.',[ico('clapperboard','ico-xl')+' Cinematic B-rolls',ico('clock')+' 20 min',ico('mic')+' Riley + Owner'])}
+      ${breakRow('wrap',ico('check-circle'),'4:30 PM · Check Footage + Wrap 🎉')}
     </div>
 
     <div class="shoot-footer">Petico Brand Campaign Day 2 · 21 May 2026 · Oblique Production · Confidential</div>
@@ -2042,73 +2118,73 @@ function getWaterfrontHTML(shoot){
     ${progressAndActivity()}
 
     <div class="session"><div class="session-hdr">Day 1 — Block A · Facilities <span class="srange">8:00 AM – 1:15 PM</span></div>
-      ${breakRow('','📋','8:00–8:30 AM · Meet Up + Short Briefing (Waterfront Lobby)')}
-      ${sceneRow('w01','08:30','09:00','Laundry','8:30–9:00 AM','Pool','Pool — Wide + Lifestyle','Hui Shan & Natsai in Sports outfit.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Hui Shan, Natsai · Sports','📚 Books, Sunglasses, Caps'])}
-      ${sceneRow('w02','09:00','09:30','Gym','9:00–9:30 AM','Laundry','Laundry — Wide + Lifestyle','Hui Shan in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Hui Shan · Casual 2','🧺 Laundry bag/basket, shirt'])}
-      ${sceneRow('w03','09:30','10:00','Atrium','9:30–10:00 AM','Gym','Gym — Wide + Lifestyle','Jacob & Natsai in Sports.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Jacob, Natsai · Sports','🏋️ Tumbler, Towel'])}
-      ${sceneRow('w04','10:00','10:45','Multipurpose Hall','10:00–10:45 AM','Atrium','Atrium — Wide + Lifestyle (WiFi Area)','All 3 Talents (Hui Shan, Natsai, Jacob) in Casual 2.',['📸 Wide + Lifestyle','⏱ 45 min','🎙 All 3 · Casual 2','💻 School bags, books, iPad, laptop, wireless headphones'])}
-      ${sceneRow('w05','10:45','11:15','Cafeteria','10:45–11:15 AM','Multipurpose Hall','Multipurpose Hall — Wide + Lifestyle','All 3 Talents in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 · Casual 2','📚 School bags, books'])}
-      ${sceneRow('w06','11:15','11:45','Security Room','11:15–11:45 AM','Cafeteria','Cafeteria — Wide + Lifestyle','Jacob in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Jacob · Casual 2','🍽 Food tray'])}
-      ${sceneRow('w07','11:45','12:15','Convenient Store','11:45 AM–12:15 PM','Security Room','Security Room — Wide + Lifestyle','Natsai & Jacob in Casual 2. Need 1 security as talent.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Natsai, Jacob · Casual 2','👮 Security with student scenes'])}
-      ${sceneRow('w08','12:15','12:45','Postbox','12:15–12:45 PM','Convenient Store','Convenient Store (Family Mart + Bila-bila) — Wide + Lifestyle','All 3 Talents in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 All 3 · Casual 2'])}
-      ${sceneRow('w09','12:45','13:15','Lunch','12:45–1:15 PM','Postbox','Postbox — Wide + Lifestyle','Natsai in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Natsai · Casual 2','📦 Parcel'])}
-      ${breakRow('lunch','🍽','1:15–1:45 PM · Lunch')}
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Meet Up + Short Briefing (Waterfront Lobby)')}
+      ${sceneRow('w01','08:30','09:00','Laundry','8:30–9:00 AM','Pool','Pool — Wide + Lifestyle','Hui Shan & Natsai in Sports outfit.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Hui Shan, Natsai · Sports','📚 Books, Sunglasses, Caps'])}
+      ${sceneRow('w02','09:00','09:30','Gym','9:00–9:30 AM','Laundry','Laundry — Wide + Lifestyle','Hui Shan in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Hui Shan · Casual 2','🧺 Laundry bag/basket, shirt'])}
+      ${sceneRow('w03','09:30','10:00','Atrium','9:30–10:00 AM','Gym','Gym — Wide + Lifestyle','Jacob & Natsai in Sports.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Jacob, Natsai · Sports',ico('dumbbell')+' Tumbler, Towel'])}
+      ${sceneRow('w04','10:00','10:45','Multipurpose Hall','10:00–10:45 AM','Atrium','Atrium — Wide + Lifestyle (WiFi Area)','All 3 Talents (Hui Shan, Natsai, Jacob) in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 45 min',ico('mic')+' All 3 · Casual 2','💻 School bags, books, iPad, laptop, wireless headphones'])}
+      ${sceneRow('w05','10:45','11:15','Cafeteria','10:45–11:15 AM','Multipurpose Hall','Multipurpose Hall — Wide + Lifestyle','All 3 Talents in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 · Casual 2','📚 School bags, books'])}
+      ${sceneRow('w06','11:15','11:45','Security Room','11:15–11:45 AM','Cafeteria','Cafeteria — Wide + Lifestyle','Jacob in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Jacob · Casual 2',ico('utensils')+' Food tray'])}
+      ${sceneRow('w07','11:45','12:15','Convenient Store','11:45 AM–12:15 PM','Security Room','Security Room — Wide + Lifestyle','Natsai & Jacob in Casual 2. Need 1 security as talent.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Natsai, Jacob · Casual 2','👮 Security with student scenes'])}
+      ${sceneRow('w08','12:15','12:45','Postbox','12:15–12:45 PM','Convenient Store','Convenient Store (Family Mart + Bila-bila) — Wide + Lifestyle','All 3 Talents in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 · Casual 2'])}
+      ${sceneRow('w09','12:45','13:15','Lunch','12:45–1:15 PM','Postbox','Postbox — Wide + Lifestyle','Natsai in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Natsai · Casual 2','📦 Parcel'])}
+      ${breakRow('lunch',ico('coffee'),'1:15–1:45 PM · Lunch')}
     </div>
 
     <div class="session"><div class="session-hdr">Day 1 — Block A · Lounge + Rooms <span class="srange">1:45 PM – 7:45 PM</span></div>
       ${breakRow('move','🚶','1:45–2:00 PM · Move to Block A Lounge + Talent Group B Meet Up + Crew Set Up')}
-      ${sceneRow('w10','14:00','14:30','Student Lounge','2:00–2:30 PM','Kitchen (Communal)','Kitchen (Communal) — Wide + Lifestyle','John, Logesh, Aleena in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','🍽 Mugs, plates, cutleries, foods'])}
-      ${sceneRow('w11','14:30','15:00','Movie Room','2:30–3:00 PM','Student Lounge','Student Lounge — Wide + Lifestyle','John, Logesh, Aleena in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','📚 Books, laptops'])}
-      ${sceneRow('w12','15:00','15:30','Game Room','3:00–3:30 PM','Movie Room','Movie Room — Wide + Lifestyle','John, Logesh, Aleena in Casual 2. Movie access needed. Prepare static image.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','🎬 Movie access'])}
-      ${sceneRow('w13','15:30','16:00','Study Room','3:30–4:00 PM','Game Room','Game Room — Wide + Lifestyle','John & Logesh in Casual 2. PS5 access needed.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh · Casual 2','🎮 PS5'])}
-      ${sceneRow('w14','16:00','16:30','Move to Rooms','4:00–4:30 PM','Study Room','Study Room — Wide + Lifestyle (WiFi Area)','John, Logesh, Aleena in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 2','💻 Books, laptops, files, stationeries'])}
+      ${sceneRow('w10','14:00','14:30','Student Lounge','2:00–2:30 PM','Kitchen (Communal)','Kitchen (Communal) — Wide + Lifestyle','John, Logesh, Aleena in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh, Aleena · Casual 2',ico('utensils')+' Mugs, plates, cutleries, foods'])}
+      ${sceneRow('w11','14:30','15:00','Movie Room','2:30–3:00 PM','Student Lounge','Student Lounge — Wide + Lifestyle','John, Logesh, Aleena in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh, Aleena · Casual 2','📚 Books, laptops'])}
+      ${sceneRow('w12','15:00','15:30','Game Room','3:00–3:30 PM','Movie Room','Movie Room — Wide + Lifestyle','John, Logesh, Aleena in Casual 2. Movie access needed. Prepare static image.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh, Aleena · Casual 2',ico('clapperboard','ico-xl')+' Movie access'])}
+      ${sceneRow('w13','15:30','16:00','Study Room','3:30–4:00 PM','Game Room','Game Room — Wide + Lifestyle','John & Logesh in Casual 2. PS5 access needed.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh · Casual 2','🎮 PS5'])}
+      ${sceneRow('w14','16:00','16:30','Move to Rooms','4:00–4:30 PM','Study Room','Study Room — Wide + Lifestyle (WiFi Area)','John, Logesh, Aleena in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh, Aleena · Casual 2','💻 Books, laptops, files, stationeries'])}
       ${breakRow('move','🚶','4:30–4:45 PM · Move to Block A Rooms')}
-      ${sceneRow('w15','16:45','17:15','Single Small','4:45–5:15 PM','Twin Sharing','Twin Sharing — Wide + Lifestyle','John & Logesh in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
-      ${sceneRow('w16','17:15','17:45','Single Room','5:15–5:45 PM','Single Small','Single Small — Wide + Lifestyle','John in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
-      ${sceneRow('w17','17:45','18:15','Living Room','5:45–6:15 PM','Single Room','Single Room — Wide + Lifestyle','Aleena in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Aleena · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
-      ${sceneRow('w18','18:15','18:45','Pantry + Dining','6:15–6:45 PM','Living Room','Living Room — Wide + Lifestyle','John, Logesh, Aleena in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'])}
-      ${sceneRow('w19','18:45','19:15','Bathroom','6:45–7:15 PM','Pantry + Dining','Pantry + Dining Area — Wide + Lifestyle','John, Logesh, Aleena in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 John, Logesh, Aleena · Casual 1','🍽 Mugs, plates, cutleries, foods'])}
-      ${sceneRow('w20','19:15','19:45','Wrap Day 1','7:15–7:45 PM','Bathroom','Bathroom — Wide + Lifestyle','Logesh in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Logesh · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'])}
-      ${breakRow('wrap','✅','7:45 PM · Check Footage + Wrap — Day 1 Complete')}
+      ${sceneRow('w15','16:45','17:15','Single Small','4:45–5:15 PM','Twin Sharing','Twin Sharing — Wide + Lifestyle','John & Logesh in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
+      ${sceneRow('w16','17:15','17:45','Single Room','5:15–5:45 PM','Single Small','Single Small — Wide + Lifestyle','John in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
+      ${sceneRow('w17','17:45','18:15','Living Room','5:45–6:15 PM','Single Room','Single Room — Wide + Lifestyle','Aleena in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Aleena · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'])}
+      ${sceneRow('w18','18:15','18:45','Pantry + Dining','6:15–6:45 PM','Living Room','Living Room — Wide + Lifestyle','John, Logesh, Aleena in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh, Aleena · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'])}
+      ${sceneRow('w19','18:45','19:15','Bathroom','6:45–7:15 PM','Pantry + Dining','Pantry + Dining Area — Wide + Lifestyle','John, Logesh, Aleena in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' John, Logesh, Aleena · Casual 1',ico('utensils')+' Mugs, plates, cutleries, foods'])}
+      ${sceneRow('w20','19:15','19:45','Wrap Day 1','7:15–7:45 PM','Bathroom','Bathroom — Wide + Lifestyle','Logesh in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Logesh · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'])}
+      ${breakRow('wrap',ico('check-circle'),'7:45 PM · Check Footage + Wrap — Day 1 Complete')}
     </div>
 
-    <div class="day-divider day2">📅 Day 2 — Monday, 11 May 2026 · Blocks C + D · Crew 8:00 AM · Talent Group A 9:00 AM · Group B 1:00 PM</div>
+    <div class="day-divider day2">${ico('calendar')} Day 2 — Monday, 11 May 2026 · Blocks C + D · Crew 8:00 AM · Talent Group A 9:00 AM · Group B 1:00 PM</div>
 
     <div class="session day2"><div class="session-hdr">Day 2 — Block D · Kitchen + Facilities <span class="srange">8:00 AM – 11:00 AM</span></div>
-      ${breakRow('','📋','8:00–8:30 AM · Meet Up + Short Briefing (Waterfront Lobby)')}
-      ${sceneRow('w21','08:30','09:00','Move to Pool','8:30–9:00 AM','Kitchen (Hood & Hob)','Kitchen (with Hood & Hob) — Wide + Lifestyle','Crystal, Sun Yi, Shaz in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Sun Yi, Shaz · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Meet Up + Short Briefing (Waterfront Lobby)')}
+      ${sceneRow('w21','08:30','09:00','Move to Pool','8:30–9:00 AM','Kitchen (Hood & Hob)','Kitchen (with Hood & Hob) — Wide + Lifestyle','Crystal, Sun Yi, Shaz in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal, Sun Yi, Shaz · Casual 1',ico('utensils')+' Mugs, plates, cutleries, foods'],true)}
       ${breakRow('move','🚶','9:00–9:15 AM · Move to Pool (Facilities)')}
-      ${sceneRow('w22','09:15','09:45','Laundry','9:15–9:45 AM','Infinity Pool','Infinity Pool — Wide + Lifestyle','Crystal & Sun Yi in Sports.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Sun Yi · Sports','📚 Books, Sunglasses, Caps'],true)}
-      ${sceneRow('w23','09:45','10:15','Parcel Room','9:45–10:15 AM','Laundry','Laundry — Wide + Lifestyle','Crystal in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 2','🧺 Laundry bag/basket, shirt'],true)}
-      ${sceneRow('w24','10:15','10:45','Move to Block D','10:15–10:45 AM','Parcel Room','Parcel Room — Wide + Lifestyle','Sun Yi in Casual 2.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi · Casual 2','📦 Parcels'],true)}
+      ${sceneRow('w22','09:15','09:45','Laundry','9:15–9:45 AM','Infinity Pool','Infinity Pool — Wide + Lifestyle','Crystal & Sun Yi in Sports.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal, Sun Yi · Sports','📚 Books, Sunglasses, Caps'],true)}
+      ${sceneRow('w23','09:45','10:15','Parcel Room','9:45–10:15 AM','Laundry','Laundry — Wide + Lifestyle','Crystal in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal · Casual 2','🧺 Laundry bag/basket, shirt'],true)}
+      ${sceneRow('w24','10:15','10:45','Move to Block D','10:15–10:45 AM','Parcel Room','Parcel Room — Wide + Lifestyle','Sun Yi in Casual 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Sun Yi · Casual 2','📦 Parcels'],true)}
       ${breakRow('move','🚶','10:45–11:00 AM · Move to Block D Show Unit')}
     </div>
 
     <div class="session day2"><div class="session-hdr">Day 2 — Block D · Rooms <span class="srange">11:00 AM – 2:00 PM</span></div>
-      ${sceneRow('w25','11:00','11:30','Twin Sharing','11:00–11:30 AM','Twin Sharing (View)','Twin Sharing (View) — Wide + Lifestyle','Sun Yi & Shaz in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi, Shaz · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
-      ${sceneRow('w26','11:30','12:00','Single Small','11:30 AM–12:00 PM','Twin Sharing','Twin Sharing — Wide + Lifestyle','Sun Yi & Shaz in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi, Shaz · Casual 1'],true)}
-      ${sceneRow('w27','12:00','12:30','Single Big','12:00–12:30 PM','Single Small','Single Small — Wide + Lifestyle','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1'],true)}
-      ${sceneRow('w28','12:30','13:00','Single View','12:30–1:00 PM','Single Big','Single Big — Wide + Lifestyle','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1'],true)}
-      ${sceneRow('w29','13:00','13:30','Studio View','1:00–1:30 PM','Single View','Single View — Wide + Lifestyle','Sun Yi in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sun Yi · Casual 1'],true)}
-      ${sceneRow('w30','13:30','14:00','Lunch','1:30–2:00 PM','Studio View','Studio View (with Hood & Hob) — Wide + Lifestyle','Jun Hao in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Jun Hao · Casual 1'],true)}
-      ${breakRow('lunch','🍽','2:00–2:30 PM · Lunch + Talent Group B Meet Up + Crew Set Up')}
+      ${sceneRow('w25','11:00','11:30','Twin Sharing','11:00–11:30 AM','Twin Sharing (View)','Twin Sharing (View) — Wide + Lifestyle','Sun Yi & Shaz in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Sun Yi, Shaz · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
+      ${sceneRow('w26','11:30','12:00','Single Small','11:30 AM–12:00 PM','Twin Sharing','Twin Sharing — Wide + Lifestyle','Sun Yi & Shaz in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Sun Yi, Shaz · Casual 1'],true)}
+      ${sceneRow('w27','12:00','12:30','Single Big','12:00–12:30 PM','Single Small','Single Small — Wide + Lifestyle','Crystal in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal · Casual 1'],true)}
+      ${sceneRow('w28','12:30','13:00','Single View','12:30–1:00 PM','Single Big','Single Big — Wide + Lifestyle','Crystal in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal · Casual 1'],true)}
+      ${sceneRow('w29','13:00','13:30','Studio View','1:00–1:30 PM','Single View','Single View — Wide + Lifestyle','Sun Yi in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Sun Yi · Casual 1'],true)}
+      ${sceneRow('w30','13:30','14:00','Lunch','1:30–2:00 PM','Studio View','Studio View (with Hood & Hob) — Wide + Lifestyle','Jun Hao in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Jun Hao · Casual 1'],true)}
+      ${breakRow('lunch',ico('coffee'),'2:00–2:30 PM · Lunch + Talent Group B Meet Up + Crew Set Up')}
     </div>
 
     <div class="session day2"><div class="session-hdr">Day 2 — Block D · Rooms + Common Areas <span class="srange">2:30 PM – 4:00 PM</span></div>
-      ${sceneRow('w31','14:30','15:00','Living Room','2:30–3:00 PM','Pantry + Dining','Pantry + Dining Area — Wide + Lifestyle','Sufia, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sufia, Jun Hao, Ahmed · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
-      ${sceneRow('w32','15:00','15:30','Bathroom','3:00–3:30 PM','Living Room','Living Room — Wide + Lifestyle','Sufia, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Sufia, Jun Hao, Ahmed · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'],true)}
-      ${sceneRow('w33','15:30','16:00','Move to Block C','3:30–4:00 PM','Bathroom','Bathroom — Wide + Lifestyle','Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Ahmed · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
+      ${sceneRow('w31','14:30','15:00','Living Room','2:30–3:00 PM','Pantry + Dining','Pantry + Dining Area — Wide + Lifestyle','Sufia, Jun Hao, Ahmed in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Sufia, Jun Hao, Ahmed · Casual 1',ico('utensils')+' Mugs, plates, cutleries, foods'],true)}
+      ${sceneRow('w32','15:00','15:30','Bathroom','3:00–3:30 PM','Living Room','Living Room — Wide + Lifestyle','Sufia, Jun Hao, Ahmed in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Sufia, Jun Hao, Ahmed · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'],true)}
+      ${sceneRow('w33','15:30','16:00','Move to Block C','3:30–4:00 PM','Bathroom','Bathroom — Wide + Lifestyle','Ahmed in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Ahmed · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
       ${breakRow('move','🚶','4:00–4:30 PM · Move to Block C + Crew Set Up')}
     </div>
 
     <div class="session day2"><div class="session-hdr">Day 2 — Block C · Rooms <span class="srange">4:30 PM – 7:30 PM</span></div>
-      ${sceneRow('w34','16:30','17:00','Ensuite Single','4:30–5:00 PM','Ensuite Twin','Ensuite Twin — Wide + Lifestyle','Crystal & Sufia in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Sufia · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
-      ${sceneRow('w35','17:00','17:30','Bathroom','5:00–5:30 PM','Ensuite Single','Ensuite Single — Wide + Lifestyle (WiFi Area)','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
-      ${sceneRow('w36','17:30','18:00','Pantry','5:30–6:00 PM','Bathroom','Bathroom — Wide + Lifestyle','Crystal in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
-      ${sceneRow('w37','18:00','18:30','Dining Area','6:00–6:30 PM','Pantry','Pantry — Wide + Lifestyle','Crystal, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Jun Hao, Ahmed · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
-      ${sceneRow('w38','18:30','19:00','Living Room','6:30–7:00 PM','Dining Area','Dining Area — Wide + Lifestyle','Crystal, Jun Hao, Ahmed in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Jun Hao, Ahmed · Casual 1','🍽 Mugs, plates, cutleries, foods'],true)}
-      ${sceneRow('w39','19:00','19:30','Wrap!','7:00–7:30 PM','Living Room','Living Room — Wide + Lifestyle','Crystal, Ahmed, Jun Hao in Casual 1.',['📸 Wide + Lifestyle','⏱ 30 min','🎙 Crystal, Ahmed, Jun Hao · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'],true)}
-      ${breakRow('wrap','✅','7:30 PM · Check Footage + Wrap — Day 2 Complete 🎉')}
+      ${sceneRow('w34','16:30','17:00','Ensuite Single','4:30–5:00 PM','Ensuite Twin','Ensuite Twin — Wide + Lifestyle','Crystal & Sufia in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal, Sufia · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
+      ${sceneRow('w35','17:00','17:30','Bathroom','5:00–5:30 PM','Ensuite Single','Ensuite Single — Wide + Lifestyle (WiFi Area)','Crystal in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal · Casual 1','🪴 Laptop, bags, books, lamps, plants, frames, teddy bear, bed shawl'],true)}
+      ${sceneRow('w36','17:30','18:00','Pantry','5:30–6:00 PM','Bathroom','Bathroom — Wide + Lifestyle','Crystal in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal · Casual 1','🧴 Diffuser, comb, hand soap, toothbrush, mug'],true)}
+      ${sceneRow('w37','18:00','18:30','Dining Area','6:00–6:30 PM','Pantry','Pantry — Wide + Lifestyle','Crystal, Jun Hao, Ahmed in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal, Jun Hao, Ahmed · Casual 1',ico('utensils')+' Mugs, plates, cutleries, foods'],true)}
+      ${sceneRow('w38','18:30','19:00','Living Room','6:30–7:00 PM','Dining Area','Dining Area — Wide + Lifestyle','Crystal, Jun Hao, Ahmed in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal, Jun Hao, Ahmed · Casual 1',ico('utensils')+' Mugs, plates, cutleries, foods'],true)}
+      ${sceneRow('w39','19:00','19:30','Wrap!','7:00–7:30 PM','Living Room','Living Room — Wide + Lifestyle','Crystal, Ahmed, Jun Hao in Casual 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Crystal, Ahmed, Jun Hao · Casual 1','🛋 Laptop, books, lamps, plants, frames, sofa pillow, shawl'],true)}
+      ${breakRow('wrap',ico('check-circle'),'7:30 PM · Check Footage + Wrap — Day 2 Complete 🎉')}
     </div>
 
     <div class="shoot-footer">Sunway Waterfront Residences · 9 + 11 May 2026 · Oblique Production · Confidential</div>
@@ -2130,38 +2206,38 @@ function getGethaDKHTML(shoot){
     ${progressAndActivity()}
 
     <div class="session"><div class="session-hdr">Dream Kingdom 1 · Mattress + Bedding Ready <span class="srange">10:00 AM – 12:15 PM</span></div>
-      ${breakRow('','📋','10:00 AM · Crew Call — Meet at Getha Showroom, briefing & walkthrough')}
-      ${breakRow('move','🟡','10:00–10:30 AM · Lighting Setup + Dial-In Dark Mood on DK1')}
-      ${sceneRow('g01','10:30','10:45','Side Profile','10:30–10:45 AM','DK1','Low 3/4 Profile — Slider','Camera at mattress height. 1 LED behind as rim, 1 as soft key. Shallow DOF.',['🎥 Slider','⏱ 15 min','💡 LED rim light behind bed'])}
-      ${sceneRow('g02','10:45','10:55','Macro Passes','10:45–10:55 AM','DK1','Straight-on Side Profile — Tripod','Centred, symmetrical. Tight crop — no floor/ceiling.',['🎥 Tripod','⏱ 10 min'])}
-      ${sceneRow('g03','10:55','11:10','Top-down','10:55–11:10 AM','DK1','Macro Texture Passes — Slider/Handheld','Quilting, stitching, embossing, corners. Move LED to 30–50cm from surface.',['🎥 Slider','⏱ 15 min','💡 1 LED close (snooted/dimmed)'])}
-      ${sceneRow('g04','11:10','11:20','Hand Press','11:10–11:20 AM','DK1','High-angle 3/4 Top-down — Gimbal/Tripod','Frame mattress surface only.',['🎥 Gimbal/Tripod','⏱ 10 min'])}
-      ${sceneRow('g05','11:20','11:40','Gimbal Orbit','11:20–11:40 AM','DK1','Hand Press Interaction — Side Angle','Slow press. Side-lit for silhouette. Higher FPS if possible.',['🎥 Side angle','⏱ 20 min','✋ Crew hands','💡 LED backlight behind hand'])}
-      ${sceneRow('g06','11:40','11:55','Bedding Detail','11:40–11:55 AM','DK1','Slow Gimbal Orbit — Hip Height','Arc from foot to 3/4. Strong light/shadow split on white sheets.',['🎥 Gimbal','⏱ 15 min','💡 Both LEDs same side'])}
-      ${sceneRow('g07','11:55','12:05','Sheet Pull','11:55 AM–12:05 PM','DK1','Pillow + Bedding Detail — Slider','Tight pass across pillows. White-on-white texture with dramatic side light.',['🎥 Slider','⏱ 10 min','💡 Side LED'])}
-      ${sceneRow('g08','12:05','12:15','Lunch','12:05–12:15 PM','DK1','Sheet Pull / Fabric Drape — Side Angle','Slow-motion. Side-lit fabric catching light as it moves. 60fps+.',['🎥 Side angle','⏱ 10 min','✋ Crew hands','💡 Backlight LED'])}
-      ${breakRow('lunch','🍽','12:15–1:00 PM · Lunch Break')}
+      ${breakRow('',ico('clipboard'),'10:00 AM · Crew Call — Meet at Getha Showroom, briefing & walkthrough')}
+      ${breakRow('move',ico('wrench'),'10:00–10:30 AM · Lighting Setup + Dial-In Dark Mood on DK1')}
+      ${sceneRow('g01','10:30','10:45','Side Profile','10:30–10:45 AM','DK1','Low 3/4 Profile — Slider','Camera at mattress height. 1 LED behind as rim, 1 as soft key. Shallow DOF.',[ico('video')+' Slider',ico('clock')+' 15 min',ico('lightbulb')+' LED rim light behind bed'])}
+      ${sceneRow('g02','10:45','10:55','Macro Passes','10:45–10:55 AM','DK1','Straight-on Side Profile — Tripod','Centred, symmetrical. Tight crop — no floor/ceiling.',[ico('video')+' Tripod',ico('clock')+' 10 min'])}
+      ${sceneRow('g03','10:55','11:10','Top-down','10:55–11:10 AM','DK1','Macro Texture Passes — Slider/Handheld','Quilting, stitching, embossing, corners. Move LED to 30–50cm from surface.',[ico('video')+' Slider',ico('clock')+' 15 min',ico('lightbulb')+' 1 LED close (snooted/dimmed)'])}
+      ${sceneRow('g04','11:10','11:20','Hand Press','11:10–11:20 AM','DK1','High-angle 3/4 Top-down — Gimbal/Tripod','Frame mattress surface only.',[ico('video')+' Gimbal/Tripod',ico('clock')+' 10 min'])}
+      ${sceneRow('g05','11:20','11:40','Gimbal Orbit','11:20–11:40 AM','DK1','Hand Press Interaction — Side Angle','Slow press. Side-lit for silhouette. Higher FPS if possible.',[ico('video')+' Side angle',ico('clock')+' 20 min',ico('user')+' Crew hands',ico('lightbulb')+' LED backlight behind hand'])}
+      ${sceneRow('g06','11:40','11:55','Bedding Detail','11:40–11:55 AM','DK1','Slow Gimbal Orbit — Hip Height','Arc from foot to 3/4. Strong light/shadow split on white sheets.',[ico('video')+' Gimbal',ico('clock')+' 15 min',ico('lightbulb')+' Both LEDs same side'])}
+      ${sceneRow('g07','11:55','12:05','Sheet Pull','11:55 AM–12:05 PM','DK1','Pillow + Bedding Detail — Slider','Tight pass across pillows. White-on-white texture with dramatic side light.',[ico('video')+' Slider',ico('clock')+' 10 min',ico('lightbulb')+' Side LED'])}
+      ${sceneRow('g08','12:05','12:15','Lunch','12:05–12:15 PM','DK1','Sheet Pull / Fabric Drape — Side Angle','Slow-motion. Side-lit fabric catching light as it moves. 60fps+.',[ico('video')+' Side angle',ico('clock')+' 10 min',ico('user')+' Crew hands',ico('lightbulb')+' Backlight LED'])}
+      ${breakRow('lunch',ico('coffee'),'12:15–1:00 PM · Lunch Break')}
     </div>
 
     <div class="session"><div class="session-hdr">Dream Kingdom 2 · Mattress + Bedding Ready <span class="srange">1:00 PM – 2:55 PM</span></div>
-      ${breakRow('move','🟡','1:00–1:10 PM · Re-light for DK2')}
-      ${sceneRow('g09','13:10','13:25','Side Profile DK2','1:10–1:25 PM','DK2','Low 3/4 Profile — Slider','Same setup as Shot 1. Highlight any visual differences from DK1.',['🎥 Slider','⏱ 15 min','💡 LED rim light'])}
-      ${sceneRow('g10','13:25','13:35','Macro DK2','1:25–1:35 PM','DK2','Straight-on Side Profile — Tripod','Match framing of Shot 2 for edit consistency.',['🎥 Tripod','⏱ 10 min'])}
-      ${sceneRow('g11','13:35','13:50','Top-down DK2','1:35–1:50 PM','DK2','Macro Texture Passes — Slider/Handheld','Focus on DK2-specific details — different quilting, fabric, branding.',['🎥 Slider','⏱ 15 min','💡 Snooted LED'])}
-      ${sceneRow('g12','13:50','14:00','Hand Press DK2','1:50–2:00 PM','DK2','High-angle 3/4 Top-down — Gimbal','Same angle as Shot 4.',['🎥 Gimbal','⏱ 10 min'])}
-      ${sceneRow('g13','14:00','14:10','Dress Bed','2:00–2:10 PM','DK2','Hand Press Interaction — Side Angle','Match Shot 5.',['🎥 Side angle','⏱ 10 min','✋ Crew hands','💡 LED backlight'])}
-      ${breakRow('move','🟡','2:10–2:20 PM · Dress DK2 with bedding')}
-      ${sceneRow('g14','14:20','14:35','Bedding DK2','2:20–2:35 PM','DK2','Slow Gimbal Orbit — Hip Height','Match Shot 6 arc.',['🎥 Gimbal','⏱ 15 min','💡 Both LEDs'])}
-      ${sceneRow('g15','14:35','14:45','Sheet Detail DK2','2:35–2:45 PM','DK2','Pillow + Bedding Detail — Slider','Match Shot 7.',['🎥 Slider','⏱ 10 min','💡 Side LED'])}
-      ${sceneRow('g16','14:45','14:55','Both Beds','2:45–2:55 PM','DK2','Sheet Pull / Fabric Drape','Match Shot 8. 60fps+.',['🎥 Side angle','⏱ 10 min','✋ Crew hands','💡 Backlight LED'])}
+      ${breakRow('move',ico('wrench'),'1:00–1:10 PM · Re-light for DK2')}
+      ${sceneRow('g09','13:10','13:25','Side Profile DK2','1:10–1:25 PM','DK2','Low 3/4 Profile — Slider','Same setup as Shot 1. Highlight any visual differences from DK1.',[ico('video')+' Slider',ico('clock')+' 15 min',ico('lightbulb')+' LED rim light'])}
+      ${sceneRow('g10','13:25','13:35','Macro DK2','1:25–1:35 PM','DK2','Straight-on Side Profile — Tripod','Match framing of Shot 2 for edit consistency.',[ico('video')+' Tripod',ico('clock')+' 10 min'])}
+      ${sceneRow('g11','13:35','13:50','Top-down DK2','1:35–1:50 PM','DK2','Macro Texture Passes — Slider/Handheld','Focus on DK2-specific details — different quilting, fabric, branding.',[ico('video')+' Slider',ico('clock')+' 15 min',ico('lightbulb')+' Snooted LED'])}
+      ${sceneRow('g12','13:50','14:00','Hand Press DK2','1:50–2:00 PM','DK2','High-angle 3/4 Top-down — Gimbal','Same angle as Shot 4.',[ico('video')+' Gimbal',ico('clock')+' 10 min'])}
+      ${sceneRow('g13','14:00','14:10','Dress Bed','2:00–2:10 PM','DK2','Hand Press Interaction — Side Angle','Match Shot 5.',[ico('video')+' Side angle',ico('clock')+' 10 min',ico('user')+' Crew hands',ico('lightbulb')+' LED backlight'])}
+      ${breakRow('move',ico('wrench'),'2:10–2:20 PM · Dress DK2 with bedding')}
+      ${sceneRow('g14','14:20','14:35','Bedding DK2','2:20–2:35 PM','DK2','Slow Gimbal Orbit — Hip Height','Match Shot 6 arc.',[ico('video')+' Gimbal',ico('clock')+' 15 min',ico('lightbulb')+' Both LEDs'])}
+      ${sceneRow('g15','14:35','14:45','Sheet Detail DK2','2:35–2:45 PM','DK2','Pillow + Bedding Detail — Slider','Match Shot 7.',[ico('video')+' Slider',ico('clock')+' 10 min',ico('lightbulb')+' Side LED'])}
+      ${sceneRow('g16','14:45','14:55','Both Beds','2:45–2:55 PM','DK2','Sheet Pull / Fabric Drape','Match Shot 8. 60fps+.',[ico('video')+' Side angle',ico('clock')+' 10 min',ico('user')+' Crew hands',ico('lightbulb')+' Backlight LED'])}
     </div>
 
     <div class="session"><div class="session-hdr">Both Mattresses Side by Side <span class="srange">2:55 PM – 3:30 PM</span></div>
-      ${sceneRow('g17','14:55','15:15','Wide Shot','2:55–3:15 PM','DK1+2','Side-by-side Slider Transition','Slider travels from DK1 to DK2. Transition shot for the edit.',['🎥 Slider (long travel)','⏱ 20 min','💡 1 LED per bed'])}
-      ${sceneRow('g18','15:15','15:20','Logo CU','3:15–3:20 PM','DK1+2','Wide Establishing Shot — Gimbal Low Angle','Low & wide, looking up. Dim all ambient. Kingdom reveal shot.',['🎥 Gimbal','⏱ 5 min','💡 All LEDs on hero bed'])}
-      ${sceneRow('g19','15:20','15:25','CTA Beauty','3:20–3:25 PM','DK1+2','Logo / Branding Close-up','Any Getha / Dream Kingdom labels. Shallow DOF.',['🎥 Tight','⏱ 5 min','💡 1 LED'])}
-      ${sceneRow('g20','15:25','15:30','Wrap!','3:25–3:30 PM','DK1+2','CTA Beauty Shot — Tripod Locked','Static hero frame for end card: The Pinnacle of Sleep Luxury / From RM99,999.',['🎥 Tripod','⏱ 5 min','💡 Best lighting setup of the day'])}
-      ${breakRow('wrap','✅','3:30 PM · Check Footage + Wrap')}
+      ${sceneRow('g17','14:55','15:15','Wide Shot','2:55–3:15 PM','DK1+2','Side-by-side Slider Transition','Slider travels from DK1 to DK2. Transition shot for the edit.',[ico('video')+' Slider (long travel)',ico('clock')+' 20 min',ico('lightbulb')+' 1 LED per bed'])}
+      ${sceneRow('g18','15:15','15:20','Logo CU','3:15–3:20 PM','DK1+2','Wide Establishing Shot — Gimbal Low Angle','Low & wide, looking up. Dim all ambient. Kingdom reveal shot.',[ico('video')+' Gimbal',ico('clock')+' 5 min',ico('lightbulb')+' All LEDs on hero bed'])}
+      ${sceneRow('g19','15:20','15:25','CTA Beauty','3:20–3:25 PM','DK1+2','Logo / Branding Close-up','Any Getha / Dream Kingdom labels. Shallow DOF.',[ico('video')+' Tight',ico('clock')+' 5 min',ico('lightbulb')+' 1 LED'])}
+      ${sceneRow('g20','15:25','15:30','Wrap!','3:25–3:30 PM','DK1+2','CTA Beauty Shot — Tripod Locked','Static hero frame for end card: The Pinnacle of Sleep Luxury / From RM99,999.',[ico('video')+' Tripod',ico('clock')+' 5 min',ico('lightbulb')+' Best lighting setup of the day'])}
+      ${breakRow('wrap',ico('check-circle'),'3:30 PM · Check Footage + Wrap')}
     </div>
 
   </div>`;
@@ -2172,7 +2248,7 @@ function getPlaceholderHTML(shoot){
   ${shootTopbar(shoot)}
   ${shootHero(shoot)}
   <div class="shoot-wrap" style="text-align:center;padding:60px 24px;">
-    <div style="font-size:40px;margin-bottom:16px;">📋</div>
+    <div style="font-size:40px;margin-bottom:16px;">${ico('clipboard')}</div>
     <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;">Schedule Coming Soon</div>
     <div style="font-size:13px;color:var(--text-m);max-width:360px;margin:0 auto;line-height:1.6;">
       This shoot is confirmed but the time schedule hasn't been created yet. Once the schedule is ready, the full live tracker with scene checklist and countdown timer will appear here.
@@ -2193,10 +2269,18 @@ function initShootPage(shoot){
   const total = document.querySelectorAll('.scene-row[data-id]').length;
   document.getElementById('prog-total').textContent = total;
 
-  // Reset edit mode
-  _editMode = false;
-  const fab = document.getElementById('edit-fab');
-  if(fab){ fab.classList.remove('active'); fab.textContent = '✏️'; }
+  // Inject add-shot buttons into each session
+  setTimeout(()=>{
+    document.querySelectorAll('.session').forEach(ses=>{
+      if(!ses.querySelector('.add-shot-btn')){
+        const btn = document.createElement('button');
+        btn.className = 'add-shot-btn';
+        btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg> Add Shot';
+        btn.onclick = function(){ openAddShot(this); };
+        ses.appendChild(btn);
+      }
+    });
+  }, 100);
 
   function waitFB(cb,n=0){if(window._fb&&window._fbListen){cb();return;}if(n>40)return;setTimeout(()=>waitFB(cb,n+1),100);}
   waitFB(()=>{
@@ -2243,8 +2327,8 @@ function updateProgress(){
 }
 
 async function handleCheck(row){
-  if(_editMode) return; // Don't toggle check in edit mode
-  if(!window._fbUpdate){showSync('error','⚠️ Firebase not connected');return;}
+  closeAllRowKebabs(); // Close any open menus
+  closeAllRowKebabs();if(!window._fbUpdate){showSync('error','Firebase not connected');return;}
   const id=row.dataset.id;const isDone=row.classList.contains('done');
   const title=row.querySelector('.stitle').textContent.trim().slice(0,50);
   const now=new Date();const time=now.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
@@ -2255,47 +2339,31 @@ async function handleCheck(row){
   try{
     const upd={};upd[id]=isDone?null:{done:true,time};
     await window._fbUpdate(_currentShootId,upd);
-    const msg=isDone?'↩ Unmarked: <em>'+title+'</em>':'✅ Done: <em>'+title+'</em> at '+time;
+    const msg=isDone?'↩ Unmarked: <em>'+title+'</em>':'Done: <em>'+title+'</em> at '+time;
     await window._fbUpdate(_currentActId,{[Date.now().toString()]:{msg,time}});
 
     // Show success state
-    showSync('success', isDone?'↩ Unmarked — saved':'✅ Saved');
+    showSync('success', isDone?'↩ Unmarked — saved':'Saved');
   }catch(e){
-    showSync('error','⚠️ Sync failed — tap to retry');
+    showSync('error','Sync failed — tap to retry');
   }
 }
 
 // ═══ SHOT EDIT MODE ═══
-let _editMode = false;
-
-function toggleEditMode(){
-  _editMode = !_editMode;
-  const wrap = document.querySelector('.shoot-wrap');
-  const fab = document.getElementById('edit-fab');
-  if(!wrap) return;
-
-  if(_editMode){
-    wrap.classList.add('edit-mode');
-    fab.classList.add('active');
-    fab.textContent = '✓';
-    // Inject add-shot buttons into each session
-    wrap.querySelectorAll('.session').forEach(ses => {
-      if(!ses.querySelector('.add-shot-btn')){
-        const btn = document.createElement('button');
-        btn.className = 'add-shot-btn';
-        btn.textContent = '+ Add Shot';
-        btn.onclick = function(){ openAddShot(this); };
-        ses.appendChild(btn);
-      }
-    });
-  } else {
-    wrap.classList.remove('edit-mode');
-    fab.classList.remove('active');
-    fab.textContent = '✏️';
-    // Remove add buttons
-    wrap.querySelectorAll('.add-shot-btn').forEach(b => b.remove());
-  }
+// ═══ ROW KEBAB HELPERS ═══
+function toggleRowKebab(btn){
+  const drop = btn.nextElementSibling;
+  const wasOpen = drop.classList.contains('open');
+  closeAllRowKebabs();
+  if(!wasOpen) drop.classList.add('open');
 }
+function closeAllRowKebabs(){
+  document.querySelectorAll('.row-kebab-drop.open').forEach(d=>d.classList.remove('open'));
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.row-kebab')) closeAllRowKebabs();
+});
+
 
 function openEditShot(row){
   const id = row.dataset.id;
@@ -2310,7 +2378,7 @@ function openEditShot(row){
   document.getElementById('sm-loc').value = locEl ? locEl.textContent : '';
   document.getElementById('sm-title').value = titleEl ? titleEl.textContent : '';
   document.getElementById('sm-desc').value = descEl ? descEl.textContent : '';
-  document.getElementById('sm-tags').value = tagsEl ? Array.from(tagsEl.querySelectorAll('.tag')).map(t=>t.textContent).join(', ') : '';
+
   document.getElementById('sm-mode').value = 'edit';
   document.getElementById('sm-target').value = id;
   document.getElementById('shot-modal').classList.add('open');
@@ -2323,7 +2391,7 @@ function openAddShot(btn){
   document.getElementById('sm-loc').value = '';
   document.getElementById('sm-title').value = '';
   document.getElementById('sm-desc').value = '';
-  document.getElementById('sm-tags').value = '';
+
   document.getElementById('sm-mode').value = 'add';
   // Store reference to session
   document.getElementById('sm-target').value = Array.from(document.querySelectorAll('.session')).indexOf(session);
@@ -2341,8 +2409,7 @@ async function saveShotModal(){
   const loc = document.getElementById('sm-loc').value.trim();
   const title = document.getElementById('sm-title').value.trim();
   const desc = document.getElementById('sm-desc').value.trim();
-  const tagsStr = document.getElementById('sm-tags').value.trim();
-  const tags = tagsStr ? tagsStr.split(',').map(t=>t.trim()).filter(Boolean) : [];
+  const tags = [];
 
   if(!title){ alert('Description is required'); return; }
 
@@ -2374,7 +2441,7 @@ async function saveShotModal(){
     }
     // Save to Firebase
     await saveShotMod('edit', target, {time, loc, title, desc, tags});
-    showSync('success', '✏️ Shot updated');
+    showSync('success', 'Shot updated');
   }
 
   if(mode === 'add'){
@@ -2394,9 +2461,12 @@ async function saveShotModal(){
           ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
         </div>
         <div class="checked-stamp"></div>
-        <div class="row-actions">
-          <button class="row-action-btn row-edit" onclick="event.stopPropagation();openEditShot(this.closest('.scene-row'))" title="Edit">✏️</button>
-          <button class="row-action-btn row-del" onclick="event.stopPropagation();deleteShot(this.closest('.scene-row'))" title="Delete">🗑</button>
+        <div class="row-kebab" onclick="event.stopPropagation()">
+          <button class="row-kebab-btn" onclick="toggleRowKebab(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+          <div class="row-kebab-drop">
+            <button class="row-kebab-item" onclick="closeAllRowKebabs();openEditShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></span>Edit</button>
+            <button class="row-kebab-item danger" onclick="closeAllRowKebabs();deleteShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></span>Delete</button>
+          </div>
         </div>
       </div>`;
 
@@ -2413,7 +2483,7 @@ async function saveShotModal(){
 
     // Save to Firebase
     await saveShotMod('add', newId, {time, loc, title, desc, tags, sessionIdx});
-    showSync('success', '✅ Shot added');
+    showSync('success', 'Shot added');
   }
 
   closeShotModal();
@@ -2433,7 +2503,7 @@ async function deleteShot(row){
   setTimeout(()=>{ row.remove(); updateProgress(); }, 300);
 
   await saveShotMod('delete', id, true);
-  showSync('success', '🗑 Shot deleted');
+  showSync('success', 'Shot deleted');
 }
 
 async function saveShotMod(type, id, data){
@@ -2511,9 +2581,12 @@ function loadShotMods(shoot){
               ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
             </div>
             <div class="checked-stamp"></div>
-            <div class="row-actions">
-              <button class="row-action-btn row-edit" onclick="event.stopPropagation();openEditShot(this.closest('.scene-row'))" title="Edit">✏️</button>
-              <button class="row-action-btn row-del" onclick="event.stopPropagation();deleteShot(this.closest('.scene-row'))" title="Delete">🗑</button>
+            <div class="row-kebab" onclick="event.stopPropagation()">
+              <button class="row-kebab-btn" onclick="toggleRowKebab(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+              <div class="row-kebab-drop">
+                <button class="row-kebab-item" onclick="closeAllRowKebabs();openEditShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></span>Edit</button>
+                <button class="row-kebab-item danger" onclick="closeAllRowKebabs();deleteShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></span>Delete</button>
+              </div>
             </div>
           </div>`;
 
@@ -2625,15 +2698,15 @@ function initTimer(shoot){
       const daysLeft=Math.ceil((firstDate-todayMid)/(1000*60*60*24));
       labelEl.textContent='Shoot Status';
       if(daysLeft>0){
-        sceneEl.textContent='📅 '+daysLeft+' day'+(daysLeft>1?'s':'')+' until shoot';
+        sceneEl.innerHTML=ico('calendar')+' '+daysLeft+' day'+(daysLeft>1?'s':'')+' until shoot';
         countEl.textContent='Day 1: '+shootLabels[0];countEl.className='timer-countdown';
       } else {
         const lastDate=parseDateStr(shootDates[shootDates.length-1]);
         if(todayMid>lastDate){
-          sceneEl.textContent='✅ Shoot has wrapped';
+          sceneEl.textContent='Shoot has wrapped';
           countEl.textContent='Completed '+shootLabels[shootLabels.length-1];countEl.className='timer-countdown';
         } else {
-          sceneEl.textContent='📅 Shoot in progress';countEl.textContent='';countEl.className='timer-countdown';
+          sceneEl.innerHTML=ico('calendar')+' Shoot in progress';countEl.textContent='';countEl.className='timer-countdown';
         }
       }
       nextLabelEl.textContent='Location';nextEl.textContent=shoot.location;
@@ -2665,7 +2738,7 @@ function initTimer(shoot){
       current.classList.add('now-active');
       sceneEl.textContent=current.querySelector('.stitle').textContent.trim();
       const remaining=parseHM(current.dataset.end)-nowMin;
-      countEl.textContent=remaining<=5?'⚠️ '+remaining+' min remaining':remaining+' min remaining';
+      countEl.textContent=remaining<=5?''+remaining+' min remaining':remaining+' min remaining';
       countEl.className='timer-countdown'+(remaining<=5?' warning':'');
       nextEl.textContent=nextScene?nextScene.querySelector('.stitle').textContent.trim():'—';
       updateShootStatus(rows,nowMin);
@@ -2680,7 +2753,7 @@ function initTimer(shoot){
         const allDone=rows.every(r=>r.classList.contains('done'));
         if(allDone&&rows.length){
           sceneEl.textContent='All scenes wrapped! 🎉';countEl.textContent='';countEl.className='timer-countdown';nextEl.textContent='—';
-          setStatus('wrap-done','✅ All Done');
+          setStatus('wrap-done','All Done');
         } else {
           sceneEl.textContent='No active scene';countEl.textContent='—';countEl.className='timer-countdown';nextEl.textContent='—';
           updateShootStatus(rows,nowMin);
@@ -2705,10 +2778,10 @@ function updateShootStatus(rows, nowMin){
     }
   }
   const diff=actuallyDone-shouldBeDone+aheadCount;
-  if(shouldBeDone===0&&aheadCount===0) setStatus('on-time','🟢 On Time');
+  if(shouldBeDone===0&&aheadCount===0) setStatus('on-time','<span class="status-dot" style="background:var(--success)"></span> On Time');
   else if(diff>0) setStatus('ahead','🔵 '+diff+' scene'+(diff>1?'s':'')+' ahead');
-  else if(diff===0) setStatus('on-time','🟢 On Time');
-  else{ const b=Math.abs(diff); setStatus('delayed','🔴 '+b+' scene'+(b>1?'s':'')+' behind'); }
+  else if(diff===0) setStatus('on-time','<span class="status-dot" style="background:var(--success)"></span> On Time');
+  else{ const b=Math.abs(diff); setStatus('delayed','<span class="status-dot" style="background:var(--pri)"></span> '+b+' scene'+(b>1?'s':'')+' behind'); }
 }
 
 function setStatus(type,text){
