@@ -20,8 +20,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, update, get, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, update, get, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBqCrOMMHA1k4rM1jgKZTZcOwexjFgQkPs",
   authDomain: "parkcity-chiro.firebaseapp.com",
@@ -1222,6 +1222,7 @@ const SHOOTS = [
     crewCall: '8:00 AM',
     talentCall: '8:00 AM',
     wrapEst: '2:30 PM (Day 4)',
+    wrapPerDay: ['6:00 PM','4:00 PM','6:30 PM','2:30 PM'],
     days: 4,
   },
 ];
@@ -1534,7 +1535,16 @@ function buildLiveCard(shoot){
   let timeLabel = 'Starting…';
   const now = new Date();
   const crewTime = parseTimeToday(shoot.crewCall);
-  const wrapTime = parseTimeToday(shoot.wrapEst);
+  // Use per-day wrap time if available
+  let wrapStr = shoot.wrapEst;
+  if(shoot.wrapPerDay && shoot.dates){
+    const td=new Date();td.setHours(0,0,0,0);
+    for(let i=0;i<shoot.dates.length;i++){
+      const sd=new Date(shoot.dates[i]+'T00:00:00');sd.setHours(0,0,0,0);
+      if(td.getTime()===sd.getTime()){wrapStr=shoot.wrapPerDay[i];break;}
+    }
+  }
+  const wrapTime = parseTimeToday(wrapStr);
   if(crewTime && wrapTime){
     const total = wrapTime - crewTime;
     const elapsed = now - crewTime;
@@ -1759,6 +1769,22 @@ function timerBar(){
 }
 
 function shootHero(shoot){
+  let wrapDisplay = shoot.wrapEst;
+  if(shoot.wrapPerDay && shoot.dates){
+    const td = new Date(); td.setHours(0,0,0,0);
+    for(let i=0;i<shoot.dates.length;i++){
+      const sd = new Date(shoot.dates[i]+'T00:00:00'); sd.setHours(0,0,0,0);
+      if(td.getTime()===sd.getTime()){
+        wrapDisplay = shoot.wrapPerDay[i]+' (Day '+(i+1)+')';
+        break;
+      }
+    }
+    // If not a shoot day, show all wrap times
+    if(wrapDisplay===shoot.wrapEst && shoot.wrapPerDay.length>1){
+      const firstDate=new Date(shoot.dates[0]+'T00:00:00');firstDate.setHours(0,0,0,0);
+      if(td<firstDate) wrapDisplay=shoot.wrapPerDay[0]+' (Day 1)';
+    }
+  }
   return `
   <div class="shoot-hero">
     <div class="hero-grid">
@@ -1766,7 +1792,7 @@ function shootHero(shoot){
       <div class="ib"><div class="ib-label">Shoot Date${shoot.days>1?'s':''}</div><div class="ib-val">${shoot.datesLabel}</div></div>
       <div class="ib"><div class="ib-label">Crew Call</div><div class="ib-val">${shoot.crewCall}</div></div>
       <div class="ib"><div class="ib-label">Talent Call</div><div class="ib-val">${shoot.talentCall}</div></div>
-      <div class="ib"><div class="ib-label">Wrap Est.</div><div class="ib-val">${shoot.wrapEst}</div></div>
+      <div class="ib"><div class="ib-label">Wrap Est.</div><div class="ib-val">${wrapDisplay}</div></div>
     </div>
   </div>`;
 }
@@ -2374,7 +2400,8 @@ async function handleCheck(row){
     // Show success state
     showSync('success', isDone?'↩ Unmarked — saved':'Saved');
   }catch(e){
-    showSync('error','Sync failed — tap to retry');
+    console.error('Firebase sync error:', e);
+    showSync('error','Sync failed — check Firebase rules');
   }
 }
 
@@ -3125,7 +3152,15 @@ setInterval(()=>{
   const liveShots = SHOOTS.filter(s=>getShootStatus(s)==='live');
   liveShots.forEach(shoot=>{
     const crewTime = parseTimeToday(shoot.crewCall);
-    const wrapTime = parseTimeToday(shoot.wrapEst);
+    let wrapStr = shoot.wrapEst;
+    if(shoot.wrapPerDay && shoot.dates){
+      const td=new Date();td.setHours(0,0,0,0);
+      for(let i=0;i<shoot.dates.length;i++){
+        const sd=new Date(shoot.dates[i]+'T00:00:00');sd.setHours(0,0,0,0);
+        if(td.getTime()===sd.getTime()){wrapStr=shoot.wrapPerDay[i];break;}
+      }
+    }
+    const wrapTime = parseTimeToday(wrapStr);
     if(!crewTime || !wrapTime) return;
     const now = new Date();
     const total = wrapTime - crewTime;
