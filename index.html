@@ -761,6 +761,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .day-divider.day1{background:var(--pri);color:#fff;}
 .day-divider.day2{background:var(--acc);color:var(--n100);}
 [data-theme="dark"] .day-divider.day2{background:var(--n100);color:var(--acc);}
+.day-divider.day3{background:#2563EB;color:#fff;}
+[data-theme="dark"] .day-divider.day3{background:#1e40af;color:#93c5fd;}
+.day-divider.day4{background:#7C3AED;color:#fff;}
+[data-theme="dark"] .day-divider.day4{background:#5b21b6;color:#c4b5fd;}
+.session.day3 .session-hdr{background:#2563EB;}
+[data-theme="dark"] .session.day3 .session-hdr{background:#1e3a5f;color:#93c5fd;}
+.session.day3 .scene-row.done .chk{background:#2563EB;border-color:#2563EB;}
+.session.day3 .scene-row.now-active{border-left-color:#2563EB;}
+[data-theme="dark"] .session.day3 .scene-row.done .chk{background:#1e40af;border-color:#1e40af;}
+.session.day4 .session-hdr{background:#7C3AED;}
+[data-theme="dark"] .session.day4 .session-hdr{background:#3b1f6e;color:#c4b5fd;}
+.session.day4 .scene-row.done .chk{background:#7C3AED;border-color:#7C3AED;}
+.session.day4 .scene-row.now-active{border-left-color:#7C3AED;}
+[data-theme="dark"] .session.day4 .scene-row.done .chk{background:#5b21b6;border-color:#5b21b6;}
+
 
 /* Scene rows */
 .scene-row{background:var(--surface);border:1px solid var(--border);border-top:none;padding:12px;display:grid;grid-template-columns:22px 88px 1fr;gap:8px;align-items:start;position:relative;transition:all .15s;cursor:pointer;}
@@ -1195,6 +1210,19 @@ const SHOOTS = [
     talentCall: '—',
     wrapEst: '3:30 PM',
     days: 1,
+  },
+  {
+    id: 'sunway-uni-facilities-jun2026',
+    actId: 'sunway-uni-facilities-jun2026-activity',
+    client: 'Sunway University',
+    title: 'Facilities Photoshoot',
+    dates: ['2026-06-29','2026-06-30','2026-07-01','2026-07-02'],
+    datesLabel: '29 Jun – 2 Jul 2026 · Mon–Thu',
+    location: 'Sunway University, Bandar Sunway',
+    crewCall: '8:00 AM',
+    talentCall: '8:00 AM',
+    wrapEst: '2:30 PM (Day 4)',
+    days: 4,
   },
 ];
 
@@ -1674,6 +1702,7 @@ function getShootHTML(shoot){
   if(shoot.id==='sunway-waterfront-may2026') return getWaterfrontHTML(shoot);
   if(shoot.id==='getha-frwd-jun2026') return getPlaceholderHTML(shoot);
   if(shoot.id==='getha-dk-jun2026') return getGethaDKHTML(shoot);
+  if(shoot.id==='sunway-uni-facilities-jun2026') return getSunwayUniFacHTML(shoot);
   return '<p style="padding:40px;text-align:center;">Shoot not found.</p>';
 }
 
@@ -1751,9 +1780,9 @@ function progressAndActivity(){
   <div class="activity-box"><div class="activity-feed" id="activity-feed"><div class="act-empty">No activity yet — waiting for shoot to begin.</div></div></div>`;
 }
 
-function sceneRow(id, start, end, next, time, loc, title, desc, tags, day2=false){
+function sceneRow(id, start, end, next, time, loc, title, desc, tags, day=false){
   const tagHtml = tags.map(t=>`<span class="tag">${t}</span>`).join('');
-  const d2 = day2 ? ' data-day="2"' : '';
+  const d2 = day===true?' data-day="2"':(typeof day==='number'&&day>1?` data-day="${day}"`:'');
   return `
   <div class="scene-row" data-id="${id}" data-start="${start}" data-end="${end}" data-next="${next}"${d2} onclick="handleCheck(this)">
     <div class="chk"><svg width="11" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4.5l3 3L11 1" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -3111,6 +3140,153 @@ setInterval(()=>{
     if(lbl) lbl.textContent=label;
   });
 }, 30000);
+
+// ═══════════════════════════════════════════════════
+// SUNWAY UNIVERSITY FACILITIES HTML (4-day shoot)
+// ═══════════════════════════════════════════════════
+function getSunwayUniFacHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="day-divider day1">${ico('calendar')} Day 1 — Monday, 29 Jun 2026 · Sunway Square · Crew Call 8:00 AM · Wrap Est. 6:00 PM</div>
+
+    <div class="session"><div class="session-hdr">Sunway Square Level 1 — Grand Lobby, Square Gallery, Trading Room, Grandstand <span class="srange">8:00 AM – 10:30 AM</span></div>
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Crew Meet Up + Short Briefing')}
+      ${sceneRow('s01','08:30','09:00','Square Gallery','8:30–9:00 AM','Grand Lobby','Grand Lobby — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books'])}
+      ${sceneRow('s02','09:00','09:30','Trading Room','9:00–9:30 AM','Square Gallery','Square Gallery — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books'])}
+      ${sceneRow('s03','09:30','10:00','Grandstand','9:30–10:00 AM','Trading Room','Trading Room — Wide + Lifestyle','Ensure computers and trading screens are on.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','💻 Computers on','⚠️ Screens must be on'])}
+      ${sceneRow('s04','10:00','10:30','Move to L2','10:00–10:30 AM','Grandstand','Grandstand — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books, stationeries, iPads, headphones, laptops'])}
+      ${breakRow('move','🚶','10:30–10:45 AM · Move to Level 2')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Sunway Square Level 2 — LT360, Study Area, Lounge, BookXcess <span class="srange">10:45 AM – 12:45 PM</span></div>
+      ${sceneRow('s05','10:45','11:15','Study Area','10:45–11:15 AM','LT360','LT360 — Wide + Lifestyle','Needs speaker talent.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Staff Talent + All 3 Talents · Campus Outfit','💻 Bags, books, laptops','🎙 Speaker talent needed'])}
+      ${sceneRow('s06','11:15','11:45','Lounge','11:15–11:45 AM','Study Area','Study Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books, stationeries, iPads, headphones, laptops'])}
+      ${sceneRow('s07','11:45','12:15','BookXcess','11:45 AM–12:15 PM','Lounge','Lounge — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books, stationeries, iPads, headphones, laptops'])}
+      ${sceneRow('s08','12:15','12:45','Lunch','12:15–12:45 PM','Library (BookXcess)','Library (BookXcess) — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Campus Outfit','📚 Books, stationeries, headphones, laptops'])}
+      ${breakRow('lunch',ico('coffee'),'12:45–1:15 PM · Lunch Break')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Sunway Square Level 3 — Behavioral Lab, Collaborative Classroom, The Atrium <span class="srange">1:15 PM – 3:00 PM</span></div>
+      ${breakRow('move','🚶','1:15–1:30 PM · Move to Level 3')}
+      ${sceneRow('s09','13:30','14:00','Collaborative Classroom','1:30–2:00 PM','Behavioral Lab','Behavioral Lab — Wide + Lifestyle','Needs staff talent.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 + Staff Talent · Campus Outfit','🔑 Staff talent needed'])}
+      ${sceneRow('s10','14:00','14:30','The Atrium','2:00–2:30 PM','Collaborative Classroom','Collaborative Classroom — Wide + Lifestyle','Needs teacher talent.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents + Staff Talent · Campus Outfit','📚 Bags, books, stationeries, iPads, headphones, laptops','🎓 Teacher talent needed'])}
+      ${sceneRow('s11','14:30','15:00','Move to L4','2:30–3:00 PM','The Atrium','The Atrium — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books'])}
+      ${breakRow('move','🚶','3:00–3:15 PM · Move to Level 4')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Sunway Square Level 4 — Recital Hall <span class="srange">3:15 PM – 3:45 PM</span></div>
+      ${sceneRow('s12','15:15','15:45','Move to L5','3:15–3:45 PM','Recital Hall','Recital Hall — Wide + Lifestyle','All 3 Talents. Pretend to play the piano.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','🎹 Piano'])}
+      ${breakRow('move','🚶','3:45–4:00 PM · Move to Level 5')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Sunway Square Level 5 — LT 5, Exam Hall, JCPAC Grand Lobby <span class="srange">4:00 PM – 5:15 PM</span></div>
+      ${sceneRow('s13','16:00','16:30','Exam Hall','4:00–4:30 PM','LT 5','LT 5 — Wide + Lifestyle','Needs teacher talent.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents + Staff Talent · Campus Outfit','📚 Bags, books, stationeries, headphones, laptops, iPads','🎓 Teacher talent needed'])}
+      ${sceneRow('s14','16:30','16:45','JCPAC Grand Lobby','4:30–4:45 PM','Exam Hall','Exam Hall — Wide','Architectural wide shot only.',[ico('camera')+' Wide',ico('clock')+' 15 min'])}
+      ${sceneRow('s15','16:45','17:15','Move to L6','4:45–5:15 PM','JCPAC Grand Lobby','JCPAC Grand Lobby — Wide + Lifestyle','Under renovation.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','⚠️ Under renovation'])}
+      ${breakRow('move','🚶','5:15–5:30 PM · Move to Level 6')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Sunway Square Level 6 — IT Learning Labs <span class="srange">5:30 PM – 6:00 PM</span></div>
+      ${sceneRow('s16','17:30','18:00','Wrap','5:30–6:00 PM','IT Learning Labs','IT Learning Labs — Wide + Lifestyle','Talent 2 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Campus Outfit','📚 Books, stationeries'])}
+      ${breakRow('wrap',ico('check-circle'),'6:00 PM · Check Footage + Wrap — Day 1 Complete')}
+    </div>
+
+    <!-- ══════════ DAY 2 ══════════ -->
+    <div class="day-divider day2">${ico('calendar')} Day 2 — Tuesday, 30 Jun 2026 · FASS Building · Crew Call 8:00 AM · Wrap Est. 4:00 PM</div>
+
+    <div class="session day2"><div class="session-hdr">FASS — Architecture & Video Production <span class="srange">8:00 AM – 11:00 AM</span></div>
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Crew Meet Up + Short Briefing')}
+      ${sceneRow('d2s01','08:30','09:00','Film Shooting Studio','8:30–9:00 AM','Architecture L2','Architecture L2 — Wide','Building architecture designs (ceilings, walls, pillars).',[ico('camera')+' Wide',ico('clock')+' 30 min',ico('building')+' Architectural details'],true)}
+      ${sceneRow('d2s02','09:00','09:30','Recording Studio','9:00–9:30 AM','Film Shooting Studio','Film Shooting Studio — Wide + Lifestyle','All 3 Talents. Needs access to studio equipment.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📷 Cameras','🔑 Needs equipment access'],true)}
+      ${sceneRow('d2s03','09:30','10:00','Webcast Studio','9:30–10:00 AM','Recording Studio','Recording Studio — Wide + Lifestyle','All 3 Talents. Needs access to studio equipment including iMacs.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','🎸 Guitar, keyboard, mic','🔑 Needs iMacs + equipment'],true)}
+      ${sceneRow('d2s04','10:00','10:30','Post Production Room','10:00–10:30 AM','Webcast Studio','Webcast Studio — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','🎙 Mic'],true)}
+      ${sceneRow('d2s05','10:30','11:00','Workshops','10:30–11:00 AM','Post Production Room','Post Production Room — Wide + Lifestyle','Talent 1 & 2. Needs access to equipment (computers).',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Campus Outfit','💻 Computer','🔑 Needs computer access'],true)}
+      ${breakRow('move','🚶','11:00–11:15 AM · Move to Workshops Floor')}
+    </div>
+
+    <div class="session day2"><div class="session-hdr">FASS — Workshops & Labs <span class="srange">11:15 AM – 1:45 PM</span></div>
+      ${sceneRow('d2s06','11:15','11:45','Digital Workshop','11:15–11:45 AM','Ceramic Room','Ceramic Room — Wide + Lifestyle','All 3 Talents. Needs access to ceramic tools.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','🏺 Ceramics','🔑 Needs ceramic tools'],true)}
+      ${sceneRow('d2s07','11:45','12:15','Fabrication Lab','11:45 AM–12:15 PM','Digital Workshop','Digital Workshop — Wide + Lifestyle','3D Printer access. Talent 2 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Campus Outfit','🖨 3D Printer + 3D printed items','🔑 Needs access'],true)}
+      ${sceneRow('d2s08','12:15','12:45','Drafting Studio','12:15–12:45 PM','Fabrication Lab','Fabrication Lab — Wide + Lifestyle','Talent 2 & 3. Needs access to fabrication equipment.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Campus Outfit','🧵 Fabrics','🔑 Needs equipment'],true)}
+      ${sceneRow('d2s09','12:45','13:15','Design Studio','12:45–1:15 PM','Drafting Studio','Drafting Studio — Wide + Lifestyle','Currently in another classroom. Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Campus Outfit','✏️ Stationeries, laptops','⚠️ Currently in another classroom'],true)}
+      ${sceneRow('d2s10','13:15','13:45','Lunch','1:15–1:45 PM','Design Studio','Design Studio — Wide + Lifestyle','Talent 1 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 3 · Campus Outfit','✏️ Stationeries, laptops'],true)}
+      ${breakRow('lunch',ico('coffee'),'1:45–2:15 PM · Lunch Break')}
+    </div>
+
+    <div class="session day2"><div class="session-hdr">FASS — Broadcast + Campus Canopy <span class="srange">2:15 PM – 4:00 PM</span></div>
+      ${breakRow('move','🚶','2:15–2:30 PM · Move to Broadcast Floor')}
+      ${sceneRow('d2s11','14:30','15:00','Canopy','2:30–3:00 PM','Radio Station','Radio Station — Wide + Lifestyle','All 3 Talents. Needs access to station equipment.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','🎙 Mic, mixer','🔑 Needs station equipment'],true)}
+      ${breakRow('move','🚶','3:00–3:15 PM · Move to Canopy')}
+      ${sceneRow('d2s12','15:15','16:00','Wrap','3:15–4:00 PM','Canopy','Canopy Walk — Wide + Lifestyle','Walk from Sunway Square to Campus. All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 45 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books, headphones'],true)}
+      ${breakRow('wrap',ico('check-circle'),'4:00 PM · Check Footage + Wrap — Day 2 Complete')}
+    </div>
+
+    <!-- ══════════ DAY 3 ══════════ -->
+    <div class="day-divider day3">${ico('calendar')} Day 3 — Wednesday, 1 Jul 2026 · Medical Faculty + Library THO · Crew Call 8:00 AM · Wrap Est. 6:30 PM</div>
+
+    <div class="session day3"><div class="session-hdr">Medical Faculty <span class="srange">8:00 AM – 11:30 AM</span></div>
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Crew Meet Up + Short Briefing')}
+      ${sceneRow('d3s01','08:30','09:00','Classroom (Non-Interactive)','8:30–9:00 AM','Classroom (Interactive)','Classroom (Interactive) — Wide + Lifestyle','Needs teacher talent. Make sure interactive screen on table is on.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents + Staff Talent · Campus Outfit','📚 Books, stationeries','⚠️ Interactive screens must be on','🎓 Teacher talent needed'],3)}
+      ${sceneRow('d3s02','09:00','09:30','Surgery Room','9:00–9:30 AM','Classroom (Non-Interactive)','Classroom (Non-Interactive) — Wide + Lifestyle','Needs teacher talent.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents + Staff Talent · Campus Outfit','📚 Books, stationeries, laptops','🎓 Teacher talent needed'],3)}
+      ${sceneRow('d3s03','09:30','10:00','Study Pods','9:30–10:00 AM','Surgery Room','Surgery Room — Wide + Lifestyle','Needs teacher talent. Talent 1, 2 + Staff.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 + Staff Talent · Campus Outfit','🔪 Surgery instruments (scissors, scalpels etc.)','🎓 Teacher talent needed'],3)}
+      ${sceneRow('d3s04','10:00','10:30','Study Area','10:00–10:30 AM','Study Pods','Study Pods — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Campus Outfit','📚 Books, stationeries, laptops, headphones'],3)}
+      ${sceneRow('d3s05','10:30','11:00','Displays','10:30–11:00 AM','Study Area','Study Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, laptops'],3)}
+      ${sceneRow('d3s06','11:00','11:30','Move to THO','11:00–11:30 AM','Displays','Displays — Wide + Lifestyle','Talent 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 3 · Campus Outfit'],3)}
+      ${breakRow('move','🚶','11:30–11:45 AM · Move to THO Library')}
+    </div>
+
+    <div class="session day3"><div class="session-hdr">Library — Ground Floor <span class="srange">11:45 AM – 1:15 PM</span></div>
+      ${sceneRow('d3s07','11:45','12:15','Facial Recognition Area','11:45 AM–12:15 PM','THOSL Main Entrance','THOSL Main Entrance — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books'],3)}
+      ${sceneRow('d3s08','12:15','12:45','Service Counter Area','12:15–12:45 PM','Facial Recognition Area','Facial Recognition Camera Area — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Campus Outfit','📚 Bags, books'],3)}
+      ${sceneRow('d3s09','12:45','13:15','Lunch','12:45–1:15 PM','Service Counter Area','Service Counter Area — Wide + Lifestyle','Needs staff talent. Talent 3 + Staff.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 3 + Staff Talent · Campus Outfit','🔑 Staff talent needed'],3)}
+      ${breakRow('lunch',ico('coffee'),'1:15–1:45 PM · Lunch Break')}
+    </div>
+
+    <div class="session day3"><div class="session-hdr">Library — Ground Floor (Cont.) + Mezzanine <span class="srange">1:45 PM – 6:30 PM</span></div>
+      ${sceneRow('d3s10','13:45','14:15','New Books Display','1:45–2:15 PM','Exhibition / Lounge Area','Exhibition / Lounge Area — Wide + Lifestyle','Needs access. Talent 2 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Campus Outfit','🔑 Needs access'],3)}
+      ${sceneRow('d3s11','14:15','14:45','Sunway Education Archive','2:15–2:45 PM','New Books Display Area','New Books Display Area — Wide + Lifestyle','Talent 2 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Campus Outfit','📚 Books'],3)}
+      ${sceneRow('d3s12','14:45','15:15','Computer Cluster 1','2:45–3:15 PM','Sunway Education Archive','Sunway Education Archive Room — Wide + Lifestyle','Talent 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 · Campus Outfit'],3)}
+      ${sceneRow('d3s13','15:15','15:45','ICube Area','3:15–3:45 PM','Computer Cluster 1','Computer Cluster 1 Area — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Campus Outfit','📚 Books, stationeries'],3)}
+      ${sceneRow('d3s14','15:45','16:15','Move to Mezzanine','3:45–4:15 PM','ICube Area','ICube Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, laptops'],3)}
+      ${breakRow('move','🚶','4:15–4:30 PM · Move to Mezzanine Level')}
+      ${sceneRow('d3s15','16:30','17:00','Quiet Study Area','4:30–5:00 PM','THOSL Extended Hour Entrance','THOSL Extended Hour Entrance — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Bags, books'],3)}
+      ${sceneRow('d3s16','17:00','17:30','Silent Zone','5:00–5:30 PM','Quiet Study Area','Quiet Study Area — Wide + Lifestyle','Talent 1 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 3 · Campus Outfit','📚 Books, stationeries, headphones, laptops'],3)}
+      ${sceneRow('d3s17','17:30','18:00','Collaborative Zone','5:30–6:00 PM','Silent Zone Area','Silent Zone Area — Wide + Lifestyle','Talent 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 · Campus Outfit','📚 Books, stationeries, headphones, laptops'],3)}
+      ${sceneRow('d3s18','18:00','18:30','Wrap','6:00–6:30 PM','Collaborative Zone Area','Collaborative Zone Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, laptops'],3)}
+      ${breakRow('wrap',ico('check-circle'),'6:30 PM · Check Footage + Wrap — Day 3 Complete')}
+    </div>
+
+    <!-- ══════════ DAY 4 ══════════ -->
+    <div class="day-divider day4">${ico('calendar')} Day 4 — Thursday, 2 Jul 2026 · Library THO B1 Level · Crew Call 8:00 AM · Wrap Est. 2:30 PM</div>
+
+    <div class="session day4"><div class="session-hdr">Library — B1 Level (Morning) <span class="srange">8:00 AM – 12:00 PM</span></div>
+      ${breakRow('',ico('clipboard'),'8:00–8:30 AM · Crew Meet Up + Short Briefing')}
+      ${sceneRow('d4s01','08:30','09:00','Help Desk Area','8:30–9:00 AM','Light Reading Area','Light Reading Area — Wide + Lifestyle','Talent 1 & 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 & 2 · Campus Outfit','📚 Books, headphones'],4)}
+      ${sceneRow('d4s02','09:00','09:30','Open Study Area','9:00–9:30 AM','Help Desk Area','Help Desk Area — Wide + Lifestyle','Needs staff talent. Talent 3 + Staff.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 3 + Staff Talent · Campus Outfit','🔑 Staff talent needed'],4)}
+      ${sceneRow('d4s03','09:30','10:00','Printing Room','9:30–10:00 AM','Open Study Area','Open Study Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, headphones, laptops'],4)}
+      ${sceneRow('d4s04','10:00','10:30','Malaysiana Collection','10:00–10:30 AM','Printing Room','Printing Room Area — Wide + Lifestyle','Needs access. Talent 2.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 · Campus Outfit','📄 Paper','🔑 Needs access'],4)}
+      ${sceneRow('d4s05','10:30','11:00','Harvard Collection','10:30–11:00 AM','Malaysiana Collection','Malaysiana / Open Shelf Collection — Wide + Lifestyle','Talent 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 3 · Campus Outfit'],4)}
+      ${sceneRow('d4s06','11:00','11:30','Training Room','11:00–11:30 AM','Harvard Collection','Harvard Collection Area — Wide + Lifestyle','Talent 1.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 1 · Campus Outfit'],4)}
+      ${sceneRow('d4s07','11:30','12:00','Lunch','11:30 AM–12:00 PM','Training Room','Training Room Area — Wide + Lifestyle','Talent 2 & 3.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' Talent 2 & 3 · Campus Outfit'],4)}
+      ${breakRow('lunch',ico('coffee'),'12:00–12:30 PM · Lunch Break')}
+    </div>
+
+    <div class="session day4"><div class="session-hdr">Library — B1 Level (Afternoon) <span class="srange">12:30 PM – 2:30 PM</span></div>
+      ${sceneRow('d4s08','12:30','13:00','Postgraduate Hub','12:30–1:00 PM','Group Project Pod','Group Project Pod Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, laptops'],4)}
+      ${sceneRow('d4s09','13:00','13:30','Collaborative Zone','1:00–1:30 PM','Postgraduate Hub','Postgraduate Hub Area — Wide + Lifestyle','Needs access. All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, laptops','🔑 Needs access'],4)}
+      ${sceneRow('d4s10','13:30','14:00','Instructional Lab','1:30–2:00 PM','Collaborative Zone','Collaborative Zone Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, laptops'],4)}
+      ${sceneRow('d4s11','14:00','14:30','Wrap','2:00–2:30 PM','Instructional Lab','Instructional Lab Area — Wide + Lifestyle','All 3 Talents.',[ico('camera')+' Wide + Lifestyle',ico('clock')+' 30 min',ico('mic')+' All 3 Talents · Campus Outfit','📚 Books, stationeries, laptops'],4)}
+      ${breakRow('wrap',ico('check-circle'),'2:30 PM · Check Footage + Wrap — Day 4 Complete · That\'s a wrap! 🎬')}
+    </div>
+
+  </div>`;
+}
+
 </script>
 </body>
 </html>
