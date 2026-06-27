@@ -807,6 +807,20 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .tag{font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid var(--border);color:var(--text2);background:var(--surface2);}
 .checked-stamp{position:absolute;top:10px;right:10px;font-size:9px;color:var(--pri);font-weight:700;opacity:0;transition:opacity .2s;}
 .scene-row.done .checked-stamp{opacity:1;}
+.remark-display{margin-top:6px;padding:6px 10px;background:var(--pri-bg);border-left:3px solid var(--pri);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:11px;color:var(--text);line-height:1.5;display:none;grid-column:2/4;}
+.remark-display.visible{display:block;}
+.remark-display .remark-time{font-size:9px;color:var(--text2);font-weight:600;margin-top:2px;}
+.session.day2 .remark-display{border-left-color:var(--acc);}
+.session.day3 .remark-display{border-left-color:#2563EB;}
+.session.day4 .remark-display{border-left-color:#7C3AED;}
+.remark-form{display:none;grid-column:2/4;margin-top:6px;}
+.remark-form.open{display:flex;flex-direction:column;gap:6px;}
+.remark-input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;font-family:inherit;background:var(--surface);color:var(--text);resize:vertical;min-height:60px;outline:none;}
+.remark-input:focus{border-color:var(--pri);}
+.remark-btns{display:flex;gap:6px;justify-content:flex-end;}
+.remark-btns button{font-size:11px;font-weight:600;padding:5px 14px;border-radius:var(--r-sm);border:none;cursor:pointer;}
+.remark-btns .remark-save{background:var(--pri);color:#fff;}
+.remark-btns .remark-cancel{background:var(--surface2);color:var(--text2);}
 
 /* Break rows */
 .break-row{border:none;padding:10px 16px;display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
@@ -1818,10 +1832,19 @@ function sceneRow(id, start, end, next, time, loc, title, desc, tags, day=false)
       ${desc?`<div class="sdesc">${desc}</div>`:''}
       ${tags.length?`<div class="tags">${tagHtml}</div>`:''}
     </div>
+    <div class="remark-display" data-remark-id="${id}"></div>
+    <div class="remark-form" data-remark-form="${id}" onclick="event.stopPropagation()">
+      <textarea class="remark-input" placeholder="Add a remark…"></textarea>
+      <div class="remark-btns">
+        <button class="remark-cancel" onclick="cancelRemark('${id}')">Cancel</button>
+        <button class="remark-save" onclick="saveRemark('${id}')">Save</button>
+      </div>
+    </div>
     <div class="checked-stamp"></div>
     <div class="row-kebab" onclick="event.stopPropagation()">
       <button class="row-kebab-btn" onclick="toggleRowKebab(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
       <div class="row-kebab-drop">
+        <button class="row-kebab-item" onclick="closeAllRowKebabs();openRemark(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Remark</button>
         <button class="row-kebab-item" onclick="closeAllRowKebabs();openEditShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></span>Edit</button>
         <button class="row-kebab-item danger" onclick="closeAllRowKebabs();deleteShot(this.closest('.scene-row'))"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></span>Delete</button>
       </div>
@@ -2342,6 +2365,7 @@ function initShootPage(shoot){
     setLive(true);
     window._currentListener    = window._fbListen(shoot.id,   d=>renderState(d||{}));
     window._currentActListener = window._fbListen(shoot.actId, d=>renderActivity(d));
+    window._currentRemarkListener = window._fbListen(shoot.id+'-remarks', d=>renderRemarks(d||{}));
     // Load any shot modifications (edits, deletes, adds)
     loadShotMods(shoot);
   });
@@ -2406,6 +2430,65 @@ async function handleCheck(row){
 }
 
 // ═══ SHOT EDIT MODE ═══
+// ═══ REMARK SYSTEM ═══
+function openRemark(row){
+  const id=row.dataset.id;
+  const form=row.querySelector('[data-remark-form="'+id+'"]');
+  const display=row.querySelector('[data-remark-id="'+id+'"]');
+  if(!form)return;
+  // Pre-fill with existing remark
+  const input=form.querySelector('.remark-input');
+  if(display&&display.dataset.text) input.value=display.dataset.text;
+  form.classList.add('open');
+  input.focus();
+}
+
+function cancelRemark(id){
+  const form=document.querySelector('[data-remark-form="'+id+'"]');
+  if(form){form.classList.remove('open');form.querySelector('.remark-input').value='';}
+}
+
+async function saveRemark(id){
+  const form=document.querySelector('[data-remark-form="'+id+'"]');
+  if(!form)return;
+  const input=form.querySelector('.remark-input');
+  const text=input.value.trim();
+  if(!window._fbUpdate||!_currentShootId){showSync('error','Firebase not connected');return;}
+  showSync('syncing','Syncing…');
+  try{
+    const path=_currentShootId+'-remarks';
+    const now=new Date();const time=now.toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});
+    const upd={};
+    upd[id]=text?{text,time}:null;
+    await window._fbUpdate(path,upd);
+    // Log activity
+    const title=form.closest('.scene-row').querySelector('.stitle').textContent.trim().slice(0,40);
+    const msg=text?'💬 Remark on <em>'+title+'</em>: '+text.slice(0,60):'🗑 Remark removed from <em>'+title+'</em>';
+    await window._fbUpdate(_currentActId,{[Date.now().toString()]:{msg,time}});
+    form.classList.remove('open');
+    input.value='';
+    showSync('success','Remark saved');
+  }catch(e){
+    console.error('Remark save error:',e);
+    showSync('error','Failed to save remark');
+  }
+}
+
+function renderRemarks(data){
+  document.querySelectorAll('.remark-display').forEach(el=>{
+    const id=el.dataset.remarkId;
+    const info=data[id];
+    if(info&&info.text){
+      el.innerHTML=info.text+'<div class="remark-time">💬 '+info.time+'</div>';
+      el.classList.add('visible');
+      el.dataset.text=info.text;
+    } else {
+      el.innerHTML='';
+      el.classList.remove('visible');
+      el.dataset.text='';
+    }
+  });
+}
 // ═══ ROW KEBAB HELPERS ═══
 function toggleRowKebab(btn){
   const drop = btn.nextElementSibling;
