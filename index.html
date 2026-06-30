@@ -757,7 +757,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .srange{font-size:9px;font-weight:500;opacity:.7;}
 .session.day2 .session-hdr{background:var(--acc);}
 [data-theme="dark"] .session.day2 .session-hdr{background:var(--n100);color:var(--acc);}
-.day-divider{text-align:center;padding:12px 16px;border-radius:var(--r-md);margin:24px 0 16px;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;}
+.day-divider{text-align:center;padding:12px 16px;border-radius:var(--r-md);margin:24px 0 16px;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;user-select:none;position:relative;transition:margin .25s;}
+.day-divider .day-chevron{position:absolute;right:14px;top:50%;transform:translateY(-50%) rotate(0deg);transition:transform .25s;font-size:14px;opacity:.7;}
+.day-group.collapsed .day-chevron{transform:translateY(-50%) rotate(-90deg);}
+.day-group.collapsed .day-divider{margin-bottom:0;border-radius:var(--r-md) var(--r-md) 0 0;}
+.day-summary{display:none;padding:10px 16px;font-size:11px;font-weight:600;color:var(--text2);background:var(--surface2);border-radius:0 0 var(--r-md) var(--r-md);text-align:center;margin-bottom:8px;border-top:1px solid var(--border);}
+.day-group.collapsed .day-summary{display:block;}
+.day-body{overflow:hidden;transition:max-height .35s ease, opacity .25s ease;max-height:99999px;opacity:1;}
+.day-group.collapsed .day-body{max-height:0;opacity:0;}
 .day-divider.day1{background:var(--pri);color:#fff;}
 .day-divider.day2{background:var(--acc);color:var(--n100);}
 [data-theme="dark"] .day-divider.day2{background:var(--n100);color:var(--acc);}
@@ -2371,6 +2378,7 @@ function initShootPage(shoot){
   });
 
   initTimer(shoot);
+  if(shoot.days>1) setTimeout(()=>setupDayCollapse(shoot),150);
 }
 
 function renderState(state){
@@ -2380,7 +2388,103 @@ function renderState(state){
     else{row.classList.remove('done');if(stamp)stamp.textContent='';}
   });
   updateProgress();
+  updateDaySummaries();
   if(window._timerTick) window._timerTick();
+}
+
+// ═══ COLLAPSIBLE DAY GROUPS ═══
+function setupDayCollapse(shoot){
+  const wrap=document.querySelector('.shoot-wrap');
+  if(!wrap) return;
+  const dividers=wrap.querySelectorAll('.day-divider');
+  if(!dividers.length) return;
+
+  // For each day-divider, wrap it + its following siblings until the next day-divider into a group
+  dividers.forEach((div,i)=>{
+    // Add chevron
+    const chev=document.createElement('span');
+    chev.className='day-chevron';
+    chev.textContent='▾';
+    div.appendChild(chev);
+
+    // Create group wrapper
+    const group=document.createElement('div');
+    group.className='day-group';
+    group.dataset.dayIndex=String(i+1);
+    if(shoot.dates&&shoot.dates[i]) group.dataset.dayDate=shoot.dates[i];
+
+    // Create body wrapper for collapsible content
+    const body=document.createElement('div');
+    body.className='day-body';
+
+    // Create summary bar
+    const summary=document.createElement('div');
+    summary.className='day-summary';
+    summary.dataset.daySummary=String(i+1);
+    summary.textContent='Tap to expand';
+
+    // Insert group before the divider
+    div.parentNode.insertBefore(group,div);
+    group.appendChild(div);
+    group.appendChild(summary);
+    group.appendChild(body);
+
+    // Move siblings into body until next day-divider or day-group or end
+    let next=group.nextSibling;
+    while(next){
+      // Stop if we hit another day-divider or day-group or a comment starting with DAY
+      if(next.nodeType===1 && (next.classList.contains('day-divider')||next.classList.contains('day-group'))){
+        break;
+      }
+      const move=next;
+      next=next.nextSibling;
+      body.appendChild(move);
+    }
+
+    // Click to toggle
+    div.addEventListener('click',()=>{
+      group.classList.toggle('collapsed');
+      updateDaySummaries();
+    });
+  });
+
+  // Auto-collapse past days
+  const today=new Date();today.setHours(0,0,0,0);
+  let currentDayGroup=null;
+  document.querySelectorAll('.day-group').forEach(g=>{
+    const dateStr=g.dataset.dayDate;
+    if(!dateStr) return;
+    const d=new Date(dateStr+'T00:00:00');d.setHours(0,0,0,0);
+    if(d<today){
+      g.classList.add('collapsed');
+    } else if(!currentDayGroup){
+      currentDayGroup=g;
+    }
+  });
+
+  updateDaySummaries();
+
+  // Scroll to current day
+  if(currentDayGroup){
+    setTimeout(()=>{
+      currentDayGroup.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  }
+}
+
+function updateDaySummaries(){
+  document.querySelectorAll('.day-group').forEach(g=>{
+    const body=g.querySelector('.day-body');
+    const summary=g.querySelector('.day-summary');
+    if(!body||!summary) return;
+    const total=body.querySelectorAll('.scene-row[data-id]').length;
+    const done=body.querySelectorAll('.scene-row[data-id].done').length;
+    if(total>0){
+      summary.textContent=done===total?'✓ All '+total+' scenes completed — tap to expand':done+' of '+total+' scenes completed — tap to expand';
+    } else {
+      summary.textContent='Tap to expand';
+    }
+  });
 }
 
 function renderActivity(data){
