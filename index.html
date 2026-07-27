@@ -1129,6 +1129,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'ergolab-jul2026',
+    actId: 'ergolab-jul2026-activity',
+    client: 'ErgoLab',
+    title: 'Deep Sleep Pillow Videoshoot',
+    dates: ['2026-07-29'],
+    datesLabel: '29 Jul 2026 · Wednesday',
+    location: 'Airbnb Unit, KL',
+    crewCall: '2:00 PM',
+    talentCall: '2:30 PM Male · 7:30 PM Female',
+    wrapEst: '10:30 PM',
+    days: 1,
+  },
+  {
     id: 'sunway-houses-may2026',
     actId: 'sunway-houses-may2026-activity',
     client: 'Sunway Houses',
@@ -1734,6 +1747,7 @@ function getShootHTML(shoot){
   if(shoot.id==='getha-frwd-jun2026') return getPlaceholderHTML(shoot);
   if(shoot.id==='getha-dk-jun2026') return getGethaDKHTML(shoot);
   if(shoot.id==='sunway-uni-facilities-jun2026') return getSunwayUniFacHTML(shoot);
+  if(shoot.id==='ergolab-jul2026') return getErgolabHTML(shoot);
   return '<p style="padding:40px;text-align:center;">Shoot not found.</p>';
 }
 
@@ -1996,6 +2010,80 @@ function getParkcityHTML(shoot){
     </div>
 
     <div class="shoot-footer">Parkcity Chiro Videoshoot · 14 May 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+
+// ═══════════════════════════════════════════════════
+// ERGOLAB HTML
+// ═══════════════════════════════════════════════════
+function getErgolabHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Block 1 — OBL02 · Good Pillow / Bad Pillow <span class="srange">2:30 – 4:55 PM · Male · Outfit 1</span></div>
+      ${breakRow('',ico('clipboard'),'2:00–2:30 PM · Crew meet up + short briefing')}
+      ${sceneRow('el01','14:30','14:40','Hook 2','2:30–2:40 PM','Living Room','Hook 3','Jump to sofa.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male · Outfit 1','🛏 ErgoLab Pillow'])}
+      ${sceneRow('el02','14:40','14:50','Hook 1','2:40–2:50 PM','Bedroom 3','Hook 2','Pillows thrown in from left & right.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male · Outfit 1','🛏 Flat Pillow x3 + ErgoLab'])}
+      ${sceneRow('el03','14:50','15:00','The Gap Test — [Cam A] Talking Head','2:50–3:00 PM','Bedroom 3','Hook 1','Talk to camera, hugging a pillow.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male · Outfit 1','🛏 Flat Pillow'])}
+      ${sceneRow('el04','15:00','15:25','The Gap Test — [Cam B] B-rolls / Closeups','3:00–3:25 PM','Bedroom 3','The Gap Test — [Cam A] Talking Head','',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab','📱 Phone'])}
+      ${sceneRow('el05','15:00','15:25','The Gap Test — [Cam A+B] B-rolls (No talking)','3:00–3:25 PM','Bedroom 3','The Gap Test — [Cam B] B-rolls / Closeups','',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab','📱 Phone'])}
+      ${sceneRow('el06','15:00','15:25','The Press Test — [Cam A] Talking Head','3:00–3:25 PM','Bedroom 3','The Gap Test — [Cam A+B] B-rolls (No talking)','Talent sleeps on pillow — show the gap, sleep comfortably.',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab','📱 Phone'])}
+      ${sceneRow('el07','15:25','15:50','The Press Test — [Cam B] B-rolls / Closeups','3:25–3:50 PM','Bedroom 3','The Press Test — [Cam A] Talking Head','',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el08','15:25','15:50','The Press Test — [Cam A+B] B-rolls (No talking)','3:25–3:50 PM','Bedroom 3','The Press Test — [Cam B] B-rolls / Closeups','',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el09','15:25','15:50','The Chin Test — [Cam A] Talking Head','3:25–3:50 PM','Bedroom 3','The Press Test — [Cam A+B] B-rolls (No talking)','Press pillow (+ slow-mo).',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el10','15:50','16:15','The Chin Test — [Cam B] B-rolls / Closeups','3:50–4:15 PM','Bedroom 3','The Chin Test — [Cam A] Talking Head','',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el11','15:50','16:15','The Chin Test — [Cam A+B] B-rolls (No talking)','3:50–4:15 PM','Bedroom 3','The Chin Test — [Cam B] B-rolls / Closeups','',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el12','15:50','16:15','The Math Test — [Cam A] Talking Head','3:50–4:15 PM','Bedroom 3','The Chin Test — [Cam A+B] B-rolls (No talking)','Talent sleeps on pillow — discomfort/relief, touch neck.',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el13','16:15','16:40','The Math Test — [Cam B] B-rolls / Closeups','4:15–4:40 PM','Bedroom 3','The Math Test — [Cam A] Talking Head','',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el14','16:15','16:40','The Math Test — [Cam A+B] B-rolls (No talking)','4:15–4:40 PM','Bedroom 3','The Math Test — [Cam B] B-rolls / Closeups','',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el15','16:15','16:40','Opening + Ending Talking Head','4:15–4:40 PM','Bedroom 3','The Math Test — [Cam A+B] B-rolls (No talking)','Sleep happy, wake-up pose, touch neck & lower-back.',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${sceneRow('el16','16:40','16:55','Hook 1','4:40–4:55 PM','Bedroom 3','Opening + Ending Talking Head','',[ico('camera')+' Talking Head',ico('clock')+' 15 min',ico('mic')+' Male · Outfit 1','🛏 Flat + ErgoLab'])}
+      ${breakRow('move','🚶','4:55–5:05 PM · Talent change to Outfit 2 + Crew set up')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 2 — OBL03 · Bad Postures <span class="srange">5:05 – 6:55 PM · Male · Outfit 2</span></div>
+      ${sceneRow('el17','17:05','17:15','Hook 2','5:05–5:15 PM','Living Room','Hook 1','Lying on pillow facing away, then turn head around.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male · Outfit 2','🛏 ErgoLab Pillow'])}
+      ${sceneRow('el18','17:15','17:25','Hook 3 — play phone, sit at desk, sleep flat','5:15–5:25 PM','Bedroom 2','Hook 2','Top-angle; on phone, then puts phone away.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male · Outfit 2','🛏 Flat Pillow','📱 Phone'])}
+      ${sceneRow('el19','17:25','17:40','Talking Head 1st Angle — [Cam A]','5:25–5:40 PM','Living / Dining / Bedroom 2','Hook 3 — play phone, sit at desk, sleep flat','Wide angle across different locations.',[ico('camera')+' Wide',ico('clock')+' 15 min',ico('mic')+' Male · Outfit 2','📱 Phone','💻 Laptop','🛏 Flat Pillow'])}
+      ${sceneRow('el20','17:35','18:15','Talking Head 2nd Angle — [Cam A]','5:35–6:15 PM','Living Room','Talking Head 1st Angle — [Cam A]','“We all have bad habits, right?”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 2','🛏 Flat Pillow'])}
+      ${sceneRow('el21','17:35','18:15','Talking Head 1st Angle — [Cam A]','5:35–6:15 PM','Living Room','Talking Head 2nd Angle — [Cam A]','“So I finally made the change.”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male · Outfit 2','🛏 Flat Pillow'])}
+      ${sceneRow('el22','18:15','18:55','Talking Head 2nd Angle — [Cam A]','6:15–6:55 PM','Bedroom 2','Talking Head 1st Angle — [Cam A]','“Okay so… this is the ErgoLab Deep Sleep Pillow.”',[ico('camera')+' Talking Head',ico('clock')+' 40 min',ico('mic')+' Male · Outfit 2','🛏 ErgoLab Pillow'])}
+      ${sceneRow('el23','18:15','18:55','B-rolls — [Cam A+B] (No talking)','6:15–6:55 PM','Bedroom 2','Talking Head 2nd Angle — [Cam A]','“Look, my neck is in a straight line.”',[ico('camera')+' Talking Head',ico('clock')+' 40 min',ico('mic')+' Male · Outfit 2','🛏 ErgoLab Pillow'])}
+      ${sceneRow('el24','18:15','18:55','Hook 1','6:15–6:55 PM','Bedroom 2','B-rolls — [Cam A+B] (No talking)','Touch pillow; show design & shape that straightens the neck; sleep + wake up happily.',[ico('camera')+' B-roll',ico('clock')+' 40 min',ico('mic')+' Male · Outfit 2','🛏 ErgoLab Pillow'])}
+      ${breakRow('lunch',ico('coffee'),'6:55–7:30 PM · Lunch Break · Female talent arrives')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 3 — OBL04 · Women Snore Too <span class="srange">7:30 – 8:50 PM · Male + Female (Couple)</span></div>
+      ${sceneRow('el25','19:30','19:40','Hook 2','7:30–7:40 PM','Bedroom 3','Hook 1','Closing the door, then talk to the camera.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male + Female · O2 + O1'])}
+      ${sceneRow('el26','19:40','19:50','Hook 3','7:40–7:50 PM','Living Room','Hook 2','Multiple person (same person) — one by one, respective lines.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male + Female · O2 + O1'])}
+      ${sceneRow('el27','19:50','20:00','Talking Head 1st Angle — [Cam A]','7:50–8:00 PM','Bedroom 3','Hook 3','Opening cabinets, then start talking.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Male + Female · O2 + O1','🚪 Cabinet'])}
+      ${sceneRow('el28','20:00','20:25','Talking Head 2nd Angle — [Cam A]','8:00–8:25 PM','Bedroom 3','Talking Head 1st Angle — [Cam A]','“Okay… I snore.”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male + Female · O2 + O1','🛏 Flat Pillow'])}
+      ${sceneRow('el29','20:00','20:25','Talking Head 1st Angle — [Cam A]','8:00–8:25 PM','Bedroom 3','Talking Head 2nd Angle — [Cam A]','“Okay, do this with me.”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male + Female · O2 + O1','🛏 Flat Pillow'])}
+      ${sceneRow('el30','20:25','20:50','Talking Head 2nd Angle — [Cam A]','8:25–8:50 PM','Bedroom 3','Talking Head 1st Angle — [Cam A]','“I never once looked at the thing my head was lying on.”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male + Female · O2 + O1','🛏 ErgoLab Pillow'])}
+      ${sceneRow('el31','20:25','20:50','B-rolls — [Cam A+B] (No talking)','8:25–8:50 PM','Bedroom 3','Talking Head 2nd Angle — [Cam A]','“That’s the whole idea. It’s not a magic pillow.”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Male + Female · O2 + O1','🛏 ErgoLab Pillow'])}
+      ${sceneRow('el32','20:25','20:50','Hook 1','8:25–8:50 PM','Bedroom 3','B-rolls — [Cam A+B] (No talking)','Wife touch pillow; show design & shape. Both sleep + wake up happily.',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Male + Female · O2 + O1','🛏 ErgoLab Pillow'])}
+      ${breakRow('move','🚶','8:50–9:00 PM · Female talent change to Outfit 2 · Male talent wrap')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 4 — OBL01 · Side Sleeper Truth <span class="srange">9:00 – 10:20 PM · Female · Outfit 2</span></div>
+      ${sceneRow('el33','21:00','21:10','Hook 2','9:00–9:10 PM','Bedroom 1','Hook 1','(Yawn) Straight eye-level, talking to the camera.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Female · Outfit 2','🛏 Flat Pillow'])}
+      ${sceneRow('el34','21:10','21:20','Hook 3','9:10–9:20 PM','Living Room','Hook 2','Sit then lie down; hand showing the gap between ear & shoulder.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Female · Outfit 2','🛏 Flat Pillow'])}
+      ${sceneRow('el35','21:20','21:30','Talking Head 1st Angle — [Cam A]','9:20–9:30 PM','Bedroom 1','Hook 3','Lying facing camera, top eye-level; zoom out to reveal 3 pillows on bed.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Female · Outfit 2','🛏 Flat Pillow x3'])}
+      ${sceneRow('el36','21:30','21:55','Talking Head 2nd Angle — [Cam A]','9:30–9:55 PM','Bedroom 1','Talking Head 1st Angle — [Cam A]','“As a side sleeper…”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Female · Outfit 2','🛏 Flat Pillow'])}
+      ${sceneRow('el37','21:30','21:55','Talking Head 1st Angle — [Cam A]','9:30–9:55 PM','Bedroom 1','Talking Head 2nd Angle — [Cam A]','“And I keep buying new pillows.”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Female · Outfit 2','🛏 Flat Pillow'])}
+      ${sceneRow('el38','21:55','22:20','Talking Head 2nd Angle — [Cam A]','9:55–10:20 PM','Bedroom 1','Talking Head 1st Angle — [Cam A]','“Then I got THIS. It’s called ErgoLab Deep Sleep Pillow.”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Female · Outfit 2','🛏 ErgoLab Pillow (new, boxed)'])}
+      ${sceneRow('el39','21:55','22:20','B-rolls — [Cam A+B] (No talking)','9:55–10:20 PM','Bedroom 1','Talking Head 2nd Angle — [Cam A]','“When I first switched to ErgoLab…”',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Female · Outfit 2','🛏 ErgoLab Pillow (new, boxed)'])}
+      ${sceneRow('el40','21:55','22:20','Wrap','9:55–10:20 PM','Bedroom 1','B-rolls — [Cam A+B] (No talking)','Squeezed / numb arms; flat-pillow movements; neck pain vs sleeping happily; unboxing; touch pillow + follow the shape.',[ico('camera')+' B-roll',ico('clock')+' 25 min',ico('mic')+' Female · Outfit 2','🛏 ErgoLab Pillow (new, boxed)'])}
+      ${breakRow('wrap',ico('check-circle'),'10:20–10:30 PM · Check footage + Wrap 🎉')}
+    </div>
+
+
+    <div class="shoot-footer">ErgoLab Deep Sleep Pillow Videoshoot · 29 July 2026 · Oblique Production · Confidential</div>
   </div>`;
 }
 
