@@ -1129,6 +1129,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'sommni-frwd-aug2026',
+    actId: 'sommni-frwd-aug2026-activity',
+    client: 'Sommni × Getha',
+    title: 'FRWD Full-Day Shoot',
+    dates: ['2026-08-11'],
+    datesLabel: '11 Aug 2026 · Tuesday',
+    location: 'FRWD Store, Bangsar',
+    crewCall: '9:15 AM',
+    talentCall: 'Brandon + Benny (FRWD) 12:50 PM · Kevin 4:00 PM',
+    wrapEst: '5:25 PM (priority 4) · 6:45 PM (all 6)',
+    days: 1,
+  },
+  {
     id: 'ergolab-jul2026',
     actId: 'ergolab-jul2026-activity',
     client: 'ErgoLab',
@@ -1751,6 +1764,7 @@ window.addEventListener('scroll',()=>{
 
 // ═══ SHOOT PAGE TEMPLATES ═══
 function getShootHTML(shoot){
+  if(shoot.id==='sommni-frwd-aug2026') return getSommniFRWDHTML(shoot);
   if(shoot.id==='sunway-houses-may2026') return getSunwayHTML(shoot);
   if(shoot.id==='parkcity-chiro-may2026') return getParkcityHTML(shoot);
   if(shoot.id==='curo-may2026') return getCuroHTML(shoot);
@@ -2477,6 +2491,88 @@ function getGethaHTML(shoot){
     </div>
 
     <div class="shoot-footer">Getha — August Shooting Plan · Day 1 · 4 Aug 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// SOMMNI × FRWD HTML
+// ═══════════════════════════════════════════════════
+function getSommniFRWDHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Block 1 — Getha · Mattress Delivery · Frame 2 (Packing) <span class="srange">9:30 – 10:20 AM</span></div>
+      ${breakRow('',ico('clipboard'),'9:15–9:30 AM · Crew call + full-day briefing (FRWD Bangsar). Order: Getha delivery → FRWD b-rolls → Sommni videos.')}
+      ${breakRow('',ico('clipboard'),'Getha storyboard pickups today: Frame 2 (Packing) + Frame 6 (Unboxing). Frames 1, 3, 7 already captured (4 Aug) · frames 4, 5, 8 sourced from UGC.')}
+      ${sceneRow('gd01','09:30','09:50','Packing — over-the-shoulder','9:30–9:50 AM','Packing setup','Packing — Wide Establishing','On-screen: "Our delivery process, 1. Packing." Wide of mattress orders being packed — clean, busy, in-motion.',[ico('camera')+' Wide',ico('clock')+' 20 min','🛏 Getha delivery'])}
+      ${sceneRow('gd02','09:50','10:05','Packing — macro / hands','9:50–10:05 AM','Packing setup','Packing — Over-the-Shoulder','Over-the-shoulder pass of the same packing action for coverage.',[ico('camera')+' OTS',ico('clock')+' 15 min'])}
+      ${sceneRow('gd03','10:05','10:20','Move to unboxing set','10:05–10:20 AM','Packing setup','Packing — Macro / Hands','Macro on the hands sealing/wrapping. Catch the light on the PE plastic so layers separate. No dust, no tearing.',[ico('camera')+' Macro',ico('clock')+' 15 min','✨ Catch light'])}
+      ${breakRow('move','🚶','10:20–10:30 AM · Move to unboxing / product set + reset')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 2 — Getha · Mattress Delivery · Frame 6 (Unboxing) <span class="srange">10:30 – 11:20 AM</span></div>
+      ${sceneRow('gd04','10:30','10:50','Reveal — padlock + warranty','10:30–10:50 AM','Product set','Unboxing — Reveal','On-screen: "Our delivery process, 3. Unboxing." Hands open the sealed unit — clean unboxing reveal.',[ico('camera')+' Mid + hands',ico('clock')+' 20 min','📦 Unboxing'])}
+      ${sceneRow('gd05','10:50','11:05','Macro — padlock + booklet','10:50–11:05 AM','Product set','Unboxing — Padlock + Warranty Booklet','Reveal the padlock and the warranty card booklet together.',[ico('camera')+' Mid',ico('clock')+' 15 min','🔒 Padlock','📕 Warranty booklet'])}
+      ${sceneRow('gd06','11:05','11:20','FRWD b-rolls','11:05–11:20 AM','Product set','Macro — Padlock + Booklet Detail','Macro of the padlock + warranty booklet. (Pairs with Frame 7 — 3-digit combination close-up — grab it here if there’s time.)',[ico('camera')+' Macro',ico('clock')+' 15 min','🔒 3-digit combo (opt)'])}
+      ${breakRow('',ico('check-circle'),'11:20–11:30 AM · Getha delivery footage check — Getha segment done ✅')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 3 — FRWD B-Rolls <span class="srange">11:30 AM – 12:05 PM · feeds the interviews</span></div>
+      ${sceneRow('sf01','11:30','11:37','Interior + water feature','11:30–11:37 AM','Exterior (EXT)','Exterior + Signage','Wide of the storefront — FRWD signage clearly in frame. Grab the top-floor-vs-stairs entrance as cover for Brandon’s intro.',[ico('camera')+' Wide',ico('clock')+' 7 min','🪧 Signage in frame'])}
+      ${sceneRow('sf02','11:37','11:44','Cozy rooms + furniture','11:37–11:44 AM','Interior (INT)','Interior + Water Feature + Stairs','Nice water feature of the space. Stairs down. Establish the layout.',[ico('camera')+' Wide + detail',ico('clock')+' 7 min','💧 Water feature','🪜 Stairs down'])}
+      ${sceneRow('sf03','11:44','11:51','Sommni mattress w/ logo','11:44–11:51 AM','Different Rooms (INT)','Cozy Vibe — Rooms + Furniture','Cozy vibe of the different rooms + furniture. Move room to room.',[ico('camera')+' B-roll',ico('clock')+' 7 min','🛋 Room vibes'])}
+      ${sceneRow('sf04','11:51','11:58','Pillows — Pure/Flex/Wave+','11:51–11:58 AM','Mattress Display (INT)','Sommni Mattress w/ FRWD Logo','Wide shot, then texture + up-close on the Sommni × FRWD logo detail.',[ico('camera')+' Wide + macro',ico('clock')+' 7 min','🛏 Sommni mattress','🔍 Logo close-up'])}
+      ${sceneRow('sf05','11:58','12:05','Lunch','11:58 AM–12:05 PM','Pillow Display (INT)','Pillows — Pure, Flex, Wave+ ONLY','Pillows carried at FRWD — Pure, Flex & Wave+ ONLY. Texture + tags.',[ico('camera')+' Detail',ico('clock')+' 7 min','🛌 Pure / Flex / Wave+ only'])}
+      ${breakRow('lunch',ico('coffee'),'12:05–12:50 PM · Lunch Break · Brandon + Benny (FRWD) arrive during lunch')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 4 — Sommni · Interview 1 · "FRWD’s Space" <span class="srange">12:50 – 2:30 PM · ✅ Priority · Brandon + Benny</span></div>
+      ${breakRow('',ico('clipboard'),'12:50–1:00 PM · Brandon + Benny (FRWD Founder) brief')}
+      ${sceneRow('sf06','13:00','13:15','Brandon intro — entrance gag','1:00–1:15 PM','Mattress Display (INT)','Cold Open — “Sommni... FRWD (fraud)?”','Camera up close on logo. Brandon: "Sommni... FRWD... (fraud)?" FRWD founder steps in, laughing: "It’s Forward, man. F-R-W-D." Grab a couple of takes for the reaction.',[ico('camera')+' Logo CU + 2-shot',ico('clock')+' 15 min',ico('mic')+' Brandon + Benny'])}
+      ${sceneRow('sf07','13:15','13:30','Interview — 5 Qs walk & chat','1:15–1:30 PM','Exterior → Stairs','Brandon Intro to Camera','"Today we’re visiting one of our B2B clients, FRWD in Bangsar!" Follow Brandon outside → tries the top floor → discovers you enter via the stairs.',[ico('camera')+' Follow + handheld',ico('clock')+' 15 min',ico('mic')+' Brandon','🪜 Stairs gag'])}
+      ${sceneRow('sf08','13:30','14:20','Natural B-roll — laughs','1:30–2:20 PM','Walk around store (INT)','Interview — 5 Questions (Walk & Chat)','Walk & chat, unhurried — let answers breathe. 1) What does FRWD mean + why start it? 2) How do you decide what makes the cut? 3) How’d the Sommni × FRWD editions come about? 4) Best-selling Sommni here + your favourite? 5) Anything coming up for FRWD? Re-ask / re-angle as needed.',[ico('camera')+' Walk & chat',ico('clock')+' 50 min',ico('mic')+' Brandon + Benny','❓ 5 questions'])}
+      ${sceneRow('sf09','14:20','14:30','Interview 2 — set up','2:20–2:30 PM','Walk around store (INT)','B-Roll — Natural Interactions','Brandon talks and laughs with the Founder. Candid interactions + cutaways to cover the interview.',[ico('camera')+' Candid B-roll',ico('clock')+' 10 min',ico('mic')+' Brandon + Benny'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 5 — Sommni · Interview 2 · "Why FRWD Chose Sommni" <span class="srange">2:30 – 4:00 PM · ✅ Priority · Brandon + Benny</span></div>
+      ${sceneRow('sf10','14:30','14:45','Interview — 4 Qs','2:30–2:45 PM','Sommni Flip Mattress (INT)','Set Up — Sit on Sommni Flip Mattress','Comfortable setting on the Sommni flip mattress. Talent can hold a Sommni pillow. Relaxed, candid sit-down — settle in before rolling.',[ico('camera')+' Seated 2-shot',ico('clock')+' 15 min',ico('mic')+' Brandon + Benny','🛏 Flip mattress'])}
+      ${sceneRow('sf11','14:45','15:45','Casual — 5 pillow types','2:45–3:45 PM','Sommni Flip Mattress (INT)','Interview — 4 Questions','Unhurried — let answers breathe. 1) Before Sommni — biggest struggle / what were you looking for? 2) What made you go with Sommni? 3) Building the range (Luxury Hotel, Ecorest) — thought process / R&D? 4) Advice for a hotel / Airbnb / retailer sourcing bedding? Re-ask / re-angle as needed.',[ico('camera')+' Seated interview',ico('clock')+' 60 min',ico('mic')+' Brandon + Benny','❓ 4 questions'])}
+      ${sceneRow('sf12','15:45','16:00','Benny wraps · Kevin in','3:45–4:00 PM','Sommni Flip Mattress (INT)','Casual — “Do You Know the 5 Pillows?”','Candid: Brandon asks Benny if he knows they have 5 types of pillow. Keep it light.',[ico('camera')+' Candid',ico('clock')+' 15 min',ico('mic')+' Brandon + Benny'])}
+      ${breakRow('move','🚶','4:00–4:10 PM · Benny (FRWD) wraps · Kevin in + brief · reset set for founder videos')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 6 — Sommni · Trust Fall (PillowMatch) <span class="srange">4:10 – 4:45 PM · ✅ Priority · Brandon + Kevin</span></div>
+      ${sceneRow('sf13','16:10','16:22','Pillow CU + setup lines','4:10–4:22 PM','Bed Set (INT)','Trust Fall — Wide Scene','Wide. Brandon, arms crossed, back to Kevin. Falls. Kevin steps aside, glances at phone. Brandon lands flat on the bed. Text: "Trust Fall." Kevin: "You can’t trust people. But you can trust our pillows."',[ico('camera')+' Wide',ico('clock')+' 12 min',ico('mic')+' Brandon + Kevin','🛌 Pillow'])}
+      ${sceneRow('sf14','16:22','16:30','Rapid-fire — 5 pillows','4:22–4:30 PM','Bed Set (INT)','Setup Lines — 30 Countries / 15 Years','Pan to Brandon on the pillow, opens eyes: "That’s right." Gets up, walks. 30 countries, 15 years before our own. Kevin: "We made five." (high five smack).',[ico('camera')+' Push-in + follow',ico('clock')+' 8 min',ico('mic')+' Brandon + Kevin'])}
+      ${sceneRow('sf15','16:30','16:42','To-camera CTA','4:30–4:42 PM','Bed Set (INT)','Rapid-Fire — Pure / Flex / Acu / Wave / Wave+','One pillow per line, alternating angles to stay engaging. Pure (latex, same shape) · Flex (smaller/lower) · Acu (massage feel) · Wave (contoured, neck in line) · Wave+ (big brother, extra thicc, broad shoulders).',[ico('camera')+' Alternating angles',ico('clock')+' 12 min',ico('mic')+' Brandon + Kevin','🛌 5 pillows'])}
+      ${sceneRow('sf16','16:42','16:45','Protector Hook — POV','4:42–4:45 PM','Bed Set (INT)','To-Camera CTA + End Card','Both to camera. Brandon: "Still not sure which one is you?" Kevin: free pillow matchmaking at sommni.com. End card: Free Pillow Matchmaking. sommni.com',[ico('camera')+' 2-shot to camera',ico('clock')+' 3 min',ico('mic')+' Brandon + Kevin','🔚 End card'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 7 — Sommni · Mattress Protector <span class="srange">4:45 – 5:25 PM · ✅ Priority · Brandon + Kevin</span></div>
+      ${sceneRow('sf17','16:45','16:55','Kevin walk & talk','4:45–4:55 PM','Bed Set (INT)','Hook — POV Under the Bedsheet','Text: "POV: what we found under the bed sheet (will shock u)." Crawl under bedsheet, torch light, two full seconds of nothing → Brandon’s face, jumpscare: "Hi." Hard cut to normal light.',[ico('camera')+' POV + jumpscare',ico('clock')+' 10 min',ico('mic')+' Brandon','🔦 Torch light'])}
+      ${sceneRow('sf18','16:55','17:03','3 protectors','4:55–5:03 PM','Bed Set (INT)','Kevin Walk & Talk Intro','Kevin: "You won’t find Brandon under your bed sheet — but sweat and spills will, unless there’s a protector in between." Brandon: five pillows, so we made three protectors. Common trait: waterproof (text: duh).',[ico('camera')+' Walk & talk',ico('clock')+' 8 min',ico('mic')+' Brandon + Kevin'])}
+      ${sceneRow('sf19','17:03','17:22','Outro — back under cover','5:03–5:22 PM','Bed Set (INT)','3 Protectors — Lite / Premium / Lux','Lite RM69 (waterproof, light, daily — "sold out / restocking" 67-gesture bit). Premium RM129 (quilted, soft layer). Lux RM219 (quilted + cooling, cannot tahan hot). Optional funny take: each protector covers a person, flip open → they pitch it.',[ico('camera')+' Product beats',ico('clock')+' 19 min',ico('mic')+' Brandon + Kevin','🏷 RM69 / RM129 / RM219'])}
+      ${sceneRow('sf20','17:22','17:25','★ Priority complete','5:22–5:25 PM','Bed Set (INT)','Outro — Brandon Back Under Cover','"From RM69 to protect a mattress you’ll keep for ten years?" Kevin: "Or you might find Brandon under your sheets!" Cut: Brandon back under the cover, waving. End card: Mattress protectors from RM69. sommni.com',[ico('camera')+' 2-shot + end card',ico('clock')+' 3 min',ico('mic')+' Brandon + Kevin','🔚 End card'])}
+      ${breakRow('',ico('check-circle'),'5:25 PM · ★ PRIORITY COMPLETE — Getha + b-rolls + 4 Sommni videos done · footage check · Blocks 8–9 only if time')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 8 — Sommni · Bro Test <span class="srange">5:25 – 6:17 PM · ⏱ If time only · Brandon + Kevin</span></div>
+      ${sceneRow('sf21','17:25','17:40','Round 2 — guess Qs','5:25–5:40 PM','Sofa / Casual Set (INT)','Opening + Round 1 — Draw Each Other','Off-camera: "You’ve known each other a long time, right?" → "Let’s test that." Round 1: draw each other from memory, 60s, no looking. Reveal both.',[ico('camera')+' Seated 2-shot',ico('clock')+' 15 min',ico('mic')+' Brandon + Kevin','✏️ Whiteboards + markers'])}
+      ${sceneRow('sf22','17:40','18:02','Round 3 — matchmaking','5:40–6:02 PM','Sofa / Casual Set (INT)','Round 2 — Guess Questions','Own answer on top, guess of the other below, reveal together. 6 Qs: other job? / lose taste-sight-hearing-smell? / Marvel hero? / animal? / beach-forest-cave? / sleep before or after 12am?',[ico('camera')+' Seated 2-shot',ico('clock')+' 22 min',ico('mic')+' Brandon + Kevin','❓ 6 questions'])}
+      ${sceneRow('sf23','18:02','18:12','Closing frames','6:02–6:12 PM','Sofa / Casual Set (INT)','Round 3 — Pillow Matchmaking','Both take the pillow quiz on camera, cold. Then guess each other’s result before revealing their own.',[ico('camera')+' Seated 2-shot',ico('clock')+' 10 min',ico('mic')+' Brandon + Kevin','📱 Quiz on sommni.com'])}
+      ${sceneRow('sf24','18:12','18:17','Trend Teaser','6:12–6:17 PM','Sofa / Casual Set (INT)','Closing Frames','Frame 1: "Friendship: tested. Pillow: matched." Frame 2: "The Rakyat’s Pillows — a pillow for every Malaysian." Frame 3: Free pillow matchmaking at sommni.com [logo].',[ico('camera')+' Locked frames',ico('clock')+' 5 min','🔚 End frames'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 9 — Sommni · Trend Teaser <span class="srange">6:17 – 6:30 PM · ⏱ If time only · Brandon + Kevin</span></div>
+      ${sceneRow('sf25','18:17','18:30','Footage check + Wrap','6:17–6:30 PM','Anywhere clean (INT)','Short Trend Teaser (Only If Time)','Optional. Short trend, both founders attempt it. Serves as a teaser for the other B2B content. Just shoot on phone, casual.',[ico('camera')+' Phone, casual',ico('clock')+' 13 min',ico('mic')+' Brandon + Kevin','📱 Phone shot'])}
+      ${breakRow('wrap',ico('check-circle'),'6:30–6:45 PM · Check footage + Wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">Sommni × Getha at FRWD · Full-Day Shoot · 11 Aug 2026 · Oblique Production · Confidential</div>
   </div>`;
 }
 
