@@ -1129,6 +1129,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'specshop-aug2026',
+    actId: 'specshop-aug2026-activity',
+    client: 'The Spec Shop',
+    title: 'Founder Shoot — Wong Yu + Store',
+    dates: ['2026-08-18'],
+    datesLabel: '18 Aug 2026 · Tuesday',
+    location: 'The Spec Shop, Desa Sri Hartamas',
+    crewCall: '9:00 AM',
+    talentCall: 'Staff 9:00 AM · Wong Yu 10:15 AM · Longest-serving staff 10:45 AM',
+    wrapEst: '3:45 PM',
+    days: 1,
+  },
+  {
     id: 'sommni-frwd-aug2026',
     actId: 'sommni-frwd-aug2026-activity',
     client: 'Sommni × Getha',
@@ -1764,6 +1777,7 @@ window.addEventListener('scroll',()=>{
 
 // ═══ SHOOT PAGE TEMPLATES ═══
 function getShootHTML(shoot){
+  if(shoot.id==='specshop-aug2026') return getSpecShopHTML(shoot);
   if(shoot.id==='sommni-frwd-aug2026') return getSommniFRWDHTML(shoot);
   if(shoot.id==='sunway-houses-may2026') return getSunwayHTML(shoot);
   if(shoot.id==='parkcity-chiro-may2026') return getParkcityHTML(shoot);
@@ -2579,6 +2593,69 @@ function getSommniFRWDHTML(shoot){
     </div>
 
     <div class="shoot-footer">Sommni × Getha at FRWD · Full-Day Shoot · 11 Aug 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// THE SPEC SHOP — FOUNDER SHOOT HTML
+// ═══════════════════════════════════════════════════
+function getSpecShopHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Block 1 — Video 3 · Store Opening <span class="srange">9:30 – 10:30 AM · 60 min · Phone / handheld · 9:16</span></div>
+      ${breakRow('',ico('clipboard'),'SEQUENCE · Video 3 Store Opening 60m → Video 1 Founder Story 60m → Video 2 Store Visit 120m → Trends ×3 60m. Shooting 5h00m · call → wrap 6h45m.')}
+      ${breakRow('',ico('clipboard'),'PREP · 4–5 archive photos of dad / old store REQUIRED for FS09 · longest-serving staff rostered for FS03 · Cartier, Chrome Hearts, Lindberg &amp; Ray-Ban hero pieces pulled and cleaned · window display reset to its “messy” start state.')}
+      ${breakRow('',ico('clipboard'),'9:00–9:30 AM · Crew call + set up + brief. Staff on site from 9:00 — they open the store on camera. Cam A locked wide, Cam B for the change-angle beats.')}
+      ${sceneRow('ss01','09:30','09:42','Arranging the Window Display','9:30–9:42 AM','Shopfront (EXT)','Open The Spec Shop With Us','Cold open, time-locked to the real opening. Grille up, doors unlocked, lights on. One clean take from outside, one from inside looking out. On-screen: “Open The Spec Shop With Us”.',[ico('camera')+' Phone, handheld',ico('clock')+' 12 min','🔑 Real opening','🎞 9:16'])}
+      ${sceneRow('ss02','09:42','09:56','Wiping Lens — “this is so satisfying”','9:42–9:56 AM','Window display (INT)','Arranging the Window Display','Lock the frame. Shoot the “before” state first, then let staff dress it — identical framing both ends so it cuts as a snap transition. Scene + timestamp overlay.',[ico('camera')+' Locked frame',ico('clock')+' 14 min','🔄 Messy → neat',ico('mic')+' Staff'])}
+      ${sceneRow('ss03','09:56','10:06','Checking New Arrivals','9:56–10:06 AM','Counter (INT)','Wiping Lens — “this is so satisfying”','Tight macro on the cloth and the lens. Slow, satisfying, ASMR-adjacent — get the squeak. No dialogue, the caption carries it.',[ico('camera')+' Macro / CU',ico('clock')+' 10 min','🧼 ASMR beat'])}
+      ${sceneRow('ss04','10:06','10:16','Serving Customers — Sign-off','10:06–10:16 AM','New arrivals shelf (INT)','Checking New Arrivals','“love the rimless, so light!” Staff checking the new drop, holding a rimless frame up to the light. Weight gag — balance it on one finger.',[ico('camera')+' Handheld',ico('clock')+' 10 min','🕶 Rimless hero',ico('mic')+' Staff'])}
+      ${sceneRow('ss05','10:16','10:30','Reset — relight for talking head','10:16–10:30 AM','Shop floor (INT)','Serving Customers — Sign-off','“ok gotta go serve customers with taste so bye bye.” Staff walks off toward a real customer. No walk-in? Stage it with a crew member shot from behind only.',[ico('camera')+' Handheld follow',ico('clock')+' 14 min','👋 Sign-off',ico('mic')+' Staff'])}
+      ${breakRow('move','🔧','10:30–10:40 AM · RESET — relight for talking head. Mic Wong Yu (on site since 10:15). Clear a seated corner with frames visible behind.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 2 — Video 1 · Founder Story <span class="srange">10:40 – 11:40 AM · 60 MIN HARD CAP · Hero · Wong Yu</span></div>
+      ${breakRow('',ico('lightbulb'),'60 MIN HARD CAP · 11 beats at ~5 min each — Wong Yu must arrive OFF-BOOK. Protect FS01, FS03 and FS07; FS05, FS06, FS08 and FS09 are b-roll over VO and can be grabbed in one pass if you fall behind.')}
+      ${sceneRow('fs01','10:40','10:47','Intro — “my dad’s store, since 1999”','10:40–10:47 AM','Seated corner (INT)','Hook — “I’m thinking of taking over”','Seated, straight to camera: “My dad asked me to help with marketing… but I’m thinking of taking over the business.” Three reads — flat, amused, conspiratorial. This is the scroll-stopper. Match this framing again at FS11.',[ico('camera')+' Straight to cam',ico('clock')+' 7 min',ico('mic')+' Wong Yu','🎯 3 reads','⭐ Protect'])}
+      ${sceneRow('fs02','10:47','10:52','Longest-Serving Employee','10:47–10:52 AM','Shopfront (EXT)','Intro — “my dad’s store, since 1999”','Walking towards the store, signage clearly in frame. “Hi, I’m Wong Yu, and this is my dad’s luxury eyewear store, The Spec Shop, which he started back in 1999.”',[ico('camera')+' Follow, handheld',ico('clock')+' 5 min',ico('mic')+' Wong Yu','🪧 Signage in frame'])}
+      ${sceneRow('fs03','10:52','11:00','27 Years in Desa Sri Hartamas','10:52–11:00 AM','Shop floor (INT)','Longest-Serving Employee','“How many years have you been working with us?” The employee answers naturally — do not script the reply. 2-shot plus a clean single on them. Get their consent on camera.',[ico('camera')+' 2-shot + single',ico('clock')+' 8 min',ico('mic')+' Wong Yu + Staff','⚠️ Must be on shift','⭐ Protect'])}
+      ${sceneRow('fs04','11:00','11:05','“From the outside… just another spectacle shop”','11:00–11:05 AM','Exterior + interior','27 Years in Desa Sri Hartamas','“For 27 years, we’ve been the IYKYK spot for luxury eyewear in Desa Sri Hartamas.” Exterior and interior b-roll over the line. Change angle — Cam B tighter, different eyeline.',[ico('camera')+' B-roll + VO',ico('clock')+' 5 min','🔄 Change angle'])}
+      ${sceneRow('fs05','11:05','11:09','“But once you step inside…”','11:05–11:09 AM','Shopfront (EXT)','“From the outside… just another spectacle shop”','Exterior shot, Wong Yu walks in. Deliberately plain framing — this is the setup for the FS06 reveal, so keep it unglamorous.',[ico('camera')+' Wide, static',ico('clock')+' 4 min','🎬 Setup for reveal'])}
+      ${sceneRow('fs06','11:09','11:13','50+ Brands + Try-On','11:09–11:13 AM','Entrance → shop floor','“But once you step inside…”','The reveal. Door opens / transition into rows of eyewear. Match-cut off the plain exterior. Shoot the push-in twice at different speeds so the edit can pick.',[ico('camera')+' Push-in',ico('clock')+' 4 min','✨ Reveal beat'])}
+      ${sceneRow('fs07','11:13','11:22','“All the best brands are right here”','11:13–11:22 AM','Display walls (INT)','50+ Brands + Try-On','“We carry more than 50 luxury eyewear brands — Cartier, Lindberg, Gucci, Akoni… even Chrome Hearts.” Then, dry: “I kinda like these ones.” Fast editorial close-ups cut against Wong Yu trying on. Over-shoot it.',[ico('camera')+' Fast editorial CUs',ico('clock')+' 9 min','🔄 Change angle','🕶 Cartier · Lindberg · Gucci · Akoni · Chrome Hearts','⭐ Protect'])}
+      ${sceneRow('fs08','11:22','11:26','Old-School / Underrated','11:22–11:26 AM','Shop floor (INT)','“All the best brands are right here”','“You don’t need to go from one luxury eyewear store to another when all the best brands are right here.” Walking through the store, talking as she moves. Steady follow behind, then reverse.',[ico('camera')+' Follow + reverse',ico('clock')+' 4 min',ico('mic')+' Wong Yu'])}
+      ${sceneRow('fs09','11:26','11:30','“Things have to change — I need your help”','11:26–11:30 AM','Seated corner (INT)','Old-School / Underrated','“Since we’ve been doing things the old-school way for so long, I realised my dad’s 27-year-old shop still remains pretty underrated.” Lay the archive photos over this — shoot them flat on the counter as well as on screen.',[ico('camera')+' Photo pass + VO',ico('clock')+' 4 min','🖼 4–5 archive photos REQUIRED','🔄 Change angle'])}
+      ${sceneRow('fs10','11:30','11:36','CTA — “What should I do first?”','11:30–11:36 AM','Back office / floor','“Things have to change — I need your help”','“Now that I’m here, things have to change. I don’t want us to stay a hidden gem forever, and I need your help to figure this out with me.” Cut to Wong Yu making content behind the scenes — phone on a tripod, ring light, laptop, boxes.',[ico('camera')+' BTS, handheld',ico('clock')+' 6 min',ico('mic')+' Wong Yu'])}
+      ${sceneRow('fs11','11:36','11:40','Hook — Close-Ups of Luxury Eyewear','11:36–11:40 AM','Seated corner (INT)','CTA — “What should I do first?”','Back to camera: “So guys, what’s the first thing I should do if I want more people to know about The Spec Shop?” Match FS01 framing exactly so it bookends. Land it, then hold two seconds of silence for the cut.',[ico('camera')+' Match FS01',ico('clock')+' 4 min',ico('mic')+' Wong Yu','💬 Comment-bait CTA'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 3 — Video 2 · Mono Style Store Visit <span class="srange">11:40 AM – 2:20 PM · 120 min · B-roll + VO · lunch splits the block</span></div>
+      ${breakRow('',ico('clipboard'),'VO-led — no sync sound. Shoot silent, record the voiceover clean at the end of the block or in post. MS01–MS04 are pure b-roll and run before lunch; MS05–MS08 need staff, so they sit after.')}
+      ${sceneRow('ms01','11:40','11:52','“Located at Desa Sri Hartamas”','11:40–11:52 AM','Display walls (INT)','Hook — Close-Ups of Luxury Eyewear','VO: “Why go from one luxury eyewear store to another when all the best brands are right here?” Open on tight, glossy close-ups. Light for reflection control — no crew in the lens.',[ico('camera')+' Macro / CU',ico('clock')+' 12 min','🚫 Watch reflections','🎞 9:16'])}
+      ${sceneRow('ms02','11:52','12:02','“Intimate, but the selection keeps you here”','11:52 AM–12:02 PM','Exterior + interior','“Located at Desa Sri Hartamas”','Exterior and interior of the store. Clean wide of the shopfront, then a slow tilt into the interior. Establish the address.',[ico('camera')+' Wide + tilt',ico('clock')+' 10 min','📍 Address beat'])}
+      ${sceneRow('ms03','12:02','12:10','Rows of Designer Eyewear','12:02–12:10 PM','Shop floor (INT)','“Intimate, but the selection keeps you here”','B-rolls of different eyewear brands. Sell density — shelves reading deep, frames stacked in rows. Turn the small footprint into an advantage on camera.',[ico('camera')+' B-roll, layered',ico('clock')+' 8 min','📦 Sell the density'])}
+      ${sceneRow('ms04','12:10','12:20','Lunch Break','12:10–12:20 PM','Brand displays (INT)','Rows of Designer Eyewear','“Step inside and you’ll find rows of designer eyewear from some of the biggest names in fashion.” Focus: Cartier, Chrome Hearts, Lindberg. One clean hero shot per brand, logo legible.',[ico('camera')+' Hero per brand',ico('clock')+' 10 min','🕶 Cartier · Chrome Hearts · Lindberg'])}
+      ${breakRow('lunch',ico('coffee'),'12:20–1:00 PM · Lunch Break · Video 2 splits here — b-roll done, service beats after. Back up the Video 3 + Video 1 cards.')}
+      ${sceneRow('ms05','13:00','13:18','Try &amp; Compare Side by Side','1:00–1:18 PM','Display walls (INT)','Classic · Minimal · Exotic','“Whether you’re after an everyday classic or something with a little more character, there’s a frame for every kind of style.” Three distinct looks — shoot as a triptych so it cuts in threes.',[ico('camera')+' Triptych',ico('clock')+' 18 min','🎭 3 distinct styles'])}
+      ${sceneRow('ms06','13:18','13:34','Optical Specialists — The Service Proof','1:18–1:34 PM','Shop floor (INT)','Try &amp; Compare Side by Side','“With everything in one place, you can actually try and compare different brands side by side.” Frames laid out on the counter, hands moving between two, mirror in frame.',[ico('camera')+' Overhead + mirror',ico('clock')+' 16 min','🪞 Mirror in frame'])}
+      ${sceneRow('ms07','13:34','14:02','Hero Eyewear → Store Branding','1:34–2:02 PM','Optical bay (INT)','Optical Specialists — The Service Proof','“From the shape and fit to the finer details, they’ll guide you through the options so finding the right pair feels effortless.” Eye checkup, fitting frames, adjusting temples. This is the USP — optical specialists on-site. Shoot it properly, it is the differentiator.',[ico('camera')+' Service sequence',ico('clock')+' 28 min',ico('mic')+' Staff','⭐ USP beat'])}
+      ${sceneRow('ms08','14:02','14:20','Reset — switch to phone','2:02–2:20 PM','Shop floor (INT)','Hero Eyewear → Store Branding','“So if you’re searching for your next designer pair, The Spec Shop is definitely one to have on your radar.” Hero eyewear shots resolving into the store branding / signage. End card material.',[ico('camera')+' Hero → branding',ico('clock')+' 18 min','🔚 End card'])}
+      ${breakRow('move','📱','2:20–2:30 PM · RESET — switch to phone. Staff / talent into their own clothes. Trends are shot vertical and deliberately rough.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 4 — Trends ×3 <span class="srange">2:30 – 3:30 PM · 60 min · 20 min per trend · Phone only</span></div>
+      ${sceneRow('tr01','14:30','14:50','“Can’t always be in LA or NYC”','2:30–2:50 PM','Shop floor (INT)','“Bored at work… but I work in luxury eyewear retail”','Text overlay on screen. Staff walks around the store trying on different frames, unbothered. Phone, one continuous take, no crew polish.',[ico('camera')+' Phone, 1 take',ico('clock')+' 20 min','📱 Rough by design',ico('mic')+' Staff'])}
+      ${sceneRow('tr02','14:50','15:10','“What do you bring to the table?”','2:50–3:10 PM','Shopfront (EXT)','“Can’t always be in LA or NYC”','“Someone gotta hold it down at Desa Sri Hartamas.” Talent comes out of the store wearing glasses, looking cool. Slow-mo on the exit. Three frames or outfits — you have the time for it.',[ico('camera')+' Phone, slow-mo',ico('clock')+' 20 min','😎 Exit walk','🕶 3 frames'])}
+      ${sceneRow('tr03','15:10','15:30','Wrap','3:10–3:30 PM','Counter / flat lay','“What do you bring to the table?”','Different eyewear brands and accessories matched to different personas. Flat lay on the counter — one frame plus their objects per persona. Top-down on phone.',[ico('camera')+' Phone, top-down',ico('clock')+' 20 min','🎭 Brand = persona'])}
+      ${breakRow('wrap',ico('clock'),'3:30–3:45 PM · Footage check + card back-up (2 copies) + wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">The Spec Shop Founder Shoot · 18 Aug 2026 · Oblique Production · Confidential</div>
   </div>`;
 }
 
