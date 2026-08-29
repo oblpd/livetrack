@@ -953,6 +953,58 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .shot-modal-btns button:active{transform:scale(.97);}
 
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+.dz-tabs{display:flex;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:4px;margin:0 0 14px;}
+.dz-tab{flex:1;border:none;background:transparent;color:var(--text2);font-weight:700;font-size:13px;padding:9px 6px;border-radius:8px;cursor:pointer;font-family:inherit;transition:background .15s,color .15s;}
+.dz-tab.active{background:var(--pri);color:#fff;box-shadow:0 1px 4px rgba(231,49,79,.35);}
+.dz-tab:not(.active):hover{background:var(--surface);color:var(--text);}
+#ddealz-map{height:360px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);z-index:0;}
+.dz-legend{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:10px 0 2px;font-size:12px;color:var(--text2);}
+.dz-legend b{display:inline-flex;align-items:center;gap:6px;font-weight:600;}
+.dz-dot{width:11px;height:11px;border-radius:50%;display:inline-block;}
+.dz-chip{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;}
+.dz-summary{display:flex;flex-direction:column;gap:12px;}
+.dz-day{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);}
+.dz-dhead{color:#fff;font-weight:800;font-size:13px;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;}
+.dz-dhead .z{font-weight:600;opacity:.9;font-size:11px;}
+.dz-teams{display:grid;grid-template-columns:1fr 1fr;}
+.dz-team{padding:10px 12px;}
+.dz-team+.dz-team{border-left:1px solid var(--border);}
+.dz-th{font-weight:800;font-size:12px;color:var(--text);margin-bottom:2px;}
+.dz-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:7px 0;border-top:1px solid var(--border);}
+.dz-time{font-weight:700;font-size:11.5px;color:var(--text);font-variant-numeric:tabular-nums;min-width:108px;}
+.dz-loc{display:flex;flex-direction:column;flex:1;min-width:110px;}
+.dz-loc b{font-size:12.5px;color:var(--text);}
+.dz-loc span{font-size:11px;color:var(--text3);}
+.dz-out{font-size:11px;color:var(--text2);}
+@media(max-width:640px){.dz-teams{grid-template-columns:1fr;}.dz-team+.dz-team{border-left:none;border-top:1px solid var(--border);}}
+.dz-maplinks{margin-top:14px;}
+.dz-mltitle{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);margin-bottom:6px;}
+.dz-mlday{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;margin:12px 0 6px;}
+.dz-mldot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+.dz-mllink{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;margin-bottom:7px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:background .12s,border-color .12s;}
+.dz-mllink:active,.dz-mllink:hover{background:var(--surface2);border-color:var(--pri);}
+.dz-mlname{font-size:13.5px;font-weight:700;display:flex;flex-direction:column;gap:1px;}
+.dz-mlname span{font-size:11px;font-weight:500;color:var(--text3);}
+.dz-mlgo{font-size:12px;font-weight:800;color:var(--pri);white-space:nowrap;}
+.dz-mlbase{border-color:#7c3aed;background:rgba(124,58,237,.09);}
+.dz-mlbase .dz-mlgo{color:#7c3aed;}
+.dz-cg-pic{border-color:#7c3aed;}
+.dz-cg-pic .dz-chead{color:#7c3aed;}
+.dz-cg-pic .dz-cnum{color:#7c3aed;}
+.dz-cg-tal{border-color:var(--pri);}
+.dz-cg-tal .dz-chead{color:var(--pri);}
+.dz-contacts{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.dz-cgroup{border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:var(--surface);}
+.dz-chead{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--text2);margin-bottom:6px;}
+.dz-crow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--border);}
+.dz-crow:first-of-type{border-top:none;}
+.dz-cname{font-size:12.5px;font-weight:600;color:var(--text);}
+.dz-cnum{font-size:12.5px;font-weight:700;color:var(--pri);text-decoration:none;white-space:nowrap;}
+@media(max-width:640px){.dz-contacts{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 
@@ -1128,6 +1180,19 @@ function ico(name, cls='') {
 }
 
 const SHOOTS = [
+  {
+    id: 'ddealz-bkk-sep2026',
+    actId: 'ddealz-bkk-sep2026-activity',
+    client: 'Ddealz',
+    title: 'Bangkok Content Shoot',
+    dates: ['2026-09-02','2026-09-03','2026-09-04'],
+    datesLabel: '2–4 Sep 2026 · Wed–Fri',
+    location: 'Bangkok · 11 vendors (Sukhumvit / CentralWorld / Silom)',
+    crewCall: 'Wed 06:45 · Thu 08:50 · Fri 09:00',
+    talentCall: 'Noey · Jeannie · Maiwan · Beam · Yada',
+    wrapEst: 'Wed 5:00 PM · Thu 8:00 PM · Fri 5:00 PM',
+    days: 3,
+  },
   {
     id: 'specshop-aug2026',
     actId: 'specshop-aug2026-activity',
@@ -1464,8 +1529,8 @@ function renderDashboard(query='', filter='all', sort='date-asc'){
     monthKeys=allKeys;
   } else {
     // Default: upcoming months first, then past months
-    const upKeys=Object.keys(monthGroups).filter(k=>k>=nowKey).sort();
-    const wrKeys=Object.keys(monthGroups).filter(k=>k<nowKey).sort().reverse();
+    const upKeys=Object.keys(monthGroups).filter(k=>monthGroups[k].shoots.some(s2=>getShootStatus(s2)!=='wrapped')).sort();
+    const wrKeys=Object.keys(monthGroups).filter(k=>!monthGroups[k].shoots.some(s2=>getShootStatus(s2)!=='wrapped')).sort().reverse();
     monthKeys=[...upKeys,...wrKeys];
   }
 
@@ -1475,7 +1540,7 @@ function renderDashboard(query='', filter='all', sort='date-asc'){
   for(const key of monthKeys){
     const mg=monthGroups[key];
     const monthLabel=MONTHS[mg.month]+' '+mg.year;
-    const isPast=key<nowKey;
+    const isPast=!mg.shoots.some(s2=>getShootStatus(s2)!=='wrapped');
 
     // Sort within month
     const mUp=mg.shoots.filter(s=>getShootStatus(s)==='upcoming').sort((a,b)=>parseDate(a.dates[0])-parseDate(b.dates[0]));
@@ -1760,6 +1825,7 @@ function buildShootPage(shoot){
   setStickyOffset();
   window.addEventListener('resize',setStickyOffset);
   initShootPage(shoot);
+  if(shoot.id==='ddealz-bkk-sep2026') initDdealzMap();
 }
 
 function setStickyOffset(){
@@ -1776,6 +1842,217 @@ window.addEventListener('scroll',()=>{
 },{passive:true});
 
 // ═══ SHOOT PAGE TEMPLATES ═══
+function getDdealzHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    <div class="dz-tabs">
+      <button class="dz-tab active" onclick="dzTab('map',this)">📍 Map</button>
+      <button class="dz-tab" onclick="dzTab('summary',this)">📋 Summary</button>
+      <button class="dz-tab" onclick="dzTab('checklist',this)">✅ Checklist</button>
+    </div>
+    <div id="dz-view-map" class="dz-view">
+      <div id="ddealz-map"></div>
+      <div class="dz-legend"><b><span class="dz-dot" style="background:#151413"></span>★ Base</b><b><span class="dz-dot" style="background:#e7314f"></span>Wed</b><b><span class="dz-dot" style="background:#151413"></span>Thu</b><b><span class="dz-dot" style="background:#2563EB"></span>Fri</b></div>
+      <div class="dz-maplinks"><div class="dz-mltitle">Open a location in Google Maps</div>
+      <a class="dz-mllink dz-mlbase" href="https://www.google.com/maps/search/?api=1&amp;query=13.7250%2C100.5097" target="_blank" rel="noopener"><span class="dz-mlname">★ Base — Airbnb<span>15 Soi Charoen Nakhon 7, Khlong San</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <div class="dz-mlday" style="color:#e7314f"><span class="dz-mldot" style="background:#e7314f"></span>Wed · 2 Sep · East/SE + North</div>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.726405%2C100.5911848&amp;query_place_id=ChIJx70w-kSf4jAREMpcm4kzXag" target="_blank" rel="noopener"><span class="dz-mlname">ESS Wellness<span>Ekkamai · 8:00–11:00 AM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7143788%2C100.709328&amp;query_place_id=ChIJWdrD0oJhHTER0K58wf6JHW4" target="_blank" rel="noopener"><span class="dz-mlname">HannahJoe Pilates<span>Prawet · 10:00 AM–1:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7912004%2C100.5424144&amp;query_place_id=ChIJe2RBYg-d4jARL8HiKRCpxe8" target="_blank" rel="noopener"><span class="dz-mlname">Medtopia<span>Phaya Thai · 2:00–5:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <div class="dz-mlday" style="color:#151413"><span class="dz-mldot" style="background:#151413"></span>Thu · 3 Sep · Sukhumvit + CentralWorld</div>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7304479%2C100.5697677&amp;query_place_id=ChIJ-bzLDQCf4jARGrbWK7g7FGc" target="_blank" rel="noopener"><span class="dz-mlname">Secret Garden<span>Sukhumvit 26 · 10:00 AM–1:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.723226%2C100.5767108&amp;query_place_id=ChIJcac7Elqf4jARd09OhMQbTow" target="_blank" rel="noopener"><span class="dz-mlname">Preme Spa<span>Thong Lo · 10:00 AM–1:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7301577%2C100.5805033&amp;query_place_id=ChIJb5MW7uaf4jARKYeT0Tvz324" target="_blank" rel="noopener"><span class="dz-mlname">The Akesis Touch<span>Thong Lo · 2:00–5:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7463847%2C100.5390124&amp;query_place_id=ChIJRy7PX1mf4jARUMDeMQSiO5c" target="_blank" rel="noopener"><span class="dz-mlname">Aestheta<span>CentralWorld 5F · 2:00–5:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7459047%2C100.5396107&amp;query_place_id=ChIJzSWLy9Ke4jARY2ToUCTyQXk" target="_blank" rel="noopener"><span class="dz-mlname">La Grace<span>CentralWorld 5F · 5:00–8:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <div class="dz-mlday" style="color:#2563EB"><span class="dz-mldot" style="background:#2563EB"></span>Fri · 4 Sep · Silom + Nana + Chidlom</div>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.724859%2C100.5350217&amp;query_place_id=ChIJ-wD92C2f4jARtiPNjUSQ1mQ" target="_blank" rel="noopener"><span class="dz-mlname">BNH Hospital<span>Silom · 10:00 AM–1:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.746354%2C100.5560443&amp;query_place_id=ChIJV3QuEKmf4jAR2dFT78VeNmg" target="_blank" rel="noopener"><span class="dz-mlname">Eden Spa<span>Nana · 10:00 AM–1:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7434391%2C100.5441529&amp;query_place_id=ChIJ0QiDWACf4jARNmDrdFXGiOI" target="_blank" rel="noopener"><span class="dz-mlname">FTV Clinic<span>Chidlom · 2:00–5:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      </div>
+    </div>
+    <div id="dz-view-summary" class="dz-view" style="display:none">
+      <div class="dz-summary">
+      <div class="dz-day"><div class="dz-dhead" style="background:#e7314f">Wed · 2 Sep<span class="z">East/SE + North</span></div><div class="dz-teams">
+      <div class="dz-team"><div class="dz-th">Team 1</div>
+      <div class="dz-row"><span class="dz-time">8:00–11:00 AM</span><span class="dz-loc"><b>ESS Wellness</b><span>Ekkamai</span></span><span class="dz-chip" style="background:#D9EAD3;color:#3C6E30">Noey</span><span class="dz-out">Casual chic</span></div>
+      <div class="dz-row"><span class="dz-time">2:00–5:00 PM</span><span class="dz-loc"><b>Medtopia</b><span>Phaya Thai</span></span><span class="dz-chip" style="background:#D9EAD3;color:#3C6E30">Noey</span><span class="dz-out">Smart casual</span></div>
+      </div>
+      <div class="dz-team"><div class="dz-th">Team 2</div>
+      <div class="dz-row"><span class="dz-time">10:00 AM–1:00 PM</span><span class="dz-loc"><b>HannahJoe Pilates</b><span>Prawet</span></span><span class="dz-chip" style="background:#FADBDB;color:#B23A3A">Jeannie</span><span class="dz-out">Pilates set</span></div>
+      </div>
+      </div></div>
+      <div class="dz-day"><div class="dz-dhead" style="background:#151413">Thu · 3 Sep<span class="z">Sukhumvit + CentralWorld</span></div><div class="dz-teams">
+      <div class="dz-team"><div class="dz-th">Team 1</div>
+      <div class="dz-row"><span class="dz-time">10:00 AM–1:00 PM</span><span class="dz-loc"><b>Secret Garden</b><span>Sukhumvit 26</span></span><span class="dz-chip" style="background:#FADBDB;color:#B23A3A">Jeannie</span><span class="dz-out">Activewear / swimwear</span></div>
+      <div class="dz-row"><span class="dz-time">2:00–5:00 PM</span><span class="dz-loc"><b>The Akesis Touch</b><span>Thong Lo</span></span><span class="dz-chip" style="background:#FADBDB;color:#B23A3A">Jeannie</span><span class="dz-out">Comfy / robe</span></div>
+      </div>
+      <div class="dz-team"><div class="dz-th">Team 2</div>
+      <div class="dz-row"><span class="dz-time">10:00 AM–1:00 PM</span><span class="dz-loc"><b>Preme Spa</b><span>Thong Lo</span></span><span class="dz-chip" style="background:#FBEFC2;color:#8A6A12">Maiwan</span><span class="dz-out">Comfy / robe</span></div>
+      <div class="dz-row"><span class="dz-time">2:00–5:00 PM</span><span class="dz-loc"><b>Aestheta</b><span>CentralWorld 5F</span></span><span class="dz-chip" style="background:#FBEFC2;color:#8A6A12">Maiwan</span><span class="dz-out">Casual chic</span></div>
+      <div class="dz-row"><span class="dz-time">5:00–8:00 PM</span><span class="dz-loc"><b>La Grace</b><span>CentralWorld 5F</span></span><span class="dz-chip" style="background:#FBEFC2;color:#8A6A12">Maiwan</span><span class="dz-out">Smart casual</span></div>
+      </div>
+      </div></div>
+      <div class="dz-day"><div class="dz-dhead" style="background:#2563EB">Fri · 4 Sep<span class="z">Silom + Nana + Chidlom</span></div><div class="dz-teams">
+      <div class="dz-team"><div class="dz-th">Team 1</div>
+      <div class="dz-row"><span class="dz-time">10:00 AM–1:00 PM</span><span class="dz-loc"><b>BNH Hospital</b><span>Silom</span></span><span class="dz-chip" style="background:#FADBDB;color:#B23A3A">Jeannie</span><span class="dz-out">Smart casual</span></div>
+      </div>
+      <div class="dz-team"><div class="dz-th">Team 2</div>
+      <div class="dz-row"><span class="dz-time">10:00 AM–1:00 PM</span><span class="dz-loc"><b>Eden Spa</b><span>Nana</span></span><span class="dz-chip" style="background:#D4E4F7;color:#2B5AA6">Beam</span><span class="dz-out">Comfy / robe</span></div>
+      <div class="dz-row"><span class="dz-time">2:00–5:00 PM</span><span class="dz-loc"><b>FTV Clinic</b><span>Chidlom</span></span><span class="dz-chip" style="background:#D4E4F7;color:#2B5AA6">Beam</span><span class="dz-chip" style="background:#E6D9F2;color:#6B3B9E">Yada</span><span class="dz-out">Smart casual</span></div>
+      </div>
+      </div></div>
+      </div>
+      <div class="dz-contacts"><div class="dz-cgroup dz-cg-pic"><div class="dz-chead">Production / PIC</div>
+      <div class="dz-crow"><span class="dz-cname">DDealz BKK · Jeannie</span><a class="dz-cnum" href="tel:+66918570541">+66 91 857 0541</a></div>
+      <div class="dz-crow"><span class="dz-cname">Content · Chloe</span><a class="dz-cnum" href="tel:+60126337889">+60 12 633 7889</a></div>
+      <div class="dz-crow"><span class="dz-cname">Content · Javin</span><a class="dz-cnum" href="tel:+60146226533">+60 14 622 6533</a></div>
+      <div class="dz-crow"><span class="dz-cname">Videographer · Nabil</span><a class="dz-cnum" href="tel:+60189798838">+60 18 979 8838</a></div>
+      <div class="dz-crow"><span class="dz-cname">Videographer · Jacklyn</span><a class="dz-cnum" href="tel:+60173611299">+60 17 361 1299</a></div>
+      </div><div class="dz-cgroup dz-cg-tal"><div class="dz-chead">Talent</div>
+      <div class="dz-crow"><span class="dz-cname">Beam</span><a class="dz-cnum" href="tel:+66955572128">+66 95 557 2128</a></div>
+      <div class="dz-crow"><span class="dz-cname">Maiwan</span><a class="dz-cnum" href="tel:+66923911792">+66 92 391 1792</a></div>
+      <div class="dz-crow"><span class="dz-cname">Noey</span><a class="dz-cnum" href="tel:+66634619644">+66 63 461 9644</a></div>
+      </div></div>
+    </div>
+    <div id="dz-view-checklist" class="dz-view" style="display:none">
+      ${progressAndActivity()}
+      <div class="break-row"><span class="break-icon">${ico('clipboard')}</span><span>Production checklist. 2 teams run in parallel — the auto-timer follows one track, so tick scenes as they wrap.</span><div class="bl"></div></div>
+      <div class="day-divider day1">${ico('calendar')} Day 1 — Wed, 2 Sep · Crew 06:45 (ESS) · Wrap ~5:00 PM</div>
+      <div class="session"><div class="session-hdr">T1 · ESS Wellness — Ekkamai <span class="srange">8:00–11:00 AM · IV Drip + Gua Sha · 🎬 Noey · 👗 Casual chic · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJx70w-kSf4jAREMpcm4kzXag" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('', ico('clock'), '06:45 T1 call · Base → ESS (car ~45 min)')}
+        ${sceneRow('dz-d1-t1-ess-1','08:00','09:30','② B-roll','8:00–9:30 AM','ESS Wellness · Ekkamai','① Long form — IV drip + Gua Sha','Whole activity, start to end · hook to close.',[ico('mic')+' Noey','👗 Casual chic',ico('clock')+' 90m',ico('clapperboard')+' IV Drip + Gua Sha'])}
+        ${sceneRow('dz-d1-t1-ess-2','09:30','10:15','③ Phone — DDealz app','9:30–10:15 AM','ESS Wellness · Ekkamai','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Noey','👗 Casual chic',ico('clock')+' 45m'])}
+        ${sceneRow('dz-d1-t1-ess-3','10:15','10:40','④ Photos','10:15–10:40 AM','ESS Wellness · Ekkamai','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Noey','👗 Casual chic',ico('clock')+' 25m'])}
+        ${sceneRow('dz-d1-t1-ess-4','10:40','11:00','① Long form — check-up + personalised IV','10:40–11:00 AM','ESS Wellness · Ekkamai','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Noey','👗 Casual chic',ico('clock')+' 20m'])}
+      </div>
+      <div class="session"><div class="session-hdr">T1 · Medtopia — Phaya Thai <span class="srange">2:00–5:00 PM · Check-up + IV Therapy · 🎬 Noey · 👗 Smart casual · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJe2RBYg-d4jARL8HiKRCpxe8" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('move', ico('clock'), 'Lunch · ESS → Medtopia (car ~45 min, east to north)')}
+        ${sceneRow('dz-d1-t1-medtopia-1','14:00','15:30','② B-roll','2:00–3:30 PM','Medtopia · Phaya Thai','① Long form — check-up + personalised IV','Whole activity, start to end · hook to close.',[ico('mic')+' Noey','👗 Smart casual',ico('clock')+' 90m',ico('clapperboard')+' Check-up + IV Therapy'])}
+        ${sceneRow('dz-d1-t1-medtopia-2','15:30','16:15','③ Phone — DDealz app','3:30–4:15 PM','Medtopia · Phaya Thai','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Noey','👗 Smart casual',ico('clock')+' 45m'])}
+        ${sceneRow('dz-d1-t1-medtopia-3','16:15','16:40','④ Photos','4:15–4:40 PM','Medtopia · Phaya Thai','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Noey','👗 Smart casual',ico('clock')+' 25m'])}
+        ${sceneRow('dz-d1-t1-medtopia-4','16:40','17:00','Wrap','4:40–5:00 PM','Medtopia · Phaya Thai','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Noey','👗 Smart casual',ico('clock')+' 20m'])}
+      </div>
+      <div class="session"><div class="session-hdr">T2 · HannahJoe Pilates — Prawet <span class="srange">10:00 AM–1:00 PM · 1-to-1 Classical Pilates · 🎬 Jeannie · 👗 Pilates set · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJWdrD0oJhHTER0K58wf6JHW4" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('', ico('clock'), '08:45 T2 call · Base → HannahJoe (car ~60 min)')}
+        ${sceneRow('dz-d1-t2-hannahjoe-1','10:00','11:30','② B-roll','10:00–11:30 AM','HannahJoe Pilates · Prawet','① Long form — reformer pilates flow','Whole activity, start to end · hook to close.',[ico('mic')+' Jeannie','👗 Pilates set',ico('clock')+' 90m',ico('clapperboard')+' 1-to-1 Classical Pilates'])}
+        ${sceneRow('dz-d1-t2-hannahjoe-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','HannahJoe Pilates · Prawet','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Jeannie','👗 Pilates set',ico('clock')+' 45m'])}
+        ${sceneRow('dz-d1-t2-hannahjoe-3','12:15','12:40','④ Photos','12:15–12:40 PM','HannahJoe Pilates · Prawet','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Jeannie','👗 Pilates set',ico('clock')+' 25m'])}
+        ${sceneRow('dz-d1-t2-hannahjoe-4','12:40','13:00','Wrap','12:40–1:00 PM','HannahJoe Pilates · Prawet','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Jeannie','👗 Pilates set',ico('clock')+' 20m'])}
+      </div>
+      <div class="day-divider day2">${ico('calendar')} Day 2 — Thu, 3 Sep · Crew 08:50 · Wrap ~8:00 PM</div>
+      <div class="session day2"><div class="session-hdr">T1 · Secret Garden — Sukhumvit 26 <span class="srange">10:00 AM–1:00 PM · Unlimited Sauna + Ice Bath · 🎬 Jeannie · 👗 Activewear / swimwear · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJ-bzLDQCf4jARGrbWK7g7FGc" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('', ico('clock'), '09:00 T1 call · Base → Secret Garden (car ~45 min)')}
+        ${sceneRow('dz-d2-t1-sg-1','10:00','11:30','② B-roll','10:00–11:30 AM','Secret Garden · Sukhumvit 26','① Long form — ice bath + sauna','Whole activity, start to end · hook to close.',[ico('mic')+' Jeannie','👗 Activewear / swimwear',ico('clock')+' 90m',ico('clapperboard')+' Unlimited Sauna + Ice Bath'],2)}
+        ${sceneRow('dz-d2-t1-sg-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','Secret Garden · Sukhumvit 26','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Jeannie','👗 Activewear / swimwear',ico('clock')+' 45m'],2)}
+        ${sceneRow('dz-d2-t1-sg-3','12:15','12:40','④ Photos','12:15–12:40 PM','Secret Garden · Sukhumvit 26','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Jeannie','👗 Activewear / swimwear',ico('clock')+' 25m'],2)}
+        ${sceneRow('dz-d2-t1-sg-4','12:40','13:00','① Long form — scrub + warm jade massage','12:40–1:00 PM','Secret Garden · Sukhumvit 26','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Jeannie','👗 Activewear / swimwear',ico('clock')+' 20m'],2)}
+      </div>
+      <div class="session day2"><div class="session-hdr">T1 · The Akesis Touch — Thong Lo <span class="srange">2:00–5:00 PM · Ultimate Bliss · 🎬 Jeannie · 👗 Comfy / robe · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJb5MW7uaf4jARKYeT0Tvz324" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('move', ico('clock'), 'Lunch · Secret Garden → Akesis (car ~8 min)')}
+        ${sceneRow('dz-d2-t1-akesis-1','14:00','15:30','② B-roll','2:00–3:30 PM','The Akesis Touch · Thong Lo','① Long form — scrub + warm jade massage','Whole activity, start to end · hook to close.',[ico('mic')+' Jeannie','👗 Comfy / robe',ico('clock')+' 90m',ico('clapperboard')+' Ultimate Bliss'],2)}
+        ${sceneRow('dz-d2-t1-akesis-2','15:30','16:15','③ Phone — DDealz app','3:30–4:15 PM','The Akesis Touch · Thong Lo','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Jeannie','👗 Comfy / robe',ico('clock')+' 45m'],2)}
+        ${sceneRow('dz-d2-t1-akesis-3','16:15','16:40','④ Photos','4:15–4:40 PM','The Akesis Touch · Thong Lo','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Jeannie','👗 Comfy / robe',ico('clock')+' 25m'],2)}
+        ${sceneRow('dz-d2-t1-akesis-4','16:40','17:00','Wrap','4:40–5:00 PM','The Akesis Touch · Thong Lo','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Jeannie','👗 Comfy / robe',ico('clock')+' 20m'],2)}
+      </div>
+      <div class="session day2"><div class="session-hdr">T2 · Preme Spa — Thong Lo <span class="srange">10:00 AM–1:00 PM · Restore in Serenity (120m) · 🎬 Maiwan · 👗 Comfy / robe · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJcac7Elqf4jARd09OhMQbTow" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('', ico('clock'), '08:50 T2 call · Base → Preme (car ~50 min)')}
+        ${sceneRow('dz-d2-t2-preme-1','10:00','11:30','② B-roll','10:00–11:30 AM','Preme Spa · Thong Lo','① Long form — aroma + herbal ball massage','Whole activity, start to end · hook to close.',[ico('mic')+' Maiwan','👗 Comfy / robe',ico('clock')+' 90m',ico('clapperboard')+' Restore in Serenity (120m)'],2)}
+        ${sceneRow('dz-d2-t2-preme-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','Preme Spa · Thong Lo','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Maiwan','👗 Comfy / robe',ico('clock')+' 45m'],2)}
+        ${sceneRow('dz-d2-t2-preme-3','12:15','12:40','④ Photos','12:15–12:40 PM','Preme Spa · Thong Lo','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Maiwan','👗 Comfy / robe',ico('clock')+' 25m'],2)}
+        ${sceneRow('dz-d2-t2-preme-4','12:40','13:00','① Long form — hyperbaric oxygen pod','12:40–1:00 PM','Preme Spa · Thong Lo','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Maiwan','👗 Comfy / robe',ico('clock')+' 20m'],2)}
+      </div>
+      <div class="session day2"><div class="session-hdr">T2 · Aestheta — CentralWorld 5F <span class="srange">2:00–5:00 PM · Hyperbaric Oxygen (HBOT) · 🎬 Maiwan · 👗 Casual chic · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJRy7PX1mf4jARUMDeMQSiO5c" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('move', ico('clock'), 'Lunch · Preme → CentralWorld (car ~20 min)')}
+        ${sceneRow('dz-d2-t2-aestheta-1','14:00','15:30','② B-roll','2:00–3:30 PM','Aestheta · CentralWorld 5F','① Long form — hyperbaric oxygen pod','Whole activity, start to end · hook to close.',[ico('mic')+' Maiwan','👗 Casual chic',ico('clock')+' 90m',ico('clapperboard')+' Hyperbaric Oxygen (HBOT)'],2)}
+        ${sceneRow('dz-d2-t2-aestheta-2','15:30','16:15','③ Phone — DDealz app','3:30–4:15 PM','Aestheta · CentralWorld 5F','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Maiwan','👗 Casual chic',ico('clock')+' 45m'],2)}
+        ${sceneRow('dz-d2-t2-aestheta-3','16:15','16:40','④ Photos','4:15–4:40 PM','Aestheta · CentralWorld 5F','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Maiwan','👗 Casual chic',ico('clock')+' 25m'],2)}
+        ${sceneRow('dz-d2-t2-aestheta-4','16:40','17:00','① Long form — Miracle Laser','4:40–5:00 PM','Aestheta · CentralWorld 5F','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Maiwan','👗 Casual chic',ico('clock')+' 20m'],2)}
+      </div>
+      <div class="session day2"><div class="session-hdr">T2 · La Grace — CentralWorld 5F <span class="srange">5:00–8:00 PM · Miracle Laser · 🎬 Maiwan · 👗 Smart casual · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJzSWLy9Ke4jARY2ToUCTyQXk" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('move', ico('clock'), 'Aestheta → La Grace (same building, ~2 min walk)')}
+        ${sceneRow('dz-d2-t2-lagrace-1','17:00','18:30','② B-roll','5:00–6:30 PM','La Grace · CentralWorld 5F','① Long form — Miracle Laser','Whole activity, start to end · hook to close.',[ico('mic')+' Maiwan','👗 Smart casual',ico('clock')+' 90m',ico('clapperboard')+' Miracle Laser'],2)}
+        ${sceneRow('dz-d2-t2-lagrace-2','18:30','19:15','③ Phone — DDealz app','6:30–7:15 PM','La Grace · CentralWorld 5F','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Maiwan','👗 Smart casual',ico('clock')+' 45m'],2)}
+        ${sceneRow('dz-d2-t2-lagrace-3','19:15','19:40','④ Photos','7:15–7:40 PM','La Grace · CentralWorld 5F','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Maiwan','👗 Smart casual',ico('clock')+' 25m'],2)}
+        ${sceneRow('dz-d2-t2-lagrace-4','19:40','20:00','Wrap','7:40–8:00 PM','La Grace · CentralWorld 5F','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Maiwan','👗 Smart casual',ico('clock')+' 20m'],2)}
+      </div>
+      <div class="day-divider day3">${ico('calendar')} Day 3 — Fri, 4 Sep · Crew 09:00 · Wrap ~5:00 PM</div>
+      <div class="session day3"><div class="session-hdr">T1 · BNH Hospital — Silom <span class="srange">10:00 AM–1:00 PM · General Health Checkup · 🎬 Jeannie · 👗 Smart casual · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJ-wD92C2f4jARtiPNjUSQ1mQ" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('', ico('clock'), '09:15 T1 call · Base → BNH (car ~15 min)')}
+        ${sceneRow('dz-d3-t1-bnh-1','10:00','11:30','② B-roll','10:00–11:30 AM','BNH Hospital · Silom','① Long form — general health checkup','Whole activity, start to end · hook to close.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 90m',ico('clapperboard')+' General Health Checkup'],3)}
+        ${sceneRow('dz-d3-t1-bnh-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','BNH Hospital · Silom','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 45m'],3)}
+        ${sceneRow('dz-d3-t1-bnh-3','12:15','12:40','④ Photos','12:15–12:40 PM','BNH Hospital · Silom','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 25m'],3)}
+        ${sceneRow('dz-d3-t1-bnh-4','12:40','13:00','Wrap','12:40–1:00 PM','BNH Hospital · Silom','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 20m'],3)}
+      </div>
+      <div class="session day3"><div class="session-hdr">T2 · Eden Spa — Nana <span class="srange">10:00 AM–1:00 PM · Timeless Self Pampering (180m) · 🎬 Beam · 👗 Comfy / robe · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJV3QuEKmf4jAR2dFT78VeNmg" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('', ico('clock'), '09:00 T2 call · Base → Eden (car ~45 min)')}
+        ${sceneRow('dz-d3-t2-eden-1','10:00','11:30','② B-roll','10:00–11:30 AM','Eden Spa · Nana','① Long form — 180-min hot stone journey','Whole activity, start to end · hook to close.',[ico('mic')+' Beam','👗 Comfy / robe',ico('clock')+' 90m',ico('clapperboard')+' Timeless Self Pampering (180m)'],3)}
+        ${sceneRow('dz-d3-t2-eden-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','Eden Spa · Nana','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Beam','👗 Comfy / robe',ico('clock')+' 45m'],3)}
+        ${sceneRow('dz-d3-t2-eden-3','12:15','12:40','④ Photos','12:15–12:40 PM','Eden Spa · Nana','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Beam','👗 Comfy / robe',ico('clock')+' 25m'],3)}
+        ${sceneRow('dz-d3-t2-eden-4','12:40','13:00','① Long form — NAD+H IV therapy','12:40–1:00 PM','Eden Spa · Nana','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Beam','👗 Comfy / robe',ico('clock')+' 20m'],3)}
+      </div>
+      <div class="session day3"><div class="session-hdr">T2 · FTV Clinic — Chidlom <span class="srange">2:00–5:00 PM · NAD+H IV Therapy · 🎬 Beam + Yada · 👗 Smart casual · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJ0QiDWACf4jARNmDrdFXGiOI" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
+        ${breakRow('move', ico('clock'), 'Lunch · Eden → FTV (car ~10 min)')}
+        ${sceneRow('dz-d3-t2-ftv-1','14:00','15:30','② B-roll','2:00–3:30 PM','FTV Clinic · Chidlom','① Long form — NAD+H IV therapy','Whole activity, start to end · hook to close.',[ico('mic')+' Beam + Yada','👗 Smart casual',ico('clock')+' 90m',ico('clapperboard')+' NAD+H IV Therapy'],3)}
+        ${sceneRow('dz-d3-t2-ftv-2','15:30','16:15','③ Phone — DDealz app','3:30–4:15 PM','FTV Clinic · Chidlom','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Beam + Yada','👗 Smart casual',ico('clock')+' 45m'],3)}
+        ${sceneRow('dz-d3-t2-ftv-3','16:15','16:40','④ Photos','4:15–4:40 PM','FTV Clinic · Chidlom','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Beam + Yada','👗 Smart casual',ico('clock')+' 25m'],3)}
+        ${sceneRow('dz-d3-t2-ftv-4','16:40','17:00','Wrap','4:40–5:00 PM','FTV Clinic · Chidlom','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Beam + Yada','👗 Smart casual',ico('clock')+' 20m'],3)}
+      </div>
+    </div>
+    <div class="shoot-footer">Ddealz × Oblique · Bangkok Content Shoot · 2–4 Sep 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+function initDdealzMap(){
+  var el=document.getElementById('ddealz-map');
+  if(!el || el.dataset.init) return;
+  (function build(tries){
+    if(typeof L==='undefined'){ if(tries<40) return void setTimeout(function(){build(tries+1);},150); return; }
+    el.dataset.init="1";
+    var base=[13.7250,100.5097];
+    var stops=[
+      {n:"ESS Wellness",t:"8:00–11:00 AM",day:"Wed",col:"#e7314f",lat:13.726405,lng:100.5911848},
+      {n:"Medtopia",t:"2:00–5:00 PM",day:"Wed",col:"#e7314f",lat:13.7912004,lng:100.5424144},
+      {n:"HannahJoe Pilates",t:"10:00 AM–1:00 PM",day:"Wed",col:"#e7314f",lat:13.7143788,lng:100.709328},
+      {n:"Secret Garden",t:"10:00 AM–1:00 PM",day:"Thu",col:"#151413",lat:13.7304479,lng:100.5697677},
+      {n:"The Akesis Touch",t:"2:00–5:00 PM",day:"Thu",col:"#151413",lat:13.7301577,lng:100.5805033},
+      {n:"Preme Spa",t:"10:00 AM–1:00 PM",day:"Thu",col:"#151413",lat:13.723226,lng:100.5767108},
+      {n:"Aestheta",t:"2:00–5:00 PM",day:"Thu",col:"#151413",lat:13.7463847,lng:100.5390124},
+      {n:"La Grace",t:"5:00–8:00 PM",day:"Thu",col:"#151413",lat:13.7459047,lng:100.5396107},
+      {n:"BNH Hospital",t:"10:00 AM–1:00 PM",day:"Fri",col:"#2563EB",lat:13.724859,lng:100.5350217},
+      {n:"Eden Spa",t:"10:00 AM–1:00 PM",day:"Fri",col:"#2563EB",lat:13.746354,lng:100.5560443},
+      {n:"FTV Clinic",t:"2:00–5:00 PM",day:"Fri",col:"#2563EB",lat:13.7434391,lng:100.5441529}
+    ];
+    var map=L.map(el,{scrollWheelZoom:false});
+    window._dzMap=map;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
+    var pts=[];
+    stops.forEach(function(s){
+      pts.push([s.lat,s.lng]);
+      L.polyline([base,[s.lat,s.lng]],{color:'#8a94ad',weight:1.5,opacity:.5,dashArray:'4,5'}).addTo(map);
+      L.circleMarker([s.lat,s.lng],{radius:8,color:'#fff',weight:2,fillColor:s.col,fillOpacity:1}).addTo(map).bindPopup('<b>'+s.n+'</b><br>'+s.day+' · '+s.t);
+    });
+    var bi=L.divIcon({html:'<div style="font-size:22px;line-height:22px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))">★</div>',className:'',iconSize:[22,22],iconAnchor:[11,11]});
+    L.marker(base,{icon:bi}).addTo(map).bindPopup('<b>★ Base</b><br>Charoen Nakhon 7');
+    pts.push(base);
+    window._dzBounds=pts;
+    function refit(){ map.invalidateSize(); map.fitBounds(window._dzBounds,{padding:[30,30]}); }
+    refit(); setTimeout(refit,250); setTimeout(refit,650);
+  })(0);
+}
+function dzTab(name, btn){
+  var tabs=btn.parentNode.querySelectorAll('.dz-tab');
+  tabs.forEach(function(b){ b.classList.toggle('active', b===btn); });
+  ['map','summary','checklist'].forEach(function(v){
+    var el=document.getElementById('dz-view-'+v);
+    if(el) el.style.display=(v===name)?'':'none';
+  });
+  if(name==='map' && window._dzMap){ setTimeout(function(){ window._dzMap.invalidateSize(); if(window._dzBounds) window._dzMap.fitBounds(window._dzBounds,{padding:[30,30]}); },80); }
+}
+
 function getShootHTML(shoot){
   if(shoot.id==='specshop-aug2026') return getSpecShopHTML(shoot);
   if(shoot.id==='sommni-frwd-aug2026') return getSommniFRWDHTML(shoot);
@@ -1790,6 +2067,7 @@ function getShootHTML(shoot){
   if(shoot.id==='getha-aug2026') return getGethaHTML(shoot);
   if(shoot.id==='sunway-uni-facilities-jun2026') return getSunwayUniFacHTML(shoot);
   if(shoot.id==='ergolab-jul2026') return getErgolabHTML(shoot);
+  if(shoot.id==='ddealz-bkk-sep2026') return getDdealzHTML(shoot);
   return '<p style="padding:40px;text-align:center;">Shoot not found.</p>';
 }
 
