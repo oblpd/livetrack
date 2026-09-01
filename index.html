@@ -1188,7 +1188,7 @@ const SHOOTS = [
     dates: ['2026-09-02','2026-09-03','2026-09-04'],
     datesLabel: '2–4 Sep 2026 · Wed–Fri',
     location: 'Bangkok · 11 vendors (Sukhumvit / CentralWorld / Silom)',
-    crewCall: 'Wed 06:45 · Thu 08:50 · Fri 09:00',
+    crewCall: 'Wed 07:00 · Thu 09:15 · Fri 09:00',
     talentCall: 'Noey · Jeannie · Maiwan · Beam · Yada',
     wrapEst: 'Wed 5:00 PM · Thu 8:00 PM · Fri 5:00 PM',
     days: 3,
@@ -1857,7 +1857,7 @@ function getDdealzHTML(shoot){
       <div id="ddealz-map"></div>
       <div class="dz-legend"><b><span class="dz-dot" style="background:#151413"></span>★ Base</b><b><span class="dz-dot" style="background:#e7314f"></span>Wed</b><b><span class="dz-dot" style="background:#151413"></span>Thu</b><b><span class="dz-dot" style="background:#2563EB"></span>Fri</b></div>
       <div class="dz-maplinks"><div class="dz-mltitle">Open a location in Google Maps</div>
-      <a class="dz-mllink dz-mlbase" href="https://maps.app.goo.gl/CDB2UMr6npAXnr1w9?g_st=ipc" target="_blank" rel="noopener"><span class="dz-mlname">★ Base — Airbnb<span>15 Soi Charoen Nakhon 7, Khlong San</span></span><span class="dz-mlgo">Maps ↗</span></a>
+      <a class="dz-mllink dz-mlbase" href="https://www.google.com/maps/search/?api=1&amp;query=169%20Soi%20Sukhumvit%2093%2C%20Bang%20Chak%2C%20Phra%20Khanong%2C%20Bangkok%2010260" target="_blank" rel="noopener"><span class="dz-mlname">★ Base<span>169 Soi Sukhumvit 93, Bang Chak</span></span><span class="dz-mlgo">Maps ↗</span></a>
       <div class="dz-mlday" style="color:#e7314f"><span class="dz-mldot" style="background:#e7314f"></span>Wed · 2 Sep · East/SE + North</div>
       <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.726405%2C100.5911848&amp;query_place_id=ChIJx70w-kSf4jAREMpcm4kzXag" target="_blank" rel="noopener"><span class="dz-mlname">ESS Wellness<span>Ekkamai · 8:00–11:00 AM</span></span><span class="dz-mlgo">Maps ↗</span></a>
       <a class="dz-mllink" href="https://www.google.com/maps/search/?api=1&amp;query=13.7143788%2C100.709328&amp;query_place_id=ChIJWdrD0oJhHTER0K58wf6JHW4" target="_blank" rel="noopener"><span class="dz-mlname">HannahJoe Pilates<span>Prawet · 10:00 AM–1:00 PM</span></span><span class="dz-mlgo">Maps ↗</span></a>
@@ -1921,9 +1921,9 @@ function getDdealzHTML(shoot){
     <div id="dz-view-checklist" class="dz-view" style="display:none">
       ${progressAndActivity()}
       <div class="break-row"><span class="break-icon">${ico('clipboard')}</span><span>Production checklist. 2 teams run in parallel — the auto-timer follows one track, so tick scenes as they wrap.</span><div class="bl"></div></div>
-      <div class="day-divider day1">${ico('calendar')} Day 1 — Wed, 2 Sep · Crew 06:45 (ESS) · Wrap ~5:00 PM</div>
+      <div class="day-divider day1">${ico('calendar')} Day 1 — Wed, 2 Sep · Crew 07:00 (ESS) · Wrap ~5:00 PM</div>
       <div class="session"><div class="session-hdr">T1 · ESS Wellness — Ekkamai <span class="srange">8:00–11:00 AM · IV Drip + Gua Sha · 🎬 Noey · 👗 Casual chic · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJx70w-kSf4jAREMpcm4kzXag" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
-        ${breakRow('', ico('clock'), '06:45 T1 call · Base → ESS (car ~45 min)')}
+        ${breakRow('', ico('clock'), '07:00 T1 call · Base → ESS (car ~15 min)')}
         ${sceneRow('dz-d1-t1-ess-1','08:00','09:30','② B-roll','8:00–9:30 AM','ESS Wellness · Ekkamai','① Long form — IV drip + Gua Sha','Whole activity, start to end · hook to close.',[ico('mic')+' Noey','👗 Casual chic',ico('clock')+' 90m',ico('clapperboard')+' IV Drip + Gua Sha'])}
         ${sceneRow('dz-d1-t1-ess-2','09:30','10:15','③ Phone — DDealz app','9:30–10:15 AM','ESS Wellness · Ekkamai','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Noey','👗 Casual chic',ico('clock')+' 45m'])}
         ${sceneRow('dz-d1-t1-ess-3','10:15','10:40','④ Photos','10:15–10:40 AM','ESS Wellness · Ekkamai','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Noey','👗 Casual chic',ico('clock')+' 25m'])}
@@ -1937,7 +1937,7 @@ function getDdealzHTML(shoot){
         ${sceneRow('dz-d1-t1-medtopia-4','16:40','17:00','Wrap','4:40–5:00 PM','Medtopia · Phaya Thai','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Noey','👗 Smart casual',ico('clock')+' 20m'])}
       </div>
       <div class="session"><div class="session-hdr">T2 · HannahJoe Pilates — Prawet <span class="srange">10:00 AM–1:00 PM · 1-to-1 Classical Pilates · 🎬 Jeannie · 👗 Pilates set · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJWdrD0oJhHTER0K58wf6JHW4" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
-        ${breakRow('', ico('clock'), '08:45 T2 call · Base → HannahJoe (car ~60 min)')}
+        ${breakRow('', ico('clock'), '09:00 T2 call · Base → HannahJoe (car ~25 min)')}
         ${sceneRow('dz-d1-t2-hannahjoe-1','10:00','11:30','② B-roll','10:00–11:30 AM','HannahJoe Pilates · Prawet','① Long form — reformer pilates flow','Whole activity, start to end · hook to close.',[ico('mic')+' Jeannie','👗 Pilates set',ico('clock')+' 90m',ico('clapperboard')+' 1-to-1 Classical Pilates'])}
         ${sceneRow('dz-d1-t2-hannahjoe-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','HannahJoe Pilates · Prawet','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Jeannie','👗 Pilates set',ico('clock')+' 45m'])}
         ${sceneRow('dz-d1-t2-hannahjoe-3','12:15','12:40','④ Photos','12:15–12:40 PM','HannahJoe Pilates · Prawet','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Jeannie','👗 Pilates set',ico('clock')+' 25m'])}
@@ -1945,7 +1945,7 @@ function getDdealzHTML(shoot){
       </div>
       <div class="day-divider day2">${ico('calendar')} Day 2 — Thu, 3 Sep · Crew 08:50 · Wrap ~8:00 PM</div>
       <div class="session day2"><div class="session-hdr">T1 · Secret Garden — Sukhumvit 26 <span class="srange">10:00 AM–1:00 PM · Unlimited Sauna + Ice Bath · 🎬 Jeannie · 👗 Activewear / swimwear · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJ-bzLDQCf4jARGrbWK7g7FGc" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
-        ${breakRow('', ico('clock'), '09:00 T1 call · Base → Secret Garden (car ~45 min)')}
+        ${breakRow('', ico('clock'), '09:15 T1 call · Base → Secret Garden (car ~20 min)')}
         ${sceneRow('dz-d2-t1-sg-1','10:00','11:30','② B-roll','10:00–11:30 AM','Secret Garden · Sukhumvit 26','① Long form — ice bath + sauna','Whole activity, start to end · hook to close.',[ico('mic')+' Jeannie','👗 Activewear / swimwear',ico('clock')+' 90m',ico('clapperboard')+' Unlimited Sauna + Ice Bath'],2)}
         ${sceneRow('dz-d2-t1-sg-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','Secret Garden · Sukhumvit 26','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Jeannie','👗 Activewear / swimwear',ico('clock')+' 45m'],2)}
         ${sceneRow('dz-d2-t1-sg-3','12:15','12:40','④ Photos','12:15–12:40 PM','Secret Garden · Sukhumvit 26','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Jeannie','👗 Activewear / swimwear',ico('clock')+' 25m'],2)}
@@ -1959,7 +1959,7 @@ function getDdealzHTML(shoot){
         ${sceneRow('dz-d2-t1-akesis-4','16:40','17:00','Wrap','4:40–5:00 PM','The Akesis Touch · Thong Lo','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Jeannie','👗 Comfy / robe',ico('clock')+' 20m'],2)}
       </div>
       <div class="session day2"><div class="session-hdr">T2 · Preme Spa — Thong Lo <span class="srange">10:00 AM–1:00 PM · Restore in Serenity (120m) · 🎬 Maiwan · 👗 Comfy / robe · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJcac7Elqf4jARd09OhMQbTow" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
-        ${breakRow('', ico('clock'), '08:50 T2 call · Base → Preme (car ~50 min)')}
+        ${breakRow('', ico('clock'), '09:15 T2 call · Base → Preme (car ~18 min)')}
         ${sceneRow('dz-d2-t2-preme-1','10:00','11:30','② B-roll','10:00–11:30 AM','Preme Spa · Thong Lo','① Long form — aroma + herbal ball massage','Whole activity, start to end · hook to close.',[ico('mic')+' Maiwan','👗 Comfy / robe',ico('clock')+' 90m',ico('clapperboard')+' Restore in Serenity (120m)'],2)}
         ${sceneRow('dz-d2-t2-preme-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','Preme Spa · Thong Lo','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Maiwan','👗 Comfy / robe',ico('clock')+' 45m'],2)}
         ${sceneRow('dz-d2-t2-preme-3','12:15','12:40','④ Photos','12:15–12:40 PM','Preme Spa · Thong Lo','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Maiwan','👗 Comfy / robe',ico('clock')+' 25m'],2)}
@@ -1981,14 +1981,14 @@ function getDdealzHTML(shoot){
       </div>
       <div class="day-divider day3">${ico('calendar')} Day 3 — Fri, 4 Sep · Crew 09:00 · Wrap ~5:00 PM</div>
       <div class="session day3"><div class="session-hdr">T1 · BNH Hospital — Silom <span class="srange">10:00 AM–1:00 PM · General Health Checkup · 🎬 Jeannie · 👗 Smart casual · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJ-wD92C2f4jARtiPNjUSQ1mQ" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
-        ${breakRow('', ico('clock'), '09:15 T1 call · Base → BNH (car ~15 min)')}
+        ${breakRow('', ico('clock'), '09:00 T1 call · Base → BNH (car ~30 min)')}
         ${sceneRow('dz-d3-t1-bnh-1','10:00','11:30','② B-roll','10:00–11:30 AM','BNH Hospital · Silom','① Long form — general health checkup','Whole activity, start to end · hook to close.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 90m',ico('clapperboard')+' General Health Checkup'],3)}
         ${sceneRow('dz-d3-t1-bnh-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','BNH Hospital · Silom','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 45m'],3)}
         ${sceneRow('dz-d3-t1-bnh-3','12:15','12:40','④ Photos','12:15–12:40 PM','BNH Hospital · Silom','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 25m'],3)}
         ${sceneRow('dz-d3-t1-bnh-4','12:40','13:00','Wrap','12:40–1:00 PM','BNH Hospital · Silom','④ Photos','Stills / listing card, if time · vendor-repostable.',[ico('mic')+' Jeannie','👗 Smart casual',ico('clock')+' 20m'],3)}
       </div>
       <div class="session day3"><div class="session-hdr">T2 · Eden Spa — Nana <span class="srange">10:00 AM–1:00 PM · Timeless Self Pampering (180m) · 🎬 Beam · 👗 Comfy / robe · 📍 <a href="https://www.google.com/maps/place/?q=place_id:ChIJV3QuEKmf4jAR2dFT78VeNmg" target="_blank" style="color:inherit;text-decoration:underline">Map</a></span></div>
-        ${breakRow('', ico('clock'), '09:00 T2 call · Base → Eden (car ~45 min)')}
+        ${breakRow('', ico('clock'), '09:00 T2 call · Base → Eden (car ~25 min)')}
         ${sceneRow('dz-d3-t2-eden-1','10:00','11:30','② B-roll','10:00–11:30 AM','Eden Spa · Nana','① Long form — 180-min hot stone journey','Whole activity, start to end · hook to close.',[ico('mic')+' Beam','👗 Comfy / robe',ico('clock')+' 90m',ico('clapperboard')+' Timeless Self Pampering (180m)'],3)}
         ${sceneRow('dz-d3-t2-eden-2','11:30','12:15','③ Phone — DDealz app','11:30 AM–12:15 PM','Eden Spa · Nana','② B-roll','Exterior · interior · signature macro · space wide.',[ico('mic')+' Beam','👗 Comfy / robe',ico('clock')+' 45m'],3)}
         ${sceneRow('dz-d3-t2-eden-3','12:15','12:40','④ Photos','12:15–12:40 PM','Eden Spa · Nana','③ Phone — DDealz app','Browse categories then tap Book · phone-in-hand.',[ico('mic')+' Beam','👗 Comfy / robe',ico('clock')+' 25m'],3)}
@@ -2012,7 +2012,7 @@ function initDdealzMap(){
   (function build(tries){
     if(typeof L==='undefined'){ if(tries<40) return void setTimeout(function(){build(tries+1);},150); return; }
     el.dataset.init="1";
-    var base=[13.7250,100.5097];
+    var base=[13.6980,100.6030];
     var stops=[
       {n:"ESS Wellness",t:"8:00–11:00 AM",day:"Wed",col:"#e7314f",lat:13.726405,lng:100.5911848},
       {n:"Medtopia",t:"2:00–5:00 PM",day:"Wed",col:"#e7314f",lat:13.7912004,lng:100.5424144},
@@ -2036,7 +2036,7 @@ function initDdealzMap(){
       L.circleMarker([s.lat,s.lng],{radius:8,color:'#fff',weight:2,fillColor:s.col,fillOpacity:1}).addTo(map).bindPopup('<b>'+s.n+'</b><br>'+s.day+' · '+s.t);
     });
     var bi=L.divIcon({html:'<div style="font-size:22px;line-height:22px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))">★</div>',className:'',iconSize:[22,22],iconAnchor:[11,11]});
-    L.marker(base,{icon:bi}).addTo(map).bindPopup('<b>★ Base</b><br>Charoen Nakhon 7');
+    L.marker(base,{icon:bi}).addTo(map).bindPopup('<b>★ Base</b><br>Sukhumvit 93, Bang Chak');
     pts.push(base);
     window._dzBounds=pts;
     function refit(){ map.invalidateSize(); map.fitBounds(window._dzBounds,{padding:[30,30]}); }
