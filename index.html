@@ -1181,6 +1181,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'ergolab-obl0608-sep2026',
+    actId: 'ergolab-obl0608-sep2026-activity',
+    client: 'ErgoLab',
+    title: 'OBL06–08 · 3-Script Shoot Day',
+    dates: ['2026-09-17'],
+    datesLabel: '17 Sep 2026 · Thursday',
+    location: 'Lumi Tropicana · Bedroom 1, Bedroom 2, Bathroom 2, Kitchen Bar',
+    crewCall: '1:00 PM',
+    talentCall: 'Peggy 1:45 PM · Wendy 5:30 PM',
+    wrapEst: '11:15 PM',
+    days: 1,
+  },
+  {
     id: 'ddealz-bkk-sep2026',
     actId: 'ddealz-bkk-sep2026-activity',
     client: 'Ddealz',
@@ -2053,7 +2066,129 @@ function dzTab(name, btn){
   if(name==='map' && window._dzMap){ setTimeout(function(){ window._dzMap.invalidateSize(); if(window._dzBounds) window._dzMap.fitBounds(window._dzBounds,{padding:[30,30]}); },80); }
 }
 
+
+// ═══════════════════════════════════════════════════
+// ERGOLAB OBL06–08 · 3-SCRIPT SHOOT DAY
+// ═══════════════════════════════════════════════════
+function getErgolabOBL0608HTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">VIDEO 1 — DEEP SLEEP PILLOW <span class="srange">2:00 PM – 2:30 PM · Bedroom 2 · Peggy</span></div>
+      ${breakRow('',ico('clipboard'),'1:00 – 2:00 PM · Crew call · set up')}
+      ${breakRow('move','🚶','1:45 PM · Peggy arrives + brief')}
+      ${sceneRow('s01','14:00','14:10','Hook 2 — talking head (wide) + neck/shoulder hold + OTS look at pillow','2:00 – 2:10 PM','Bedroom 2','Hook 1 — camera follows lie-down → sit (wide), hand to neck','I take maybe three naps a day at my age. And every time I get up, my neck\'s killing me.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow, bedding'])}
+      ${sceneRow('s02','14:10','14:20','Hook 3 — talking to camera, zoom out revealing the pillow','2:10 – 2:20 PM','Bedroom 2','Hook 2 — talking head (wide) + neck/shoulder hold + OTS look at pillow','"I bought a whole new mattress a while back..." Cam B take b rolls',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
+      ${sceneRow('s03','14:20','14:30','1A — talking head, straight to camera','2:20 – 2:30 PM','Bedroom 2','Hook 3 — talking to camera, zoom out revealing the pillow','"I kept blaming my age for the aches..."',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 1 — PILLOW · TALKING HEADS (1A → 1I, every VO block) <span class="srange">2:30 PM – 3:40 PM · Cam A + Cam B</span></div>
+      ${sceneRow('s04','14:30','14:40','1B + 1C — talking head (mattress + saw the ad online)','2:30 – 2:40 PM','Bedroom 2','1A — talking head, straight to camera','“I’m 67…” Eye level or slightly below.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants'])}
+      ${sceneRow('s05','14:40','14:50','1D — talking head, flat pillow in frame','2:40 – 2:50 PM','Bedroom 2','1B + 1C — talking head (mattress + saw the ad online)','“And I’ve always been a firm support believer… RM4,000 on a new one.”  /  “Then I saw this ad online…”  Mattress and phone b-roll.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants'])}
+      ${sceneRow('s06','14:50','15:00','1E — talking head + ErgoLab pillow in hand, runs hand along the contour','2:50 – 3:00 PM','Bedroom 2','1D — talking head, flat pillow in frame','“That’s when it hit me…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
+      ${sceneRow('s07','15:00','15:10','1F — talking head, press-and-release in hand','3:00 – 3:10 PM','Bedroom 2','1E — talking head + ErgoLab pillow in hand, runs hand along the contour','“So I got this…” Longest segment. Hand must follow the curve on “see this shape here”.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
+      ${sceneRow('s08','15:10','15:20','1G + 1H — talking head (result + price / offer)','3:10 – 3:20 PM','Bedroom 2','1F — talking head, press-and-release in hand','“And the foam inside is the dense kind…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
+      ${sceneRow('s09','15:20','15:30','1I — CTA talking head + hugging pillow','3:20 – 3:30 PM','Bedroom 2','1G + 1H — talking head (result + price / offer)','“First few days I could already feel the difference…”  /  “It’s only RM229 now, RM71 off when you order online…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
+      ${sceneRow('s10','15:30','15:40','1A / 1B — napping in bedroom; sleeping on mattress uncomfortable (wide + closeup)','3:30 – 3:40 PM','Bedroom 2','1I — CTA talking head + hugging pillow','"After what I paid...than you think."',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
+      ${breakRow('move','🚶','3:40 – 3:45 PM   ·   Break - Prep for Brolls')}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 1 — PILLOW · PAIN + LIFESTYLE B-ROLL <span class="srange">3:45 PM – 4:00 PM · Bedroom 2 · Peggy</span></div>
+      ${sceneRow('s11','15:45','15:50','1B — back pain (side); pressing mattress (closeup); sit-and-wake touching neck','3:45 – 3:50 PM','Bedroom 2','1A / 1B — napping in bedroom; sleeping on mattress uncomfortable (wide + closeup)','Afternoon-nap look, curtains half drawn.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old pillow, bedding'])}
+      ${sceneRow('s12','15:50','15:55','1C — scrolling phone (wide, lamp on); lying on flat pillow, uncomfortable','3:50 – 3:55 PM','Bedroom 2','1B — back pain (side); pressing mattress (closeup); sit-and-wake touching neck','The sit-and-wake side-on, tight, and from behind.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Mattress'])}
+      ${sceneRow('s13','15:55','16:00','1D — flat pillow: hand presses down, stays down','3:55 – 4:00 PM','Living room','1C — scrolling phone (wide, lamp on); lying on flat pillow, uncomfortable','Scrolling article',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Phone, lamp, old pillow'])}
+      ${breakRow('move','🚶','4:00 – 4:05 PM   ·   Move to bedroom')}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 1 — PILLOW · PRODUCT B-ROLL <span class="srange">4:05 PM – 4:35 PM · Bedroom 2</span></div>
+      ${sceneRow('s14','16:05','16:10','1E / 1F — ErgoLab beauty, contour reveal, press-and-rebound','4:05 – 4:10 PM','Bedroom 2','1D — flat pillow: hand presses down, stays down','',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Hands · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
+      ${sceneRow('s15','16:10','16:15','1E — sleeping on ErgoLab pillow','4:10 – 4:15 PM','Bedroom 2','1E / 1F — ErgoLab beauty, contour reveal, press-and-rebound','Ergolab product beauty shots',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Hands · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
+      ${sceneRow('s16','16:15','16:25','1G — waking up happily; walks out past camera, pillow visible behind','4:15 – 4:25 PM','Bedroom 2','1E — sleeping on ErgoLab pillow','Top, side, wide, closeup angles of talent sleeping.',[ico('camera')+' B-roll',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
+      ${sceneRow('s17','16:25','16:30','1H — pillow + bedroom alone (wide, no talent)','4:25 – 4:30 PM','Bedroom 2','1G — waking up happily; walks out past camera, pillow visible behind','Wake up pose, camera follow, talent walk pass camera.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
+      ${sceneRow('s18','16:30','16:35','Mum walking around the house (wide); mum on the phone — “it’s okay ya”','4:30 – 4:35 PM','Bedroom 2','1H — pillow + bedroom alone (wide, no talent)','Pillow+bedroom beauty shots, leave space for text.',[ico('camera')+' B-roll',ico('clock')+' 5 min','📦 ErgoLab pillow'])}
+      ${breakRow('move','🚶','4:35 – 4:55 PM   ·   MOVE + WARDROBE — Bedroom 2 → Bathroom 2. Peggy into the pink blouse + pants (bathrobe over it for the shower step-out). Pre-soak the fabric mat, wet-down tile for later   ·')}
+      ${breakRow('lunch',ico('coffee'),'4:55 – 5:25 PM   ·   DINNER — crew + Peggy. Wendy arrived + to brief')}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 2 — BATH MAT · DRY SET <span class="srange">5:25 PM – 6:15 PM · Bathroom 2, tile bone dry · Peggy in pink blouse + Wendy in corporate wear</span></div>
+      ${sceneRow('s19','17:25','17:30','Mum fall (wide) + pain reaction (closeup)','5:25 – 5:30 PM','Bathroom 2 / house','Mum walking around the house (wide); mum on the phone — “it’s okay ya”','Talent walking around in living room, kitchen. Mom talks on the phone (closeup).',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Pink blouse + pants','📦 Phone'])}
+      ${sceneRow('s20','17:30','17:40','Mum steps out of the shower onto the ErgoLab mat','5:30 – 5:40 PM','Bathroom 2','Mum fall (wide) + pain reaction (closeup)','Pre-wet the bathroom abit + mat.',[ico('camera')+' Product B-roll',ico('clock')+' 10 min',ico('mic')+' Peggy · Pink blouse + pants','📦 Wet bathroom, wet fabric mat'])}
+      ${sceneRow('s21','17:40','17:45','1E — throw the fabric mat into the bin','5:40 – 5:45 PM','Bathroom 2','Mum steps out of the shower onto the ErgoLab mat','Happy (wide + closeup); foot step on mat (closeup)',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Pink blouse + pants','📦 ErgoLab mat, towel, robe'])}
+      ${breakRow('',ico('clipboard'),'5:45 PM   ·   Peggy WRAPPED')}
+      ${sceneRow('s22','17:45','17:50','1F — ErgoLab mat closeups / beauty shots','5:45 – 5:50 PM','Bathroom 2','1E — throw the fabric mat into the bin','Pre-soak a spare fabric mat in the sink and carry it to the bin.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Bin, ErgoLab box'])}
+      ${sceneRow('s23','17:50','17:55','1F — pour water, absorbs and dries in under 60s (top-down, locked off)','5:50 – 5:55 PM','Bathroom 2','1F — ErgoLab mat closeups / beauty shots','Ergolab product beauty shots',[ico('camera')+' Product B-roll',ico('clock')+' 5 min','📦 ErgoLab mat'])}
+      ${sceneRow('s24','17:55','18:05','1G — grip demo','5:55 – 6:05 PM','Bathroom 2','1F — pour water, absorbs and dries in under 60s (top-down, locked off)','Water goes on the MAT, not the tile. Blot the mat between takes; the floor stays dry.',[ico('camera')+' B-roll',ico('clock')+' 10 min',ico('mic')+' Hands · Formal corporate wear','📦 Glass, water, towels'])}
+      ${sceneRow('s25','18:05','18:10','Unboxing Ergolab floot mat','6:05 – 6:10 PM','Bathroom 2','1G — grip demo','Closeup + wide; lift mat showing dry tile (closeup); bathroom with ErgoLab mat (wide)',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Hands · Formal corporate wear','📦 ErgoLab mat, fabric mat'])}
+      ${sceneRow('s25a','18:10','18:15','Hook 2 — soggy mat, slow dolly in','6:10 - 6:15 PM','—','Unboxing Ergolab floot mat','Unboxing (closeup + wide)',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Ergolab box, floor mat'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 2 — BATH MAT · WET SET <span class="srange">6:15 PM – 6:30 PM · Bathroom 2, soaked mat + wet tile</span></div>
+      ${sceneRow('s26','18:15','18:20','1D — walk to bathroom (facing talent, follow), revealing the mat','6:15 – 6:20 PM','Bathroom 2','Hook 2 — soggy mat, slow dolly in','',[ico('camera')+' Hook',ico('clock')+' 5 min','📦 Soggy fabric mat'])}
+      ${sceneRow('s27','18:20','18:25','1D — wet mat closeup (hand press squeezes water); slippery wet bathroom (wide + closeup); step on bad mat (closeup)','6:20 – 6:25 PM','Bathroom 2','1D — walk to bathroom (facing talent, follow), revealing the mat','One continuous move from the hallway. She stops in the doorway; rack from her shoulder down to the mat.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Soggy fabric mat'])}
+      ${sceneRow('s28','18:25','18:30','Hook 1 — selfie talking','6:25 – 6:30 PM','Bathroom 2','1D — wet mat closeup (hand press squeezes water); slippery wet bathroom (wide + closeup); step on bad mat (closeup)','Fill the frame with fabric and water.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Hands / Wendy · Formal corporate wear','📦 Soggy mat, water, spray'])}
+      ${breakRow('move','🚶','6:30 – 6:35 PM   ·   MOVE — Bathroom 2 → Bedroom 2 / Kitchen Bar.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 2 — BATH MAT · DAUGHTER TALKING HEADS <span class="srange">6:35 PM – 8:00 PM · Wendy · Outfit 1 · Cam A + Cam B</span></div>
+      ${sceneRow('s29','18:35','18:45','Hook 2 — talking head','6:35 – 6:45 PM','Kitchen Bar','Hook 1 — selfie talking','“My mum almost fell…” Genuinely handheld at arm\'s length. A small breath before the line.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 Phone / selfie rig'])}
+      ${sceneRow('s30','18:45','18:55','Hook 3 — sit down and talk; phone lights up showing “Mum” (closeup)','6:45 – 6:55 PM','Bedroom 2','Hook 2 — talking head','“The most dangerous thing in your parents’ house is sitting right next to the shower.”  The soggy-mat dolly cuts in over this.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear'])}
+      ${sceneRow('s31','18:55','19:05','1A — talking head (phone-call narration)','6:55 – 7:05 PM','Bedroom 2','Hook 3 — sit down and talk; phone lights up showing “Mum” (closeup)','Top-down on the phone. Hand hovers and hesitates a full 3s before answering.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 Phone'])}
+      ${sceneRow('s32','19:05','19:15','1A — sit working (wide); phone rings (closeup); press answer; worry face (closeup)','7:05 – 7:15 PM','Bedroom 2','1A — talking head (phone-call narration)','“You’re at work. Your phone rings…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear'])}
+      ${sceneRow('s33','19:15','19:20','1B / 1C — talking head (top down) × 2','7:15 – 7:20 PM','Bedroom 2','1A — sit working (wide); phone rings (closeup); press answer; worry face (closeup)','Closeup reaction',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Laptop, phone, desk'])}
+      ${sceneRow('s34','19:20','19:30','1D + 1E — talking head','7:20 – 7:30 PM','Bedroom 2','1B / 1C — talking head (top down) × 2','',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear'])}
+      ${sceneRow('s35','19:30','19:40','1F + 1G — talking head','7:30 – 7:40 PM','Bedroom 2','1D + 1E — talking head','“When I got home, I looked at that spot…”  /  “I swapped it that same day…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 ErgoLab box'])}
+      ${sceneRow('s36','19:40','19:50','Stat beat + peace-of-mind beat + CTA talking head holding mat / box','7:40 – 7:50 PM','Bedroom 2','1F + 1G — talking head','“It’s made from diatomaceous stone…”  /  “It has an anti-slip base…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 ErgoLab mat'])}
+      ${sceneRow('s37','19:50','20:00','1A — turning around on the bed, restless','7:50 – 8:00 PM','Bedroom 2','Stat beat + peace-of-mind beat + CTA talking head holding mat / box','"If you have elderly...get one today."',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 ErgoLab mat + box'])}
+      ${breakRow('move','🚶','8:00 – 8:20 PM   ·   MOVE + WARDROBE — → Bedroom 1 (pre-dressed with the cotton sheet). Wendy into the sleeping outfit.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 3 — BAMBOO BEDSHEET · HOT / 3AM B-ROLL <span class="srange">8:20 PM – 8:30 PM · Bedroom 1 · Wendy · sleeping outfit</span></div>
+      ${sceneRow('s38','20:20','20:25','1A — sit up on bed (wide); feeling-hot gesture + face (closeup); sweat detail on neck / shoulder','8:20 – 8:25 PM','Bedroom 1','1A — turning around on the bed, restless','Top down, wide shot',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
+      ${sceneRow('s39','20:25','20:30','Hook 1 — talking head, side angle turning to camera','8:25 – 8:30 PM','Bedroom 1','1A — sit up on bed (wide); feeling-hot gesture + face (closeup); sweat detail on neck / shoulder','Talent showing very hot can\'t sleep pose.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)'])}
+      ${breakRow('move','🚶','8:30 – 8:35 PM   ·   RESET')}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · HOOKS <span class="srange">8:35 PM – 9:05 PM · Bedroom 1 · Cam A + Cam B</span></div>
+      ${sceneRow('s40','20:35','20:45','Hook 2 — holding bedsheet showing thread count (wide); thread count label (closeup)','8:35 – 8:45 PM','Bedroom 1','Hook 1 — talking head, side angle turning to camera','"Higher thread count...reason behind it."',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
+      ${sceneRow('s41','20:45','20:55','Hook 3 — mid bed-making, grab sheet and toss it to camera (wide, low angle)','8:45 – 8:55 PM','Bedroom 1','Hook 2 — holding bedsheet showing thread count (wide); thread count label (closeup)','"You thought thread count..."',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet + TC label'])}
+      ${sceneRow('s42','20:55','21:05','1A — talking head (3AM narration)','8:55 – 9:05 PM','Bedroom 1','Hook 3 — mid bed-making, grab sheet and toss it to camera (wide, low angle)','"Stop buying the "premium" bed sheet cover lens transition.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · TALKING HEADS (1A / 1B / 1C / 1D / 1E / 1F / 1G / 1H / CTA) <span class="srange">9:05 PM – 10:15 PM · Cam A + Cam B</span></div>
+      ${sceneRow('s43','21:05','21:15','1B + 1C — talking head, straight to camera','9:05 – 9:15 PM','Bedroom 1','1A — talking head (3AM narration)','“The aircon is cold enough, the fan is on as well…”  The restless 3AM b-roll cuts in over this.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
+      ${sceneRow('s44','21:15','21:25','1D — talking head + holding the ErgoLab sheet / box / packaging','9:15 – 9:25 PM','Bedroom 1','1B + 1C — talking head, straight to camera','Two segments, one setup. Give 1C (“they’re not wrong…”) air — static, no cuts; it\'s the credibility beat.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)'])}
+      ${sceneRow('s45','21:25','21:35','1E — talking head','9:25 – 9:35 PM','Bedroom 1','1D — talking head + holding the ErgoLab sheet / box / packaging','“I didn’t believe it at first…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 ErgoLab box, bamboo set'])}
+      ${sceneRow('s46','21:35','21:45','1F — talking head + holding the sheet to show silky detail','9:35 – 9:45 PM','Bedroom 1','1E — talking head','“Bamboo is naturally breathable… even in Malaysia’s heat and humidity.”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo sheet'])}
+      ${sceneRow('s47','21:45','21:55','1G — talking head','9:45 – 9:55 PM','Bedroom 1','1F — talking head + holding the sheet to show silky detail','“And here’s the part cotton can’t match…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo sheet'])}
+      ${sceneRow('s48','21:55','22:05','1H + CTA — talking head + ErgoLab box','9:55 – 10:05 PM','Bedroom 1','1G — talking head','“This also means falling asleep faster, staying asleep through the night…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
+      ${sceneRow('s49','22:05','22:15','1B / 1C — backlit weave test: cotton blocks the light, bamboo passes it. Matched frames + macro of the weave','10:05 – 10:15 PM','Bedroom 1','1H + CTA — talking head + ErgoLab box','“Just one night in…” through “…no risk!”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 ErgoLab box'])}
+      ${breakRow('move','🚶','10:15 – 10:20 PM   ·   RESET')}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · THREAD / WEAVE DEMO <span class="srange">10:20 PM – 10:35 PM · Bedroom 1 · No talent</span></div>
+      ${sceneRow('s50','22:20','22:30','1C — thread bedsheet B-rolls (closeup + wide); worn cotton vs bamboo rub test','10:20 – 10:30 PM','Bedroom 1','1B / 1C — backlit weave test: cotton blocks the light, bamboo passes it. Matched frames + macro of the weave','Fabric side by side',[ico('camera')+' Product B-roll',ico('clock')+' 10 min','📦 Cotton + bamboo swatches, frame'])}
+      ${sceneRow('s51','22:30','22:35','1D — unboxing, taking the pieces out (wide + closeup)','10:30 – 10:35 PM','Bedroom 1','1C — thread bedsheet B-rolls (closeup + wide); worn cotton vs bamboo rub test','Thread bedsheet b rolls, hand touching, closeups.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Hands','📦 Worn cotton swatch, bamboo swatch'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · PRODUCT + SLEEP B-ROLL <span class="srange">10:35 PM – 11:15 PM · Bedroom 1</span></div>
+      ${sceneRow('s52','22:35','22:40','1E — bed making; sheet throw / billow (60–120fps); made-bed beauty (wide + closeup + hand touching)','10:35 – 10:40 PM','Bedroom 1','1D — unboxing, taking the pieces out (wide + closeup)','Unboxing, showing all products.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 ErgoLab box, bamboo set'])}
+      ${sceneRow('s53','22:40','22:50','1F — quilt cover fluff; pillowcase puff','10:40 – 10:50 PM','Bedroom 1','1E — bed making; sheet throw / billow (60–120fps); made-bed beauty (wide + closeup + hand touching)','Ergolab bedsheet b rolls: make bed, closeups, hand touching)',[ico('camera')+' Product B-roll',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
+      ${sceneRow('s54','22:50','22:55','1G — covering herself with blanket, ready-to-sleep posture (wide)','10:50 – 10:55 PM','Bedroom 1','1F — quilt cover fluff; pillowcase puff','Put on pillowcase, quilt cover, sleep on it, touch on it happily.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Quilt cover, pillowcases'])}
+      ${sceneRow('s55','22:55','23:00','1H — sleeping angles: top down / side / closeup / revealing','10:55 PM – 11:00 PM','Bedroom 1','1G — covering herself with blanket, ready-to-sleep posture (wide)','Lamp on, warm practical against cool ambient. Ready to sleep pose.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
+      ${sceneRow('s56','23:00','23:10','1G — sit up and wake refreshed; bed + sheet alone (wide, clean plate)','11:00 – 11:10 PM','Bedroom 1','1H — sleeping angles: top down / side / closeup / revealing','Top down, sleeping happily, no turning around.',[ico('camera')+' Product B-roll',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
+      ${sceneRow('s57','23:10','23:15','Wrap','11:10 – 11:15 PM','Bedroom 1','1G — sit up and wake refreshed; bed + sheet alone (wide, clean plate)','Wake up happily pose.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
+      ${breakRow('',ico('clipboard'),'11:15 PM   ·   WRAP')}
+    </div>
+
+  </div>`;
+}
+
 function getShootHTML(shoot){
+  if(shoot.id==='ergolab-obl0608-sep2026') return getErgolabOBL0608HTML(shoot);
   if(shoot.id==='specshop-aug2026') return getSpecShopHTML(shoot);
   if(shoot.id==='sommni-frwd-aug2026') return getSommniFRWDHTML(shoot);
   if(shoot.id==='sunway-houses-may2026') return getSunwayHTML(shoot);
