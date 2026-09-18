@@ -838,6 +838,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .break-row.lunch{background:#4CAF50;color:#fff;}.break-row.lunch .bl{background:rgba(255,255,255,.2);}
 .break-row.wrap{background:var(--pri);color:#fff;}.break-row.wrap .bl{background:rgba(255,255,255,.2);}
 
+.jb-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 0 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.jb-tabs::-webkit-scrollbar{display:none;}
+.jb-tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;font-weight:800;font-size:15px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;}
+.jb-tab i{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
+.jb-tab span{font-weight:600;font-size:13px;color:var(--text3);}
+.jb-tab.active{background:var(--pri);border-color:var(--pri);color:#fff;box-shadow:0 1px 6px rgba(231,49,79,.35);}
+.jb-tab.active i{background:#fff !important;}
+.jb-tab.active span{color:rgba(255,255,255,.8);}
+.day-divider.day5{background:#0F766E;color:#fff;}
+[data-theme="dark"] .day-divider.day5{background:#115e59;color:#5eead4;}
+.session.day5 .session-hdr{background:#0F766E;}
+.session.day5 .stime{color:#0F766E;}
+.session.day5 .scene-row.now-active{border-left-color:#0F766E;}
+.session.day5 .scene-row.done .chk{background:#0F766E;border-color:#0F766E;}
+.session.day5 .remark-display{border-left-color:#0F766E;}
+.warn-note{background:#fff6e6;border:1px solid #f0d7a6;color:#7a5510;font-size:12.5px;font-weight:600;line-height:1.5;border-radius:10px;padding:10px 13px;margin:0 0 14px;}
+[data-theme="dark"] .warn-note{background:#2a2213;border-color:#6b5420;color:#e8c98a;}
 .shoot-footer{text-align:center;font-size:9px;color:var(--text3);margin-top:8px;letter-spacing:.05em;text-transform:uppercase;}
 
 /* Toast */
@@ -1181,17 +1198,18 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
-    id: 'ergolab-obl0608-sep2026',
-    actId: 'ergolab-obl0608-sep2026-activity',
-    client: 'ErgoLab',
-    title: 'OBL06–08 · 3-Script Shoot Day',
-    dates: ['2026-09-17'],
-    datesLabel: '17 Sep 2026 · Thursday',
-    location: 'Lumi Tropicana · Bedroom 1, Bedroom 2, Bathroom 2, Kitchen Bar',
-    crewCall: '1:00 PM',
-    talentCall: 'Peggy 1:45 PM · Wendy 5:30 PM',
-    wrapEst: '11:15 PM',
-    days: 1,
+    id: 'johor-sep2026',
+    actId: 'johor-sep2026-activity',
+    client: 'Sunway Johor',
+    title: 'Johor Week — SISJ · TES JB · College JB',
+    dates: ['2026-09-21','2026-09-22','2026-09-23','2026-09-24','2026-09-25'],
+    datesLabel: '21–25 Sep 2026 · Mon–Fri',
+    location: 'SISJ Medini · SIS House · Sunway TES JB · Sunway College JB (Mount Austin)',
+    crewCall: 'Mon–Wed 8:00 AM · Thu–Fri 8:30 AM',
+    talentCall: 'SISJ 43 students + teachers · TES & College pax per block',
+    wrapEst: 'Mon 5:30 · Tue 5:45 · Wed 12:00 (TES) · Thu 6:00 · Fri 3:00 PM',
+    wrapPerDay: ['5:30 PM','5:45 PM','12:00 PM (TES)','6:00 PM','3:00 PM'],
+    days: 5,
   },
   {
     id: 'ddealz-bkk-sep2026',
@@ -1839,6 +1857,7 @@ function buildShootPage(shoot){
   window.addEventListener('resize',setStickyOffset);
   initShootPage(shoot);
   if(shoot.id==='ddealz-bkk-sep2026') initDdealzMap();
+  if(shoot.id==='johor-sep2026') johorInit(shoot);
 }
 
 function setStickyOffset(){
@@ -2066,129 +2085,8 @@ function dzTab(name, btn){
   if(name==='map' && window._dzMap){ setTimeout(function(){ window._dzMap.invalidateSize(); if(window._dzBounds) window._dzMap.fitBounds(window._dzBounds,{padding:[30,30]}); },80); }
 }
 
-
-// ═══════════════════════════════════════════════════
-// ERGOLAB OBL06–08 · 3-SCRIPT SHOOT DAY
-// ═══════════════════════════════════════════════════
-function getErgolabOBL0608HTML(shoot){
-  return `
-  ${shootTopbar(shoot)}
-  ${timerBar()}
-  ${shootHero(shoot)}
-  <div class="shoot-wrap">
-    ${progressAndActivity()}
-
-    <div class="session"><div class="session-hdr">VIDEO 1 — DEEP SLEEP PILLOW <span class="srange">2:00 PM – 2:30 PM · Bedroom 2 · Peggy</span></div>
-      ${breakRow('',ico('clipboard'),'1:00 – 2:00 PM · Crew call · set up')}
-      ${breakRow('move','🚶','1:45 PM · Peggy arrives + brief')}
-      ${sceneRow('s01','14:00','14:10','Hook 2 — talking head (wide) + neck/shoulder hold + OTS look at pillow','2:00 – 2:10 PM','Bedroom 2','Hook 1 — camera follows lie-down → sit (wide), hand to neck','I take maybe three naps a day at my age. And every time I get up, my neck\'s killing me.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow, bedding'])}
-      ${sceneRow('s02','14:10','14:20','Hook 3 — talking to camera, zoom out revealing the pillow','2:10 – 2:20 PM','Bedroom 2','Hook 2 — talking head (wide) + neck/shoulder hold + OTS look at pillow','"I bought a whole new mattress a while back..." Cam B take b rolls',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
-      ${sceneRow('s03','14:20','14:30','1A — talking head, straight to camera','2:20 – 2:30 PM','Bedroom 2','Hook 3 — talking to camera, zoom out revealing the pillow','"I kept blaming my age for the aches..."',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 1 — PILLOW · TALKING HEADS (1A → 1I, every VO block) <span class="srange">2:30 PM – 3:40 PM · Cam A + Cam B</span></div>
-      ${sceneRow('s04','14:30','14:40','1B + 1C — talking head (mattress + saw the ad online)','2:30 – 2:40 PM','Bedroom 2','1A — talking head, straight to camera','“I’m 67…” Eye level or slightly below.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants'])}
-      ${sceneRow('s05','14:40','14:50','1D — talking head, flat pillow in frame','2:40 – 2:50 PM','Bedroom 2','1B + 1C — talking head (mattress + saw the ad online)','“And I’ve always been a firm support believer… RM4,000 on a new one.”  /  “Then I saw this ad online…”  Mattress and phone b-roll.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants'])}
-      ${sceneRow('s06','14:50','15:00','1E — talking head + ErgoLab pillow in hand, runs hand along the contour','2:50 – 3:00 PM','Bedroom 2','1D — talking head, flat pillow in frame','“That’s when it hit me…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
-      ${sceneRow('s07','15:00','15:10','1F — talking head, press-and-release in hand','3:00 – 3:10 PM','Bedroom 2','1E — talking head + ErgoLab pillow in hand, runs hand along the contour','“So I got this…” Longest segment. Hand must follow the curve on “see this shape here”.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
-      ${sceneRow('s08','15:10','15:20','1G + 1H — talking head (result + price / offer)','3:10 – 3:20 PM','Bedroom 2','1F — talking head, press-and-release in hand','“And the foam inside is the dense kind…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
-      ${sceneRow('s09','15:20','15:30','1I — CTA talking head + hugging pillow','3:20 – 3:30 PM','Bedroom 2','1G + 1H — talking head (result + price / offer)','“First few days I could already feel the difference…”  /  “It’s only RM229 now, RM71 off when you order online…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
-      ${sceneRow('s10','15:30','15:40','1A / 1B — napping in bedroom; sleeping on mattress uncomfortable (wide + closeup)','3:30 – 3:40 PM','Bedroom 2','1I — CTA talking head + hugging pillow','"After what I paid...than you think."',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
-      ${breakRow('move','🚶','3:40 – 3:45 PM   ·   Break - Prep for Brolls')}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 1 — PILLOW · PAIN + LIFESTYLE B-ROLL <span class="srange">3:45 PM – 4:00 PM · Bedroom 2 · Peggy</span></div>
-      ${sceneRow('s11','15:45','15:50','1B — back pain (side); pressing mattress (closeup); sit-and-wake touching neck','3:45 – 3:50 PM','Bedroom 2','1A / 1B — napping in bedroom; sleeping on mattress uncomfortable (wide + closeup)','Afternoon-nap look, curtains half drawn.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Old pillow, bedding'])}
-      ${sceneRow('s12','15:50','15:55','1C — scrolling phone (wide, lamp on); lying on flat pillow, uncomfortable','3:50 – 3:55 PM','Bedroom 2','1B — back pain (side); pressing mattress (closeup); sit-and-wake touching neck','The sit-and-wake side-on, tight, and from behind.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Mattress'])}
-      ${sceneRow('s13','15:55','16:00','1D — flat pillow: hand presses down, stays down','3:55 – 4:00 PM','Living room','1C — scrolling phone (wide, lamp on); lying on flat pillow, uncomfortable','Scrolling article',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 Phone, lamp, old pillow'])}
-      ${breakRow('move','🚶','4:00 – 4:05 PM   ·   Move to bedroom')}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 1 — PILLOW · PRODUCT B-ROLL <span class="srange">4:05 PM – 4:35 PM · Bedroom 2</span></div>
-      ${sceneRow('s14','16:05','16:10','1E / 1F — ErgoLab beauty, contour reveal, press-and-rebound','4:05 – 4:10 PM','Bedroom 2','1D — flat pillow: hand presses down, stays down','',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Hands · Khaki tshirt + elephant pants','📦 Old flat pillow'])}
-      ${sceneRow('s15','16:10','16:15','1E — sleeping on ErgoLab pillow','4:10 – 4:15 PM','Bedroom 2','1E / 1F — ErgoLab beauty, contour reveal, press-and-rebound','Ergolab product beauty shots',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Hands · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
-      ${sceneRow('s16','16:15','16:25','1G — waking up happily; walks out past camera, pillow visible behind','4:15 – 4:25 PM','Bedroom 2','1E — sleeping on ErgoLab pillow','Top, side, wide, closeup angles of talent sleeping.',[ico('camera')+' B-roll',ico('clock')+' 10 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
-      ${sceneRow('s17','16:25','16:30','1H — pillow + bedroom alone (wide, no talent)','4:25 – 4:30 PM','Bedroom 2','1G — waking up happily; walks out past camera, pillow visible behind','Wake up pose, camera follow, talent walk pass camera.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Khaki tshirt + elephant pants','📦 ErgoLab pillow'])}
-      ${sceneRow('s18','16:30','16:35','Mum walking around the house (wide); mum on the phone — “it’s okay ya”','4:30 – 4:35 PM','Bedroom 2','1H — pillow + bedroom alone (wide, no talent)','Pillow+bedroom beauty shots, leave space for text.',[ico('camera')+' B-roll',ico('clock')+' 5 min','📦 ErgoLab pillow'])}
-      ${breakRow('move','🚶','4:35 – 4:55 PM   ·   MOVE + WARDROBE — Bedroom 2 → Bathroom 2. Peggy into the pink blouse + pants (bathrobe over it for the shower step-out). Pre-soak the fabric mat, wet-down tile for later   ·')}
-      ${breakRow('lunch',ico('coffee'),'4:55 – 5:25 PM   ·   DINNER — crew + Peggy. Wendy arrived + to brief')}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 2 — BATH MAT · DRY SET <span class="srange">5:25 PM – 6:15 PM · Bathroom 2, tile bone dry · Peggy in pink blouse + Wendy in corporate wear</span></div>
-      ${sceneRow('s19','17:25','17:30','Mum fall (wide) + pain reaction (closeup)','5:25 – 5:30 PM','Bathroom 2 / house','Mum walking around the house (wide); mum on the phone — “it’s okay ya”','Talent walking around in living room, kitchen. Mom talks on the phone (closeup).',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Pink blouse + pants','📦 Phone'])}
-      ${sceneRow('s20','17:30','17:40','Mum steps out of the shower onto the ErgoLab mat','5:30 – 5:40 PM','Bathroom 2','Mum fall (wide) + pain reaction (closeup)','Pre-wet the bathroom abit + mat.',[ico('camera')+' Product B-roll',ico('clock')+' 10 min',ico('mic')+' Peggy · Pink blouse + pants','📦 Wet bathroom, wet fabric mat'])}
-      ${sceneRow('s21','17:40','17:45','1E — throw the fabric mat into the bin','5:40 – 5:45 PM','Bathroom 2','Mum steps out of the shower onto the ErgoLab mat','Happy (wide + closeup); foot step on mat (closeup)',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Peggy · Pink blouse + pants','📦 ErgoLab mat, towel, robe'])}
-      ${breakRow('',ico('clipboard'),'5:45 PM   ·   Peggy WRAPPED')}
-      ${sceneRow('s22','17:45','17:50','1F — ErgoLab mat closeups / beauty shots','5:45 – 5:50 PM','Bathroom 2','1E — throw the fabric mat into the bin','Pre-soak a spare fabric mat in the sink and carry it to the bin.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Bin, ErgoLab box'])}
-      ${sceneRow('s23','17:50','17:55','1F — pour water, absorbs and dries in under 60s (top-down, locked off)','5:50 – 5:55 PM','Bathroom 2','1F — ErgoLab mat closeups / beauty shots','Ergolab product beauty shots',[ico('camera')+' Product B-roll',ico('clock')+' 5 min','📦 ErgoLab mat'])}
-      ${sceneRow('s24','17:55','18:05','1G — grip demo','5:55 – 6:05 PM','Bathroom 2','1F — pour water, absorbs and dries in under 60s (top-down, locked off)','Water goes on the MAT, not the tile. Blot the mat between takes; the floor stays dry.',[ico('camera')+' B-roll',ico('clock')+' 10 min',ico('mic')+' Hands · Formal corporate wear','📦 Glass, water, towels'])}
-      ${sceneRow('s25','18:05','18:10','Unboxing Ergolab floot mat','6:05 – 6:10 PM','Bathroom 2','1G — grip demo','Closeup + wide; lift mat showing dry tile (closeup); bathroom with ErgoLab mat (wide)',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Hands · Formal corporate wear','📦 ErgoLab mat, fabric mat'])}
-      ${sceneRow('s25a','18:10','18:15','Hook 2 — soggy mat, slow dolly in','6:10 - 6:15 PM','—','Unboxing Ergolab floot mat','Unboxing (closeup + wide)',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Ergolab box, floor mat'])}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 2 — BATH MAT · WET SET <span class="srange">6:15 PM – 6:30 PM · Bathroom 2, soaked mat + wet tile</span></div>
-      ${sceneRow('s26','18:15','18:20','1D — walk to bathroom (facing talent, follow), revealing the mat','6:15 – 6:20 PM','Bathroom 2','Hook 2 — soggy mat, slow dolly in','',[ico('camera')+' Hook',ico('clock')+' 5 min','📦 Soggy fabric mat'])}
-      ${sceneRow('s27','18:20','18:25','1D — wet mat closeup (hand press squeezes water); slippery wet bathroom (wide + closeup); step on bad mat (closeup)','6:20 – 6:25 PM','Bathroom 2','1D — walk to bathroom (facing talent, follow), revealing the mat','One continuous move from the hallway. She stops in the doorway; rack from her shoulder down to the mat.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Soggy fabric mat'])}
-      ${sceneRow('s28','18:25','18:30','Hook 1 — selfie talking','6:25 – 6:30 PM','Bathroom 2','1D — wet mat closeup (hand press squeezes water); slippery wet bathroom (wide + closeup); step on bad mat (closeup)','Fill the frame with fabric and water.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Hands / Wendy · Formal corporate wear','📦 Soggy mat, water, spray'])}
-      ${breakRow('move','🚶','6:30 – 6:35 PM   ·   MOVE — Bathroom 2 → Bedroom 2 / Kitchen Bar.')}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 2 — BATH MAT · DAUGHTER TALKING HEADS <span class="srange">6:35 PM – 8:00 PM · Wendy · Outfit 1 · Cam A + Cam B</span></div>
-      ${sceneRow('s29','18:35','18:45','Hook 2 — talking head','6:35 – 6:45 PM','Kitchen Bar','Hook 1 — selfie talking','“My mum almost fell…” Genuinely handheld at arm\'s length. A small breath before the line.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 Phone / selfie rig'])}
-      ${sceneRow('s30','18:45','18:55','Hook 3 — sit down and talk; phone lights up showing “Mum” (closeup)','6:45 – 6:55 PM','Bedroom 2','Hook 2 — talking head','“The most dangerous thing in your parents’ house is sitting right next to the shower.”  The soggy-mat dolly cuts in over this.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear'])}
-      ${sceneRow('s31','18:55','19:05','1A — talking head (phone-call narration)','6:55 – 7:05 PM','Bedroom 2','Hook 3 — sit down and talk; phone lights up showing “Mum” (closeup)','Top-down on the phone. Hand hovers and hesitates a full 3s before answering.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 Phone'])}
-      ${sceneRow('s32','19:05','19:15','1A — sit working (wide); phone rings (closeup); press answer; worry face (closeup)','7:05 – 7:15 PM','Bedroom 2','1A — talking head (phone-call narration)','“You’re at work. Your phone rings…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear'])}
-      ${sceneRow('s33','19:15','19:20','1B / 1C — talking head (top down) × 2','7:15 – 7:20 PM','Bedroom 2','1A — sit working (wide); phone rings (closeup); press answer; worry face (closeup)','Closeup reaction',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Formal corporate wear','📦 Laptop, phone, desk'])}
-      ${sceneRow('s34','19:20','19:30','1D + 1E — talking head','7:20 – 7:30 PM','Bedroom 2','1B / 1C — talking head (top down) × 2','',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear'])}
-      ${sceneRow('s35','19:30','19:40','1F + 1G — talking head','7:30 – 7:40 PM','Bedroom 2','1D + 1E — talking head','“When I got home, I looked at that spot…”  /  “I swapped it that same day…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 ErgoLab box'])}
-      ${sceneRow('s36','19:40','19:50','Stat beat + peace-of-mind beat + CTA talking head holding mat / box','7:40 – 7:50 PM','Bedroom 2','1F + 1G — talking head','“It’s made from diatomaceous stone…”  /  “It has an anti-slip base…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 ErgoLab mat'])}
-      ${sceneRow('s37','19:50','20:00','1A — turning around on the bed, restless','7:50 – 8:00 PM','Bedroom 2','Stat beat + peace-of-mind beat + CTA talking head holding mat / box','"If you have elderly...get one today."',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Formal corporate wear','📦 ErgoLab mat + box'])}
-      ${breakRow('move','🚶','8:00 – 8:20 PM   ·   MOVE + WARDROBE — → Bedroom 1 (pre-dressed with the cotton sheet). Wendy into the sleeping outfit.')}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 3 — BAMBOO BEDSHEET · HOT / 3AM B-ROLL <span class="srange">8:20 PM – 8:30 PM · Bedroom 1 · Wendy · sleeping outfit</span></div>
-      ${sceneRow('s38','20:20','20:25','1A — sit up on bed (wide); feeling-hot gesture + face (closeup); sweat detail on neck / shoulder','8:20 – 8:25 PM','Bedroom 1','1A — turning around on the bed, restless','Top down, wide shot',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
-      ${sceneRow('s39','20:25','20:30','Hook 1 — talking head, side angle turning to camera','8:25 – 8:30 PM','Bedroom 1','1A — sit up on bed (wide); feeling-hot gesture + face (closeup); sweat detail on neck / shoulder','Talent showing very hot can\'t sleep pose.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)'])}
-      ${breakRow('move','🚶','8:30 – 8:35 PM   ·   RESET')}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · HOOKS <span class="srange">8:35 PM – 9:05 PM · Bedroom 1 · Cam A + Cam B</span></div>
-      ${sceneRow('s40','20:35','20:45','Hook 2 — holding bedsheet showing thread count (wide); thread count label (closeup)','8:35 – 8:45 PM','Bedroom 1','Hook 1 — talking head, side angle turning to camera','"Higher thread count...reason behind it."',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
-      ${sceneRow('s41','20:45','20:55','Hook 3 — mid bed-making, grab sheet and toss it to camera (wide, low angle)','8:45 – 8:55 PM','Bedroom 1','Hook 2 — holding bedsheet showing thread count (wide); thread count label (closeup)','"You thought thread count..."',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet + TC label'])}
-      ${sceneRow('s42','20:55','21:05','1A — talking head (3AM narration)','8:55 – 9:05 PM','Bedroom 1','Hook 3 — mid bed-making, grab sheet and toss it to camera (wide, low angle)','"Stop buying the "premium" bed sheet cover lens transition.',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · TALKING HEADS (1A / 1B / 1C / 1D / 1E / 1F / 1G / 1H / CTA) <span class="srange">9:05 PM – 10:15 PM · Cam A + Cam B</span></div>
-      ${sceneRow('s43','21:05','21:15','1B + 1C — talking head, straight to camera','9:05 – 9:15 PM','Bedroom 1','1A — talking head (3AM narration)','“The aircon is cold enough, the fan is on as well…”  The restless 3AM b-roll cuts in over this.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Cotton sheet'])}
-      ${sceneRow('s44','21:15','21:25','1D — talking head + holding the ErgoLab sheet / box / packaging','9:15 – 9:25 PM','Bedroom 1','1B + 1C — talking head, straight to camera','Two segments, one setup. Give 1C (“they’re not wrong…”) air — static, no cuts; it\'s the credibility beat.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)'])}
-      ${sceneRow('s45','21:25','21:35','1E — talking head','9:25 – 9:35 PM','Bedroom 1','1D — talking head + holding the ErgoLab sheet / box / packaging','“I didn’t believe it at first…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 ErgoLab box, bamboo set'])}
-      ${sceneRow('s46','21:35','21:45','1F — talking head + holding the sheet to show silky detail','9:35 – 9:45 PM','Bedroom 1','1E — talking head','“Bamboo is naturally breathable… even in Malaysia’s heat and humidity.”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo sheet'])}
-      ${sceneRow('s47','21:45','21:55','1G — talking head','9:45 – 9:55 PM','Bedroom 1','1F — talking head + holding the sheet to show silky detail','“And here’s the part cotton can’t match…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo sheet'])}
-      ${sceneRow('s48','21:55','22:05','1H + CTA — talking head + ErgoLab box','9:55 – 10:05 PM','Bedroom 1','1G — talking head','“This also means falling asleep faster, staying asleep through the night…”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
-      ${sceneRow('s49','22:05','22:15','1B / 1C — backlit weave test: cotton blocks the light, bamboo passes it. Matched frames + macro of the weave','10:05 – 10:15 PM','Bedroom 1','1H + CTA — talking head + ErgoLab box','“Just one night in…” through “…no risk!”',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 ErgoLab box'])}
-      ${breakRow('move','🚶','10:15 – 10:20 PM   ·   RESET')}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · THREAD / WEAVE DEMO <span class="srange">10:20 PM – 10:35 PM · Bedroom 1 · No talent</span></div>
-      ${sceneRow('s50','22:20','22:30','1C — thread bedsheet B-rolls (closeup + wide); worn cotton vs bamboo rub test','10:20 – 10:30 PM','Bedroom 1','1B / 1C — backlit weave test: cotton blocks the light, bamboo passes it. Matched frames + macro of the weave','Fabric side by side',[ico('camera')+' Product B-roll',ico('clock')+' 10 min','📦 Cotton + bamboo swatches, frame'])}
-      ${sceneRow('s51','22:30','22:35','1D — unboxing, taking the pieces out (wide + closeup)','10:30 – 10:35 PM','Bedroom 1','1C — thread bedsheet B-rolls (closeup + wide); worn cotton vs bamboo rub test','Thread bedsheet b rolls, hand touching, closeups.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Hands','📦 Worn cotton swatch, bamboo swatch'])}
-    </div>
-
-    <div class="session"><div class="session-hdr">VIDEO 3 — BEDSHEET · PRODUCT + SLEEP B-ROLL <span class="srange">10:35 PM – 11:15 PM · Bedroom 1</span></div>
-      ${sceneRow('s52','22:35','22:40','1E — bed making; sheet throw / billow (60–120fps); made-bed beauty (wide + closeup + hand touching)','10:35 – 10:40 PM','Bedroom 1','1D — unboxing, taking the pieces out (wide + closeup)','Unboxing, showing all products.',[ico('camera')+' Product B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 ErgoLab box, bamboo set'])}
-      ${sceneRow('s53','22:40','22:50','1F — quilt cover fluff; pillowcase puff','10:40 – 10:50 PM','Bedroom 1','1E — bed making; sheet throw / billow (60–120fps); made-bed beauty (wide + closeup + hand touching)','Ergolab bedsheet b rolls: make bed, closeups, hand touching)',[ico('camera')+' Product B-roll',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
-      ${sceneRow('s54','22:50','22:55','1G — covering herself with blanket, ready-to-sleep posture (wide)','10:50 – 10:55 PM','Bedroom 1','1F — quilt cover fluff; pillowcase puff','Put on pillowcase, quilt cover, sleep on it, touch on it happily.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Quilt cover, pillowcases'])}
-      ${sceneRow('s55','22:55','23:00','1H — sleeping angles: top down / side / closeup / revealing','10:55 PM – 11:00 PM','Bedroom 1','1G — covering herself with blanket, ready-to-sleep posture (wide)','Lamp on, warm practical against cool ambient. Ready to sleep pose.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
-      ${sceneRow('s56','23:00','23:10','1G — sit up and wake refreshed; bed + sheet alone (wide, clean plate)','11:00 – 11:10 PM','Bedroom 1','1H — sleeping angles: top down / side / closeup / revealing','Top down, sleeping happily, no turning around.',[ico('camera')+' Product B-roll',ico('clock')+' 10 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
-      ${sceneRow('s57','23:10','23:15','Wrap','11:10 – 11:15 PM','Bedroom 1','1G — sit up and wake refreshed; bed + sheet alone (wide, clean plate)','Wake up happily pose.',[ico('camera')+' B-roll',ico('clock')+' 5 min',ico('mic')+' Wendy · Sleeping outfit (baby blue + pants)','📦 Bamboo set'])}
-      ${breakRow('',ico('clipboard'),'11:15 PM   ·   WRAP')}
-    </div>
-
-  </div>`;
-}
-
 function getShootHTML(shoot){
-  if(shoot.id==='ergolab-obl0608-sep2026') return getErgolabOBL0608HTML(shoot);
+  if(shoot.id==='johor-sep2026') return getJohorHTML(shoot);
   if(shoot.id==='specshop-aug2026') return getSpecShopHTML(shoot);
   if(shoot.id==='sommni-frwd-aug2026') return getSommniFRWDHTML(shoot);
   if(shoot.id==='sunway-houses-may2026') return getSunwayHTML(shoot);
@@ -2204,6 +2102,296 @@ function getShootHTML(shoot){
   if(shoot.id==='ergolab-jul2026') return getErgolabHTML(shoot);
   if(shoot.id==='ddealz-bkk-sep2026') return getDdealzHTML(shoot);
   return '<p style="padding:40px;text-align:center;">Shoot not found.</p>';
+}
+
+
+// ═══════════════════════════════════════════════════
+// JOHOR RUN OF WEEK — SISJ · Sunway TES JB · Sunway College JB
+// ═══════════════════════════════════════════════════
+function getJohorHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    <div class="jb-tabs" id="jb-tabs">
+      <button class="jb-tab active" onclick="johorTab(1,this)"><i style="background:#E7314F"></i>Day 1 <span>Mon</span></button>
+      <button class="jb-tab" onclick="johorTab(2,this)"><i style="background:#E7314F"></i>Day 2 <span>Tue</span></button>
+      <button class="jb-tab" onclick="johorTab(3,this)"><i style="background:#C27A1A"></i>Day 3 <span>Wed</span></button>
+      <button class="jb-tab" onclick="johorTab(4,this)"><i style="background:#2563EB"></i>Day 4 <span>Thu</span></button>
+      <button class="jb-tab" onclick="johorTab(5,this)"><i style="background:#0F766E"></i>Day 5 <span>Fri</span></button>
+    </div>
+    ${progressAndActivity()}
+
+    <div class="day-divider day1">${ico('calendar')} Day 1 — Mon, 21 Sep · SISJ · Crew 8:00 AM · Wrap ~5:30 PM</div>
+    <div class="warn-note">⚠️ SISJ timings not confirmed — high chance we follow their direction on the day.</div>
+    ${breakRow('wrap',ico('check-circle'),'8:00 – 8:30 AM · BRIEFING — Crew call & setup, walkthrough with school coordinator, confirm consent/PDPA forms, talent call sheet & room timetable')}
+    <div class="session day1"><div class="session-hdr">MAIN ENTRANCE · Campus identity, soft morning light <span class="srange">8:30 – 9:00 AM · 30 min</span></div>
+      ${sceneRow('a01','08:30','09:00','Gardens','8:30 – 9:00 AM','Main entrance / walkway','Hero shot: mixed-age students walking into campus, chatting naturally. Plus entrance, school signage, façade & landmark wides','01 Student Life · School Identity. 4–5 passes, vary groupings',['👥 Naomi (6A), Reyan (10A), Kyoka (12), Hugo (2C), Isla (3B), Henry (2C)','👕 School uniform','🎒 School bags, books',ico('clock')+' 30 min'],1)}
+    </div>
+    ${breakRow('move','🚶','9:00 – 9:10 AM · Main entrance → Gardens')}
+    <div class="session day1"><div class="session-hdr">GARDENS & GREEN WALKWAYS · Nature & outdoor learning, morning light <span class="srange">9:10 – 10:30 AM · 80 min</span></div>
+      ${sceneRow('a02','09:10','09:30','Gardens','9:10 – 9:30 AM','Gardens','Outdoor lesson: teacher-led class seated on grass / outdoor area','08 Outdoor lessons · 05 Teacher demonstrating an activity',['👥 Shawn (1A), Gasant (1A), Dong Yanchen (1B), Aliyana (2B), Henry (2C), Hugo (2C), Park Doah (2C) + Teacher (Pri) TBC','👕 School uniform','🎒 Stationeries, activity tools',ico('clock')+' 20 min'],1)}
+      ${sceneRow('a03','09:30','09:45','Gardens','9:30 – 9:45 AM','Gardens','Nature observation: magnifying glasses, leaves & insects','08 Nature observation · IB Inquirers',['👥 Same Lower Primary group (4)','👕 School uniform','🎒 Magnifiers, specimen jars, notebooks',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a04','09:45','10:05','Gardens / shaded lawn','9:45 – 10:05 AM','Gardens','Sustainability activity: planting / composting / recycling, older helping younger','08 Sustainability · IB Caring · 06 Across age groups',['👥 Tushyan (3A), Luce (4B), Guillaume (3C) + Lucas (8C), Eva (9C)','👕 School uniform','🎒 Seedlings, gloves, watering can, recycling bins',ico('clock')+' 20 min'],1)}
+      ${sceneRow('a05','10:05','10:20','Green walkways','10:05 – 10:20 AM','Gardens / shaded lawn','Mindfulness session + relaxing together on the grass','10 Mindfulness / Relaxing together · IB Balanced',['👥 Hannah (9C), Lim Pei Xuan (9B), Anahita (12), Kyoka (12), Cho Yena (8B)','👕 School uniform','🎒 Mats',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a06','10:20','10:30','KG classroom','10:20 – 10:30 AM','Green walkways','Friends walking & laughing through green spaces','01 Friends talking & laughing · 08 Walking through green spaces',['👥 Naomi (6A), Elizabeth (10A), Luna (9A), Liam (6C), Reyan (10A)','👕 School uniform','🎒 School bags',ico('clock')+' 10 min'],1)}
+    </div>
+    ${breakRow('move','🚶','10:30 – 10:40 AM · Gardens → KG classroom (academic block)')}
+    <div class="session day1"><div class="session-hdr">KG CLASSROOM · Kindergarten, play-based learning (short setups) <span class="srange">10:40 – 11:20 AM · 40 min</span></div>
+      ${sceneRow('a07','10:40','10:55','KG classroom','10:40 – 10:55 AM','KG classroom','Teacher storytelling / demonstration; hands up, curious faces','IB Inquirers · 03 Teacher demonstrations · 05 Students asking questions. Child\'s eye level',['👥 All KG: Nash Hailey, Iyla-Jane, Hao Chen, Avina, Eleanor, Idris + Teacher (KG) TBC','👕 School uniform','🎒 Picture books, learning cards',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a08','10:55','11:10','KG classroom','10:55 – 11:10 AM','KG classroom','Group play & building together; sharing materials','06 Diverse groups · IB Open-minded',['👥 All KG','👕 School uniform','🎒 Blocks, learning toys',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a09','11:10','11:20','Primary classroom','11:10 – 11:20 AM','KG classroom','Painting at easels / craft table','07 Painting · IB Creative. Aprons over uniform. KG dismissal time TBC',['👥 All KG + Teacher (KG)','👕 School uniform','🎒 Aprons, paints, easels',ico('clock')+' 10 min'],1)}
+    </div>
+    ${breakRow('move','🚶','11:20 – 11:30 AM · KG classroom → Primary classroom')}
+    <div class="session day1"><div class="session-hdr">PRIMARY CLASSROOM · Upper Primary <span class="srange">11:30 AM – 12:15 PM · 45 min</span></div>
+      ${sceneRow('a10','11:30','11:45','Primary classroom','11:30 – 11:45 AM','Primary classroom','Classroom discussion: hands up, teacher facilitating, student answering','IB Inquirers / Communicators · 03 & 05 Classroom discussions',['👥 Tushyan (3A), Isla (3B), Guillaume (3C), Luce (4B), Aleena (4C), Ava (4C), Leah (5B), Kangmin (5B) + Teacher (Pri) TBC','👕 School uniform','🎒 Whiteboard content, workbooks',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a11','11:45','12:00','Primary classroom','11:45 AM – 12:00 PM','Primary classroom','Group project around one table: diverse group collaborating','03 Group projects · 06 Diverse groups · IB Thinkers',['👥 Same Upper Primary group','👕 School uniform','🎒 Chart paper, markers, project materials',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a12','12:00','12:15','Secondary classroom','12:00 – 12:15 PM','Primary classroom','Teacher 1:1 mentoring & feedback at desk','05 Mentoring / One-to-one · IB Reflective',['👥 Leah (5B) + Teacher (Pri)','👕 School uniform','🎒 Exercise book',ico('clock')+' 15 min'],1)}
+    </div>
+    ${breakRow('lunch',ico('coffee'),'12:15 – 1:00 PM · LUNCH — Crew & talent')}
+    <div class="session day1"><div class="session-hdr">SECONDARY / PRE-U CLASSROOM <span class="srange">1:00 – 1:45 PM · 45 min</span></div>
+      ${sceneRow('a13','13:00','13:15','Secondary classroom','1:00 – 1:15 PM','Secondary classroom','Student presentation to class; peers engaged, asking questions','IB Communicators · 03 Classroom discussions',['👥 Naomi (6A), Liam (6C), Li Ava Xuan (7B), Maryam (8A), Reyan (10A), Elizabeth (10A), Norocos (10B) + Teacher (Sec) TBC','👕 School uniform','🎒 Screen/projector, slides on screen',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a14','13:15','13:30','Secondary classroom','1:15 – 1:30 PM','Secondary classroom','Students using technology: laptops / iPads, coding or research','03 Students using technology',['👥 Same Secondary group','👕 School uniform','🎒 Laptops, iPads',ico('clock')+' 15 min'],1)}
+      ${sceneRow('a15','13:30','13:45','Science laboratory','1:30 – 1:45 PM','Secondary classroom','IB DP 1:1 mentoring / feedback session','05 Mentoring / One-to-one · IB Reflective',['👥 Anahita (12) + Teacher (Pre-U) TBC','👕 School uniform','🎒 IB DP coursework',ico('clock')+' 15 min'],1)}
+    </div>
+    ${breakRow('move','🚶','1:45 – 1:55 PM · Secondary classroom → Science lab')}
+    <div class="session day1"><div class="session-hdr">SCIENCE LABORATORY · Secondary <span class="srange">1:55 – 2:30 PM · 35 min</span></div>
+      ${sceneRow('a16','13:55','14:15','Science laboratory','1:55 – 2:15 PM','Science laboratory','Science experiment + teacher demonstration; goggles on, reaction moment','03 Science experiments / Teacher demonstrations · IB Knowledgeable. Lab safety officer present',['👥 Cho Yena (8B), Tan Chong Lip (8B), Lucas (8C), Luna (9A), Mykhailo (10A), Eva (9C) + Teacher (Sci) TBC','👕 School uniform','🎒 Lab coats, goggles, safe visual experiment (colour change)',ico('clock')+' 20 min'],1)}
+      ${sceneRow('a17','14:15','14:30','Library','2:15 – 2:30 PM','Science laboratory','Problem-solving: pairs testing a hypothesis, recording results','IB Thinkers / Risk-takers',['👥 Same Secondary group','👕 School uniform','🎒 Worksheets, tablets',ico('clock')+' 15 min'],1)}
+    </div>
+    ${breakRow('move','🚶','2:30 – 2:40 PM · Science lab → Library')}
+    <div class="session day1"><div class="session-hdr">LIBRARY · Secondary & Pre-U <span class="srange">2:40 – 3:10 PM · 30 min</span></div>
+      ${sceneRow('a18','14:40','15:00','Library','2:40 – 3:00 PM','Library','Research & investigation: studying together between shelves and at tables','01 Studying together · IB Knowledgeable',['👥 Lukas (11), Hwang Jein (11), Anahita (12), Kyoka (12), Lim Pei Xuan (9B), Hannah (9C)','👕 School uniform','🎒 Books, laptops, notebooks',ico('clock')+' 20 min'],1)}
+      ${sceneRow('a19','15:00','15:10','Art room','3:00 – 3:10 PM','Library','Quiet reflection: journalling / reading by window','IB Reflective',['👥 Viktoriia (12), Chong Yiang Yang (11)','👕 School uniform','🎒 Journal, book',ico('clock')+' 10 min'],1)}
+    </div>
+    ${breakRow('move','🚶','3:10 – 3:20 PM · Library → Art room')}
+    <div class="session day1"><div class="session-hdr">ART ROOM <span class="srange">3:20 – 3:50 PM · 30 min</span></div>
+      ${sceneRow('a20','15:20','15:50','Music room','3:20 – 3:50 PM','Art room','Painting & design projects; student artwork visible','07 Painting · IB Creative. Wide, over-shoulder & hands/detail',['👥 Aliyana (2B), Park Doah (2C), Li Ava Xuan (7B), Hannah (9C) + Teacher (Art) TBC','👕 School uniform','🎒 Canvases, paints, aprons, student artwork',ico('clock')+' 30 min'],1)}
+    </div>
+    ${breakRow('move','🚶','3:50 – 4:00 PM · Art room → Music room')}
+    <div class="session day1"><div class="session-hdr">MUSIC ROOM <span class="srange">4:00 – 4:30 PM · 30 min</span></div>
+      ${sceneRow('a21','16:00','16:30','Meeting room / classroom','4:00 – 4:30 PM','Music room','Music ensemble / practice session','07 Music.',['👥 Henry (2C), Dong Yanchen (1B), Norocos (10B), Luna (9A) + Teacher (Music) TBC','👕 School uniform','🎒 Instruments (TBC with school)',ico('clock')+' 30 min'],1)}
+    </div>
+    ${breakRow('move','🚶','4:30 – 4:40 PM · Music room → Meeting room (after dismissal — time TBC)')}
+    <div class="session day1"><div class="session-hdr">MEETING ROOM · Leadership <span class="srange">4:40 – 5:10 PM · 30 min</span></div>
+      ${sceneRow('a22','16:40','17:10','Wrap','4:40 – 5:10 PM','Meeting room / classroom','Student council meeting: student chair leading discussion, voting, planning','09 Student council / Leadership interactions · IB Principled',['👥 Reyan (10A), Elizabeth (10A), Mykhailo (10A), Hwang Jein (11), Kyoka (12), Lukas (11) + Teacher TBC','👕 School uniform','🎒 Laptop, notebooks, stationeries',ico('clock')+' 30 min'],1)}
+    </div>
+    ${breakRow('wrap',ico('check-circle'),'5:10 – 5:30 PM · WRAP — Footage check, back-up cards, pack down')}
+
+    <div class="day-divider day2">${ico('calendar')} Day 2 — Tue, 22 Sep · SISJ · Crew 8:00 AM · Wrap ~5:45 PM</div>
+    <div class="warn-note">⚠️ SISJ timings not confirmed. Ends off-site at SIS House, L28 Sunway Citrine Residences.</div>
+    ${breakRow('wrap',ico('check-circle'),'8:00 – 8:30 AM · BRIEFING — Crew call & setup, weather check (rain plan: swap field/court → MPH), talent & ECA coach confirmations')}
+    <div class="session day2"><div class="session-hdr">FIELD · Football & athletics, soft morning light <span class="srange">8:30 – 9:35 AM · 65 min</span></div>
+      ${sceneRow('b01','08:30','08:55','Field / track','8:30 – 8:55 AM','Field','Football ECA session: action, tackles, goal celebration & high-fives','04 Football / High-fives / Celebrating. Talent arrive in PE kit',['👥 ECA Football members (TBC) + Reyan (10A), Mykhailo (10A), Liam (6C), Lukas (11), Norocos (10B) + Coach TBC','👕 Sports attire','🎒 Footballs, goals, bibs, cones',ico('clock')+' 25 min'],2)}
+      ${sceneRow('b02','08:55','09:15','Field','8:55 – 9:15 AM','Field / track','Running & jumping: sprint starts, long jump, finish line','04 Running / Jumping · IB Risk-takers',['👥 Luna (9A), Liam (6C), Isla (3B), Kangmin (5B), Chong Yiang Yang (11)','👕 Sports attire','🎒 Track markers, finish tape',ico('clock')+' 20 min'],2)}
+      ${sceneRow('b03','09:15','09:35','Open court','9:15 – 9:35 AM','Field','Team huddle, encouraging teammates, celebrating achievements','04 Team huddles / Encouraging / Celebrating',['👥 All sports talent','👕 Sports attire','🎒 Medals / trophy (TBC)',ico('clock')+' 20 min'],2)}
+    </div>
+    ${breakRow('move','🚶','9:35 – 9:45 AM · Field → Open court')}
+    <div class="session day2"><div class="session-hdr">OPEN COURT · Netball <span class="srange">9:45 – 10:15 AM · 30 min</span></div>
+      ${sceneRow('b04','09:45','10:15','MPH','9:45 – 10:15 AM','Open court','Netball: passing, shooting, team huddle','04 Netball / Team huddles',['👥 Naomi (6A), Elizabeth (10A), Hannah (9C), Eva (9C), Maryam (8A), Li Ava Xuan (7B) + Coach TBC','👕 Sports attire','🎒 Netballs, bibs',ico('clock')+' 30 min'],2)}
+    </div>
+    ${breakRow('move','🚶','10:15 – 10:25 AM · Open court → MPH (grab empty wide of swimming pool en route)')}
+    <div class="session day2"><div class="session-hdr">MPH · Indoor sports & ECA <span class="srange">10:25 – 11:10 AM · 45 min</span></div>
+      ${sceneRow('b05','10:25','10:45','MPH','10:25 – 10:45 AM','MPH','Badminton: smash action, rally, handshake at net','04 Badminton · IB Balanced',['👥 Lucas (8C), Tan Chong Lip (8B), Kangmin (5B), Leah (5B) + Coach TBC','👕 Sports attire','🎒 Rackets, shuttles, net',ico('clock')+' 20 min'],2)}
+      ${sceneRow('b06','10:45','11:10','MPH stage','10:45 – 11:10 AM','MPH','Taekwondo: kicks, board break, coach instruction','04 Taekwondo · IB Risk-takers. Confirm ECA session',['👥 ECA Taekwondo members (TBC) + Hugo (2C), Tushyan (3A) + Coach TBC','👕 Sports attire (taekwondo fit)','🎒 Mats, kick pads, boards',ico('clock')+' 25 min'],2)}
+    </div>
+    ${breakRow('move','🚶','11:10 – 11:25 AM · Talent into uniform / performance wear · reset MPH stage')}
+    <div class="session day2"><div class="session-hdr">MPH STAGE · Performing arts <span class="srange">11:25 AM – 12:10 PM · 45 min</span></div>
+      ${sceneRow('b07','11:25','11:50','MPH stage','11:25 – 11:50 AM','MPH stage','Drama rehearsal: expressive scene work','07 Drama. Drama space not on venue list — using MPH stage',['👥 Li Ava Xuan (7B), Maryam (8A), Tan Chong Lip (8B), Norocos (10B), Eva (9C) + Teacher (Drama) TBC','👕 School uniform','🎒 Simple costume pieces, scripts',ico('clock')+' 25 min'],2)}
+      ${sceneRow('b08','11:50','12:10','Cafeteria','11:50 AM – 12:10 PM','MPH stage','Dance rehearsal: movement, mid-leap moments','07 Dance. Burst mode; shoot from stage front & wings',['👥 Aleena (4C), Ava (4C), Luce (4B), Hannah (9C), Luna (9A) + Teacher TBC','👕 Dancing costumes',ico('clock')+' 20 min'],2)}
+    </div>
+    ${breakRow('move','🚶','12:10 – 12:20 PM · MPH → Cafeteria')}
+    <div class="session day2"><div class="session-hdr">CAFETERIA <span class="srange">12:20 – 12:50 PM · 30 min</span></div>
+      ${sceneRow('b09','12:20','12:50','Corridors / common areas','12:20 – 12:50 PM','Cafeteria','Students eating together, mixed nationalities & ages (reserved table section) + real lunch candids','01 Friends talking & laughing · 06 Multicultural. Candids of consented students only',['👥 Park Doah (2C), Aleena (4C), Kangmin (5B), Li Ava Xuan (7B), Tan Chong Lip (8B), Norocos (10B), Hwang Jein (11), Anahita (12)','👕 School uniform','🎒 Food trays (canteen TBC)',ico('clock')+' 30 min'],2)}
+    </div>
+    ${breakRow('lunch',ico('coffee'),'12:50 – 1:35 PM · LUNCH — Crew & talent')}
+    <div class="session day2"><div class="session-hdr">CORRIDORS / COMMON AREAS · Student life <span class="srange">1:35 – 2:05 PM · 30 min</span></div>
+      ${sceneRow('b10','13:35','13:50','Corridors / common areas','1:35 – 1:50 PM','Corridors / common areas','Mixed-age interaction: seniors chatting with primary students','01 Different age groups · 06 Across age groups · 10 Friendly conversations',['👥 Lukas (11), Chong Yiang Yang (11) + Isla (3B), Ava (4C), Leah (5B)','👕 School uniform',ico('clock')+' 15 min'],2)}
+      ${sceneRow('b11','13:50','14:05','Student service centre','1:50 – 2:05 PM','Corridors / common areas','Senior student helping younger students (buddy / peer support)','IB Caring · 09 Leadership interactions',['👥 Viktoriia (12) + Shawn (1A), Gasant (1A)','👕 School uniform','🎒 Reading book',ico('clock')+' 15 min'],2)}
+    </div>
+    ${breakRow('move','🚶','2:05 – 2:15 PM · Corridors → Student service centre')}
+    <div class="session day2"><div class="session-hdr">STUDENT SERVICE CENTRE <span class="srange">2:15 – 2:45 PM · 30 min</span></div>
+      ${sceneRow('b12','14:15','14:45','Common area (TBC)','2:15 – 2:45 PM','Student service centre','Students at counter getting help; friendly staff interaction; waiting-area chats','10 Friendly conversations',['👥 Mykhailo (10A), Viktoriia (12) + staff TBC','👕 School uniform',ico('clock')+' 30 min'],2)}
+    </div>
+    ${breakRow('move','🚶','2:45 – 2:55 PM · Student service centre → Common area')}
+    <div class="session day2"><div class="session-hdr">COMMON AREA (or MPH — TBC) · International & multicultural <span class="srange">2:55 – 3:25 PM · 30 min</span></div>
+      ${sceneRow('b13','14:55','15:25','SIS House · twin room','2:55 – 3:25 PM','Common area (TBC)','Cultural activities: sharing traditions, cultural attire / flags, cultural exchange','06 Cultural activities',['👥 Kyoka (JP), Viktoriia (RU), Anahita (BD), Mykhailo (UA), Hwang Jein (KR), Naomi (SA), Guillaume (FR), Henry (CA), Dong Yanchen (CN), Maryam (MY)','👕 Cultural attire (TBC) / uniform','🎒 Flags, cultural items (TBC)',ico('clock')+' 30 min'],2)}
+    </div>
+    ${breakRow('move','🚶','3:25 – 3:55 PM · PACK DOWN + TRAVEL to SIS House (L28, Sunway Citrine Residences · ~5 min) + lift & access')}
+    <div class="session day2"><div class="session-hdr">SIS HOUSE · TWIN ROOM · Housemaster on site <span class="srange">3:55 – 4:30 PM · 35 min</span></div>
+      ${sceneRow('b14','15:55','16:15','SIS House · twin room','3:55 – 4:15 PM','SIS House · twin room','Roommates studying at their desks, warm lamp light','Boarding life. Rooms tidied & dressed; no personal info in frame',['👥 Boarders TBC (2) — confirm which listed students board','👕 School Uniform','🎒 Desk lamps, textbooks',ico('clock')+' 20 min'],2)}
+      ${sceneRow('b15','16:15','16:30','SIS House · common area','4:15 – 4:30 PM','SIS House · twin room','Roommates chatting on bed edge; personal touches (flags, photos from home)','11 Relaxing with friends. Fully dressed, seated setups only — safeguarding',['👥 Same boarders (2)','👕 School Uniform','🎒 Flags, framed photos, cushions',ico('clock')+' 15 min'],2)}
+    </div>
+    <div class="session day2"><div class="session-hdr">SIS HOUSE · COMMON AREA <span class="srange">4:30 – 5:00 PM · 30 min</span></div>
+      ${sceneRow('b16','16:30','17:00','SIS House · dining area (TBC)','4:30 – 5:00 PM','SIS House · common area','Board games / recreational time; students relaxing with friends','11 Common areas / Recreational activities',['👥 Boarders TBC (4–6)','👕 School Uniform','🎒 Board games, snacks',ico('clock')+' 30 min'],2)}
+    </div>
+    <div class="session day2"><div class="session-hdr">SIS HOUSE · DINING AREA (TBC) <span class="srange">5:00 – 5:30 PM · 30 min</span></div>
+      ${sceneRow('b17','17:00','17:30','Wrap','5:00 – 5:30 PM','SIS House · dining area (TBC)','Mealtime together + Housemaster check-in moment','11 Dining. Confirm dining location & meal timing',['👥 Boarders TBC (4–6) + Housemaster','👕 School Uniform','🎒 SIS House meal set (TBC with catering)',ico('clock')+' 30 min'],2)}
+    </div>
+    ${breakRow('wrap',ico('check-circle'),'5:30 – 5:45 PM · WRAP — Footage check, back-up cards, pack down at SIS House')}
+
+    <div class="day-divider day3">${ico('calendar')} Day 3 — Wed, 23 Sep · Sunway TES JB · Crew 8:00 AM · TES wraps 12:00 PM</div>
+    <div class="warn-note">🛏 Hotel switch day — check out of Big Box in the morning, check in at Austin Park after wrap.</div>
+    ${breakRow('wrap',ico('check-circle'),'8:00 – 8:30 AM · BRIEFING — Crew call & setup, campus walkthrough with TES contact, confirm talent list, consent forms & room access')}
+    <div class="session day3"><div class="session-hdr">EXTERIOR — LOWER ENTRANCE · Soft morning light <span class="srange">8:30 – 8:55 AM · 25 min</span></div>
+      ${sceneRow('t01','08:30','08:55','Classroom','8:30 – 8:55 AM','Exterior (lower)','Building façade & lower entrance wides; signage and branding details; students walking in','Client-specified: shoot the LOWER exterior. Best light of the day — shot first on purpose',['👥 Students TBC (4–6)','👕 Smart casual / college wear','🎒 Bags, books',ico('clock')+' 25 min'],3)}
+    </div>
+    ${breakRow('move','🚶','8:55 – 9:00 AM · Exterior → Classrooms')}
+    <div class="session day3"><div class="session-hdr">CLASSROOMS <span class="srange">9:00 – 9:20 AM · 20 min</span></div>
+      ${sceneRow('t02','09:00','09:10','Classroom','9:00 – 9:10 AM','Classroom','Lecture in progress: lecturer at the front, students engaged, hands up, discussion','ACCA / professional-programme feel — adult learners, not school-style',['👥 8–10 pax TBC','👕 Smart casual / college wear','🎒 Whiteboard content, notebooks, laptops',ico('clock')+' 10 min'],3)}
+      ${sceneRow('t03','09:10','09:20','Library','9:10 – 9:20 AM','Classroom','Small-group study & one-to-one lecturer guidance at the desk','Same room, quick re-block — no lighting change',['👥 4 pax TBC','👕 Smart casual / college wear','🎒 Study materials',ico('clock')+' 10 min'],3)}
+    </div>
+    ${breakRow('move','🚶','9:20 – 9:25 AM · Classrooms → Library')}
+    <div class="session day3"><div class="session-hdr">LIBRARY <span class="srange">9:25 – 9:40 AM · 15 min</span></div>
+      ${sceneRow('t04','09:25','09:40','Student life area','9:25 – 9:40 AM','Library','Students studying together at tables and between shelves + individual focused study; interior wides','Two looks in one block — group table first, then singles',['👥 6 pax TBC','👕 Smart casual / college wear','🎒 Books, laptops',ico('clock')+' 15 min'],3)}
+    </div>
+    ${breakRow('move','🚶','9:40 – 9:45 AM · Library → Student Life area')}
+    <div class="session day3"><div class="session-hdr">STUDENT LIFE <span class="srange">9:45 – 10:05 AM · 20 min</span></div>
+      ${sceneRow('t05','09:45','10:05','Surau','9:45 – 10:05 AM','Student life area','Students hanging out between classes: talking, laughing, eating, group work in the lounge / café','Corridor, common areas. ⚠️ 10 AM may be quiet — tell us if the area is busier at another hour and we\'ll swap this block',['👥 8–10 pax TBC','👕 Smart casual / college wear','🎒 Bags, drinks, laptops',ico('clock')+' 20 min'],3)}
+    </div>
+    ${breakRow('move','🚶','10:05 – 10:10 AM · Student Life → Surau')}
+    <div class="session day3"><div class="session-hdr">SURAU <span class="srange">10:10 – 10:25 AM · 15 min</span></div>
+      ${sceneRow('t06','10:10','10:25','ACCA Exam Centre','10:10 – 10:25 AM','Surau','Respectful interior wides; students arriving / at the entrance; quiet detail shots','⚠️ Shoot outside prayer times — Zohor is around 1:15 PM in JB, so this slot is clear. No shoes in frame, no shooting during prayer. Confirm access with the surau committee',['👥 Students TBC (2–3)','👕 Smart casual / college wear · modest dress',ico('clock')+' 15 min'],3)}
+    </div>
+    ${breakRow('move','🚶','10:25 – 10:30 AM · Surau → ACCA Exam Centre')}
+    <div class="session day3"><div class="session-hdr">ACCA EXAM CENTRE <span class="srange">10:30 – 10:55 AM · 25 min</span></div>
+      ${sceneRow('t07','10:30','10:55','Info Centre','10:30 – 10:55 AM','ACCA Exam Centre','Exam hall set up: rows of desks / terminals, invigilator walking the aisle, candidate at a station','',['👥 6 pax TBC','👕 Smart casual / college wear','🎒 Exam desks',ico('clock')+' 25 min'],3)}
+    </div>
+    ${breakRow('move','🚶','10:55 – 11:00 AM · ACCA Exam Centre → Info Centre')}
+    <div class="session day3"><div class="session-hdr">INFO CENTRE <span class="srange">11:00 – 11:20 AM · 20 min</span></div>
+      ${sceneRow('t08','11:00','11:20','Corporate Suites','11:00 – 11:20 AM','Info Centre','Counsellor advising a prospective student & parent at the counter; brochures and course wall in frame','',['👥 4 pax TBC','👕 Smart casual / college wear','🎒 Brochures, prospectus, laptop',ico('clock')+' 20 min'],3)}
+    </div>
+    ${breakRow('move','🚶','11:20 – 11:25 AM · Info Centre → Corporate Suites')}
+    <div class="session day3"><div class="session-hdr">CORPORATE SUITES <span class="srange">11:25 – 11:40 AM · 15 min</span></div>
+      ${sceneRow('t09','11:25','11:40','Function Room','11:25 – 11:40 AM','Corporate Suites','Boardroom / meeting in session: presentation to a small group, handshake & discussion moments','Corporate-training story — confirm dress code (business attire likely)',['👥 6 pax TBC','👕 Smart casual / college wear · business attire','🎒 Screen, slides, notepads',ico('clock')+' 15 min'],3)}
+    </div>
+    ${breakRow('move','🚶','11:40 – 11:45 AM · Corporate Suites → Function Room')}
+    <div class="session day3"><div class="session-hdr">FUNCTION ROOM <span class="srange">11:45 AM – 12:00 PM · 15 min</span></div>
+      ${sceneRow('t10','11:45','12:00','SISJ campus','11:45 AM – 12:00 PM','Function Room','Event / seminar layout: speaker at the front, audience seated. Plus clean empty wide of the room','Room must be pre-set before we arrive — an empty unstyled room shoots poorly and there is no time to dress it',['👥 8–10 pax TBC','👕 Smart casual / college wear','🎒 AV, staging, seating layout',ico('clock')+' 15 min'],3)}
+    </div>
+    ${breakRow('lunch',ico('coffee'),'12:00 – 12:45 PM · LUNCH — Crew & talent, then pack down at TES')}
+    ${breakRow('move','🚶','12:45 – 1:30 PM · Sunway TES JB → SIS Iskandar Puteri (Medini) · ~45 min across JB')}
+    <div class="session day3"><div class="session-hdr">SISJ — BUFFER & PICK-UPS · See SISJ workbook for shot detail <span class="srange">1:30 – 5:30 PM · 240 min</span></div>
+      ${sceneRow('t11','13:30','17:30','Wrap','1:30 – 5:30 PM','SISJ campus','Pick-up shots, reshoots and client add-ons from Days 1–2','Locations chosen on the day from whatever is outstanding. Hard stop so we can check in at Austin Park Hotel',['👥 Per Day 1–2 talent list','👕 Per shot','🎒 Per shot',ico('clock')+' 240 min'],3)}
+    </div>
+    ${breakRow('wrap',ico('check-circle'),'5:30 – 5:45 PM · WRAP — Footage check, back-up cards, pack down · check in at Austin Park Hotel, Mount Austin')}
+      <div class="session day3"><div class="session-hdr">SISJ — Backup (afternoon) · only if extra shots are needed <span class="srange">PM · flexible</span></div>
+      ${breakRow('move','🚶','12:45 PM · Travel Mount Austin → SIS Iskandar Puteri, Medini (~45 min)')}
+      ${sceneRow('t90','13:30','17:30','Wrap','PM · flexible','SISJ campus','Pick-up shots, reshoots &amp; client add-ons from Days 1–2','Locations chosen on the day from whatever is still outstanding — skip entirely if Days 1–2 got everything.',['👥 Per Day 1–2 talent list'],3)}
+    </div>
+
+    <div class="day-divider day4">${ico('calendar')} Day 4 — Thu, 24 Sep · Sunway College JB · Crew 8:30 AM · Wrap 6:00 PM</div>
+    <div class="warn-note">⚠️ Client set-up before we arrive: smart boards, PCs, projectors &amp; games console ON with college logo · lab coats · board games out.</div>
+    ${breakRow('wrap',ico('check-circle'),'8:30 – 9:00 AM · BRIEFING — Crew call (0830 per client rundown), campus walkthrough with client contact, confirm talent groups, consent forms & room access')}
+    <div class="session day4"><div class="session-hdr">ADMIN OFFICE · FINANCE OFFICE · OUTDOOR · 4 pax   (client slot 0900–1000) <span class="srange">9:00 – 9:50 AM · 50 min</span></div>
+      ${sceneRow('c01','09:00','09:20','Finance Office','9:00 – 9:20 AM','Admin Office','Enquiry counter: staff assisting a student, over-shoulder of the counter, friendly welcome moment','Clear any student records / screens with personal data before shooting',['👥 4 pax','👕 Smart casual / college wear','🎒 Forms, lanyards, counter signage',ico('clock')+' 20 min'],4)}
+      ${sceneRow('c02','09:20','09:35','Outdoor (optional)','9:20 – 9:35 AM','Finance Office','Payment counter: student paying / receipting, staff at the desk','',['👥 4 pax','👕 Smart casual / college wear','🎒 Receipt, card terminal, forms',ico('clock')+' 15 min'],4)}
+      ${sceneRow('c03','09:35','09:50','Information Centre','9:35 – 9:50 AM','Outdoor (optional)','Group shot of the 4 pax + building façade wides','Client-marked optional. Shot here while the group is already together — morning light also better now than at 1700',['👥 4 pax','👕 Smart casual / college wear',ico('clock')+' 15 min'],4)}
+    </div>
+    ${breakRow('move','🚶','9:50 – 10:00 AM · Admin block → Information Centre')}
+    <div class="session day4"><div class="session-hdr">INFORMATION CENTRE · PLACEMENT SUPPORT · 7 pax   (client slot 1000–1100) <span class="srange">10:00 – 10:50 AM · 50 min</span></div>
+      ${sceneRow('c04','10:00','10:25','Placement Support','10:00 – 10:25 AM','Information Centre','Course enquiry at the counter; programme consultation with a prospective student & parent','',['👥 3–4 pax of the 7','👕 Smart casual / college wear','🎒 Brochures, prospectus, course wall, laptop',ico('clock')+' 25 min'],4)}
+      ${sceneRow('c05','10:25','10:50','Classroom','10:25 – 10:50 AM','Placement Support','Pathway consultation & placement enquiry: advisor with student, CV / pathway chart in frame','Strong employability asset',['👥 3–4 pax of the 7','👕 Smart casual / college wear','🎒 CVs, pathway chart, laptop',ico('clock')+' 25 min'],4)}
+    </div>
+    ${breakRow('move','🚶','10:50 – 11:00 AM · Information Centre → Classroom')}
+    <div class="session day4"><div class="session-hdr">CLASSROOM · COMPUTER LAB 103 · 8 pax   (client slot 1100–1200) <span class="srange">11:00 – 11:50 AM · 50 min</span></div>
+      ${sceneRow('c06','11:00','11:25','Computer Lab 103 + counter','11:00 – 11:25 AM','Classroom','Lecture in progress: lecturer at the smart board, students engaged, hands up, discussion','Client requirement: smart board and laptop switched on, college logo displayed',['👥 8 pax','👕 Smart casual / college wear','🎒 Smart board ON + college logo on screen, laptop ON, notebooks',ico('clock')+' 25 min'],4)}
+      ${sceneRow('c07','11:25','11:50','Science Lab — Chemistry setup','11:25 – 11:50 AM','Computer Lab 103 + counter','Students at workstations; over-shoulder screen work; lecturer assisting; counter area','Client requirement: computer stations and smart board on, logo on screen',['👥 8 pax','👕 Smart casual / college wear','🎒 All stations ON + smart board ON, college logo on screens',ico('clock')+' 25 min'],4)}
+    </div>
+    ${breakRow('lunch',ico('coffee'),'11:50 AM – 1:00 PM · LUNCH BREAK — Crew & talent  (client slot 1200–1300)')}
+    <div class="session day4"><div class="session-hdr">SCIENCE LAB · 12 pax   (client slot 1300–1400) <span class="srange">1:00 – 1:50 PM · 50 min</span></div>
+      ${sceneRow('c08','13:00','13:25','Science Lab — Biology setup','1:00 – 1:25 PM','Science Lab — Chemistry setup','Chemistry practical: students in lab coats & goggles, colour-change experiment, lecturer demonstrating','Client: 1 lab, 2 setups — Chem first while the bench is dressed',['👥 6 pax of the 12','👕 Smart casual / college wear + lab coats','🎒 Lab coats (provided by college), goggles, chem glassware',ico('clock')+' 25 min'],4)}
+      ${sceneRow('c09','13:25','13:50','HOSTEC — restaurant','1:25 – 1:50 PM','Science Lab — Biology setup','Biology practical: microscopes, specimens, students recording results','Lab team to re-dress the bench between the two setups — confirm who does this',['👥 6 pax of the 12','👕 Smart casual / college wear + lab coats','🎒 Microscopes, specimens, worksheets',ico('clock')+' 25 min'],4)}
+    </div>
+    ${breakRow('move','🚶','1:50 – 2:00 PM · Science Lab → HOSTEC')}
+    <div class="session day4"><div class="session-hdr">HOSTEC · EVENTORIUM · 12 pax   (client slot 1400–1500) <span class="srange">2:00 – 2:50 PM · 50 min</span></div>
+      ${sceneRow('c10','14:00','14:35','EVENTORIUM','2:00 – 2:35 PM','HOSTEC — restaurant','Table setting in progress & finished; front counter check-in; mock bar service','Four sub-areas in one block: table setting, mock guest room, front counter, mock bar — keep it moving',['👥 6 pax of the 12','👕 Smart casual / college wear / service & chef uniform','🎒 Full table setting, bar setup, counter, projector ON with college logo',ico('clock')+' 35 min'],4)}
+      ${sceneRow('c11','14:35','14:50','Library — ground floor','2:35 – 2:50 PM','EVENTORIUM','Simple project showcase: students presenting at the display, audience reacting','Client requirement: projector screen on with logo',['👥 6 pax of the 12','👕 Smart casual / college wear','🎒 Showcase display, projector ON with college logo',ico('clock')+' 15 min'],4)}
+    </div>
+    ${breakRow('move','🚶','2:50 – 3:00 PM · HOSTEC → Library & Learning Commons')}
+    <div class="session day4"><div class="session-hdr">LIBRARY & LEARNING COMMONS · 10 pax   (client slot 1500–1600) <span class="srange">3:00 – 3:50 PM · 50 min</span></div>
+      ${sceneRow('c12','15:00','15:20','Library — 1st floor','3:00 – 3:20 PM','Library — ground floor','Quiet zone: individual focused study between the shelves and at carrels','Client: ground floor is the quiet zone',['👥 4 pax of the 10','👕 Smart casual / college wear','🎒 Books, laptops',ico('clock')+' 20 min'],4)}
+      ${sceneRow('c13','15:20','15:50','Courtyard','3:20 – 3:50 PM','Library — 1st floor','Active zone: discussion pod, project room, magazine area and relax corner — group work and downtime','Five sub-areas — shoot as a continuous walk-through, one frame per area',['👥 6 pax of the 10','👕 Smart casual / college wear','🎒 Magazines, laptops, whiteboard in project room',ico('clock')+' 30 min'],4)}
+    </div>
+    ${breakRow('move','🚶','3:50 – 4:00 PM · Library → Courtyard')}
+    <div class="session day4"><div class="session-hdr">COURTYARD · STUDENT CENTRE · 10 pax   (client slot 1600–1700) <span class="srange">4:00 – 4:50 PM · 50 min</span></div>
+      ${sceneRow('c14','16:00','16:20','Student Centre — music room','4:00 – 4:20 PM','Courtyard','Common hangout spots: students talking, laughing, eating, sitting between classes','Late-afternoon light — good for exteriors',['👥 10 pax','👕 Smart casual / college wear','🎒 Bags, drinks',ico('clock')+' 20 min'],4)}
+      ${sceneRow('c15','16:20','16:35','Student Centre — games room','4:20 – 4:35 PM','Student Centre — music room','Students playing / jamming in the music room','',['👥 4 pax of the 10','👕 Smart casual / college wear','🎒 Instruments',ico('clock')+' 15 min'],4)}
+      ${sceneRow('c16','16:35','16:50','Outdoor sports facilities','4:35 – 4:50 PM','Student Centre — games room','Console gaming and board games at the tables; reactions and group energy','Client requirement: console switched on, board games set out before we arrive',['👥 6 pax of the 10','👕 Smart casual / college wear','🎒 Game console ON, board games out on tables',ico('clock')+' 15 min'],4)}
+    </div>
+    ${breakRow('move','🚶','4:50 – 5:00 PM · Student Centre → Outdoor sports')}
+    <div class="session day4"><div class="session-hdr">OUTDOOR SPORTS · HALL B & INDOOR SPORTS · 10 pax   (client slot 1700–1800) <span class="srange">5:00 – 5:50 PM · 50 min</span></div>
+      ${sceneRow('c17','17:00','17:30','Hall B + indoor sports','5:00 – 5:30 PM','Outdoor sports facilities','Basketball: drive to the hoop, jump shot, team huddle. Futsal: action, tackles, goal celebration','Golden hour — prioritise the outdoor half of this block',['👥 10 pax','👕 Sports kit','🎒 Basketballs, futsal balls, bibs',ico('clock')+' 30 min'],4)}
+      ${sceneRow('c18','17:30','17:50','Wrap','5:30 – 5:50 PM','Hall B + indoor sports','Badminton rally & smash; pickleball serve and return; celebration moments','',['👥 10 pax','👕 Sports kit','🎒 Rackets, shuttles, pickleball paddles & balls, net',ico('clock')+' 20 min'],4)}
+    </div>
+    ${breakRow('wrap',ico('check-circle'),'5:50 – 6:00 PM · WRAP — Footage check, back-up cards, pack down  (client slot 1800)')}
+
+    <div class="day-divider day5">${ico('calendar')} Day 5 — Fri, 25 Sep · Sunway College JB · Crew 8:30 AM · Wrap 3:00 PM</div>
+    <div class="warn-note">Four of six blocks are client-marked optional — drop them if we are behind.</div>
+    ${breakRow('wrap',ico('check-circle'),'8:30 – 9:00 AM · BRIEFING — Crew call (0830 per client rundown), hostel access & talent groups confirmed')}
+    <div class="session day5"><div class="session-hdr">HOSTEL COMMON AREA · 5 pax   (client slot 0900–1000) <span class="srange">9:00 – 9:50 AM · 50 min</span></div>
+      ${sceneRow('e01','09:00','09:12','Hostel — student lounge','9:00 – 9:12 AM','Hostel — study room','Residents studying together; individual at a desk with lamp light','',['👥 5 pax','👕 Smart casual / college wear','🎒 Books, laptops, desk lamps',ico('clock')+' 12 min'],5)}
+      ${sceneRow('e02','09:12','09:25','Hostel — lobby & operations office','9:12 – 9:25 AM','Hostel — student lounge','Residents relaxing: chatting, games, TV corner','',['👥 5 pax','👕 Casual / house wear','🎒 Cushions, board games',ico('clock')+' 13 min'],5)}
+      ${sceneRow('e03','09:25','09:38','Hostel — building façade','9:25 – 9:38 AM','Hostel — lobby & operations office','Check-in / key collection at the lobby; hostel operations office with staff','',['👥 3 pax + staff','👕 Smart casual / college wear','🎒 Lanyards, keys, counter signage',ico('clock')+' 13 min'],5)}
+      ${sceneRow('e04','09:38','09:50','Show unit — twin sharing room (girls)','9:38 – 9:50 AM','Hostel — building façade','Exterior wides of the hostel block; students walking in','Morning light on the façade',['👥 5 pax','👕 Smart casual / college wear','🎒 Bags',ico('clock')+' 12 min'],5)}
+    </div>
+    ${breakRow('move','🚶','9:50 – 10:00 AM · Hostel common areas → Show unit')}
+    <div class="session day5"><div class="session-hdr">HOSTEL SHOW UNIT · 5 pax   (client slot 1000–1100) <span class="srange">10:00 – 10:50 AM · 50 min</span></div>
+      ${sceneRow('e05','10:00','10:20','Show unit — twin sharing room (boys)','10:00 – 10:20 AM','Show unit — twin sharing room (girls)','Room styled as lived-in: roommates studying at desks, chatting, personal touches','Client: shoot with both boys + girls groups if time permits — girls group first',['👥 2–3 pax','👕 Smart casual / college wear / casual','🎒 Desk lamp, books, personal décor',ico('clock')+' 20 min'],5)}
+      ${sceneRow('e06','10:20','10:35','Show unit — living hall','10:20 – 10:35 AM','Show unit — twin sharing room (boys)','Same room type with the boys group; plus clean empty interior wides','Drop to empty-room wides only if running behind',['👥 2–3 pax','👕 Smart casual / college wear / casual','🎒 As above',ico('clock')+' 15 min'],5)}
+      ${sceneRow('e07','10:35','10:50','Auditorium','10:35 – 10:50 AM','Show unit — living hall','Shared living hall: group hanging out, cooking / pantry corner if present','',['👥 5 pax','👕 Casual / house wear','🎒 Mugs, snacks',ico('clock')+' 15 min'],5)}
+    </div>
+    ${breakRow('move','🚶','10:50 – 11:00 AM · Hostel → Auditorium')}
+    <div class="session day5"><div class="session-hdr">AUDITORIUM · CLASSROOM (optional) · 6 pax   (client slot 1100–1200) <span class="srange">11:00 – 11:50 AM · 50 min</span></div>
+      ${sceneRow('e08','11:00','11:35','Classroom (optional)','11:00 – 11:35 AM','Auditorium','Talk / seminar in session: speaker on stage, audience engaged, applause moment. Plus clean empty wide of the hall','Confirm stage lighting is available and switched on',['👥 6 pax','👕 Smart casual / college wear','🎒 Stage AV, slides with college logo',ico('clock')+' 35 min'],5)}
+      ${sceneRow('e09','11:35','11:50','Science Lab (optional)','11:35 – 11:50 AM','Classroom (optional)','Pick-up coverage if Day 4 classroom shots need topping up','Client-marked optional — drop if the auditorium overruns',['👥 6 pax','👕 Smart casual / college wear','🎒 Smart board ON with logo',ico('clock')+' 15 min'],5)}
+    </div>
+    ${breakRow('move','🚶','11:50 AM – 12:00 PM · Auditorium → Science Lab')}
+    <div class="session day5"><div class="session-hdr">SCIENCE LAB · HOSTEC (both optional) · 7 pax   (client slot 1200–1300) <span class="srange">12:00 – 12:50 PM · 50 min</span></div>
+      ${sceneRow('e10','12:00','12:25','HOSTEC (optional)','12:00 – 12:25 PM','Science Lab (optional)','Pick-up coverage: alternative angles or the setup that ran short on Day 4','Optional — skip if Day 4 coverage is strong',['👥 7 pax','👕 Smart casual / college wear + lab coats','🎒 Lab coats, goggles',ico('clock')+' 25 min'],5)}
+      ${sceneRow('e11','12:25','12:50','Computer Lab (optional)','12:25 – 12:50 PM','HOSTEC (optional)','Pick-up coverage of the restaurant, mock guest room or bar','Optional',['👥 7 pax','👕 Smart casual / college wear / service uniform','🎒 As Day 4',ico('clock')+' 25 min'],5)}
+    </div>
+    ${breakRow('lunch',ico('coffee'),'12:50 – 2:00 PM · LUNCH BREAK — Crew & talent  (client slot 1300–1400)')}
+    <div class="session day5"><div class="session-hdr">COMPUTER LAB · OUTDOOR (both optional) · 5 pax   (client slot 1400–1500) <span class="srange">2:00 – 2:45 PM · 45 min</span></div>
+      ${sceneRow('e12','14:00','14:25','Outdoor (optional)','2:00 – 2:25 PM','Computer Lab (optional)','Pick-up coverage: workstations, over-shoulder screen work, lab wides','Optional',['👥 5 pax','👕 Smart casual / college wear','🎒 Stations ON with logo on screens',ico('clock')+' 25 min'],5)}
+      ${sceneRow('e13','14:25','14:45','Wrap','2:25 – 2:45 PM','Outdoor (optional)','Campus exteriors, students walking through the grounds, group shot','Optional — also the rain buffer for the day',['👥 5 pax','👕 Smart casual / college wear','🎒 Bags',ico('clock')+' 20 min'],5)}
+    </div>
+    ${breakRow('wrap',ico('check-circle'),'2:45 – 3:00 PM · WRAP — Footage check, back-up cards, pack down  (client slot 1500)')}
+
+    <div class="shoot-footer">Oblique Production System · Johor · 21–25 Sep 2026</div>
+  </div>`;
+}
+
+// Johor: horizontal day tabs — show one day at a time
+function johorTab(n, btn){
+  var tabs=document.querySelectorAll('#jb-tabs .jb-tab');
+  tabs.forEach(function(b,i){ b.classList.toggle('active', btn ? b===btn : i===n-1); });
+  var groups=document.querySelectorAll('#page-shoot .day-group');
+  if(groups.length){
+    groups.forEach(function(g,i){
+      g.style.display=(i===n-1)?'':'none';
+      if(i===n-1) g.classList.remove('collapsed');
+    });
+  } else {
+    // fallback before day-groups are built: hide dividers + sessions of other days
+    for(var d=1;d<=5;d++){
+      var show=(d===n);
+      document.querySelectorAll('#page-shoot .day-divider.day'+d+', #page-shoot .session.day'+d).forEach(function(el){ el.style.display=show?'':'none'; });
+    }
+  }
+  if(typeof updateDaySummaries==='function') updateDaySummaries();
+  try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){}
+}
+function johorInit(shoot){
+  setTimeout(function(){
+    var n=1;
+    try{ var t=today(); for(var i=0;i<shoot.dates.length;i++){ if(isSameDay(parseDate(shoot.dates[i]),t)){ n=i+1; break; } } }catch(e){}
+    // day-dividers become plain headers, not collapsible, when tabs are in use
+    document.querySelectorAll('#page-shoot .day-group .day-chevron').forEach(function(c){ c.style.display='none'; });
+    document.querySelectorAll('#page-shoot .day-summary').forEach(function(sm){ sm.style.display='none'; });
+    johorTab(n, null);
+  }, 320);
 }
 
 function shootTopbar(shoot, extraClass=''){
