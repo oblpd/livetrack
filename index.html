@@ -969,6 +969,156 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .shot-modal-btns .modal-save{background:var(--pri);color:#fff;}
 .shot-modal-btns button:active{transform:scale(.97);}
 
+
+/* ═══════════════════════════════════════════
+   CALENDAR — week strip, month view, up next
+   ═══════════════════════════════════════════ */
+/* Week strip (hero) */
+.wk{margin-top:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-md);padding:10px 8px 10px;}
+.wk-hdr{display:flex;align-items:center;justify-content:space-between;padding:0 4px 8px;}
+.wk-title{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,241,234,.5);}
+.wk-nav{display:flex;gap:4px;}
+.wk-nav button{width:32px;height:32px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(243,241,234,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.wk-nav button:hover{background:rgba(255,255,255,.08);color:var(--n100);}
+.wk-row{position:relative;}
+.wk-days{display:grid;grid-template-columns:repeat(7,1fr);}
+.wk-day{background:none;border:none;cursor:pointer;padding:4px 0 0;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Inter',sans-serif;color:var(--n100);border-radius:var(--r-sm);-webkit-tap-highlight-color:transparent;}
+.wk-day:hover .wk-num{background:rgba(255,255,255,.1);}
+.wk-dow{font-size:9px;white-space:nowrap;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(243,241,234,.4);}
+.wk-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;transition:background .2s;}
+.wk-day.past .wk-num{color:rgba(243,241,234,.35);}
+.wk-day.today .wk-num{background:var(--pri)!important;color:#fff;}
+.wk-bars{position:relative;margin-top:8px;}
+.wk-bar{position:absolute;height:18px;border-radius:4px;border:none;padding:0 6px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;line-height:18px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.wk-bar:hover{filter:brightness(1.12);}
+.wk-bar-sub{font-weight:500;opacity:.75;}
+.wk-bar.cl{border-top-left-radius:0;border-bottom-left-radius:0;}
+.wk-bar.cr{border-top-right-radius:0;border-bottom-right-radius:0;}
+.wk-bar.live{background:var(--pri);color:#fff;}
+.wk-bar.upcoming{background:rgba(212,153,58,.22);color:#e8b566;}
+.wk-bar.wrapped{background:rgba(139,184,144,.14);color:rgba(170,205,174,.8);}
+.wk-bar.tent{background:transparent!important;border:1px dashed;line-height:16px;}
+.wk-bar.tent.live{color:#ff8098;border-color:var(--pri);}
+.wk-bar.tent.upcoming{color:#e8b566;border-color:rgba(212,153,58,.7);}
+.wk-bar.tent.wrapped{color:rgba(170,205,174,.7);border-color:rgba(139,184,144,.45);}
+.wk-more{position:absolute;bottom:0;text-align:center;font-size:10px;font-weight:800;color:rgba(243,241,234,.55);}
+.wk-none{font-size:11px;color:rgba(243,241,234,.4);text-align:center;padding:6px 0 0;}
+.wk-reset{width:auto!important;padding:0 10px;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;}
+.wk-lines{margin-top:10px;display:flex;flex-direction:column;gap:4px;}
+.wk-line{display:flex;align-items:center;gap:10px;width:100%;min-height:36px;padding:6px 10px;border:none;border-radius:var(--r-sm);background:rgba(255,255,255,.04);color:rgba(243,241,234,.75);font-family:'Inter',sans-serif;font-size:12px;text-align:left;cursor:pointer;}
+button.wk-line:hover{background:rgba(255,255,255,.08);}
+.wk-line.is-live{background:rgba(231,49,79,.16);}
+.wk-line.is-live:hover{background:rgba(231,49,79,.22);}
+.wk-line.is-empty{cursor:default;color:rgba(243,241,234,.4);}
+.wk-line-when{width:62px;flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,241,234,.45);}
+.wk-line.is-live .wk-line-when{color:#ff8098;}
+.wk-line-what{flex:1;min-width:0;display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wk-line-what i{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;}
+.wk-line-what strong{color:var(--n100);font-weight:700;}
+.wk-line-meta{overflow:hidden;text-overflow:ellipsis;}
+.wk-line-more{flex-shrink:0;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;background:rgba(255,255,255,.08);color:rgba(243,241,234,.7);}
+
+/* View toggle next to search */
+.search-top{display:flex;gap:8px;align-items:stretch;}
+.search-top .search-wrap{flex:1;min-width:0;}
+.view-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:3px;gap:2px;flex-shrink:0;}
+.vt-btn{min-width:42px;height:40px;border:none;border-radius:7px;background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .2s,color .2s;}
+.vt-btn:hover{color:var(--text);}
+.vt-btn.active{background:var(--acc);color:var(--n100);}
+[data-theme="dark"] .vt-btn.active{background:var(--n100);color:var(--acc);}
+.vt-btn .vt-lbl{display:none;}
+@media(min-width:520px){.vt-btn .vt-lbl{display:inline;}}
+
+/* View switching */
+.dash-body.view-cal #live-section,.dash-body.view-cal #monthly-groups,.dash-body.view-cal #no-results{display:none!important;}
+.dash-body.view-list #calendar-view{display:none;}
+.view-cal-on #sort-btn{display:none;}
+
+/* Calendar layout */
+#calendar-view{scroll-margin-top:calc(200px + env(safe-area-inset-top));}
+.cal-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;}
+@media(min-width:760px){.cal-layout{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);align-items:start;}}
+.cal-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;}
+.cal-hdr{display:flex;align-items:center;gap:8px;padding:12px 12px 8px 16px;}
+.cal-month{font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-right:auto;}
+.cal-month span{color:var(--text3);font-weight:600;}
+.cal-nav{width:36px;height:36px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.cal-nav:hover{border-color:var(--pri);color:var(--pri);}
+.cal-today-btn{height:36px;padding:0 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.cal-today-btn:hover{border-color:var(--pri);color:var(--pri);}
+.cal-legend{display:flex;flex-wrap:wrap;gap:12px;padding:0 16px 10px;font-size:11px;color:var(--text2);}
+.cal-legend span{display:flex;align-items:center;gap:5px;}
+.cal-legend i{width:14px;height:6px;border-radius:3px;display:inline-block;}
+.cal-dows{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);background:var(--surface2);}
+.cal-dows div{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);text-align:center;padding:6px 0;}
+.cal-week{position:relative;border-bottom:1px solid var(--border2);}
+.cal-week:last-child{border-bottom:none;}
+.cal-cells{display:grid;grid-template-columns:repeat(7,1fr);height:100%;}
+.cal-cell{position:relative;background:transparent;border:none;border-right:1px solid var(--border2);cursor:pointer;padding:5px 0 0;display:flex;flex-direction:column;align-items:center;font-family:'Inter',sans-serif;color:var(--text);-webkit-tap-highlight-color:transparent;transition:background .15s;}
+.cal-cell:nth-child(7n){border-right:none;}
+.cal-cell:hover{background:var(--surface2);}
+.cal-cell.wknd{background:var(--acc-bg);}
+.cal-cell.out .cal-num{color:var(--text3);opacity:.5;}
+.cal-cell.past:not(.out) .cal-num{color:var(--text3);}
+.cal-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
+.cal-cell.today .cal-num{background:var(--pri);color:#fff!important;}
+.cal-cell.sel{background:var(--pri-bg);box-shadow:inset 0 0 0 2px var(--pri);}
+.cal-more{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:9px;font-weight:800;color:var(--text2);}
+.cal-bars{position:absolute;left:0;right:0;top:32px;pointer-events:none;}
+.cal-bar{position:absolute;height:16px;border-radius:4px;font-size:10px;font-weight:700;line-height:16px;padding:0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cal-bar.cl{border-top-left-radius:0;border-bottom-left-radius:0;}
+.cal-bar.cr{border-top-right-radius:0;border-bottom-right-radius:0;}
+.cal-bar.live{background:var(--pri);color:#fff;}
+.cal-bar.upcoming{background:var(--upcoming-bg2);color:var(--upcoming);box-shadow:inset 0 0 0 1px var(--upcoming-border);}
+.cal-bar.wrapped{background:var(--wrapped-bg2);color:var(--wrapped);}
+.cal-bar.tent{background:var(--surface)!important;box-shadow:none;border:1px dashed currentColor;line-height:14px;}
+.cal-bar.live.tent{color:var(--pri);}
+
+/* Side panels */
+.cal-side{display:flex;flex-direction:column;gap:16px;}
+.cal-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 14px 10px;}
+.cal-panel-hdr{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px;}
+.cal-panel-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.01em;}
+.cal-panel-sub{font-size:11px;font-weight:600;color:var(--text3);white-space:nowrap;}
+.cal-evt{display:flex;gap:10px;padding:10px;border-radius:var(--r-sm);background:var(--surface2);margin-bottom:8px;cursor:pointer;border:1px solid transparent;transition:border-color .2s;}
+.cal-evt:hover{border-color:var(--pri);}
+.cal-evt-stripe{width:4px;border-radius:2px;flex-shrink:0;}
+.cal-evt-stripe.live{background:var(--pri);}.cal-evt-stripe.upcoming{background:var(--upcoming);}.cal-evt-stripe.wrapped{background:var(--wrapped);}
+.cal-evt-stripe.tent{background:transparent!important;border:1.5px dashed;}
+.cal-evt-stripe.tent.live{border-color:var(--pri);}.cal-evt-stripe.tent.upcoming{border-color:var(--upcoming);}.cal-evt-stripe.tent.wrapped{border-color:var(--wrapped);}
+.cal-evt.is-booking{cursor:default;}
+.cal-evt.is-booking:hover{border-color:transparent;}
+.cal-tag{padding:1px 7px;border-radius:99px;background:var(--upcoming-bg2);color:var(--upcoming);font-weight:700;}
+.cal-tag.tent{background:transparent;box-shadow:inset 0 0 0 1px var(--border);color:var(--text2);}
+.cal-promote{display:inline-flex;align-items:center;gap:5px;margin-top:8px;height:30px;padding:0 10px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
+.cal-promote:hover{border-color:var(--pri);color:var(--pri);}
+.cal-evt-body{min-width:0;flex:1;}
+.cal-evt-client{font-size:13px;font-weight:800;color:var(--text);}
+.cal-evt-title{font-size:12px;color:var(--text2);margin-top:1px;}
+.cal-evt-meta{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font-size:11px;font-weight:600;color:var(--text2);}
+.cal-evt-meta span{display:flex;align-items:center;gap:4px;}
+.cal-empty{font-size:12px;color:var(--text2);padding:4px 0 8px;}
+.cal-add{display:inline-flex;align-items:center;gap:6px;margin-top:4px;height:34px;padding:0 12px;border-radius:99px;border:1.5px dashed var(--pri-border);background:var(--pri-bg);color:var(--pri);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.cal-add:hover{border-style:solid;}
+/* Up next */
+.un-row{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--border2);}
+.un-row:first-child{border-top:none;padding-top:2px;}
+.un-date{width:40px;flex-shrink:0;text-align:center;}
+.un-dow{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);}
+.un-day{font-size:17px;font-weight:900;color:var(--text);line-height:1.1;}
+.un-row.is-today .un-dow{color:var(--pri);}
+.un-row.is-today .un-day{color:var(--pri);}
+.un-items{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;}
+.un-item{cursor:pointer;border-radius:var(--r-sm);padding:2px 0;}
+.un-item:hover .un-client{color:var(--pri);}
+.un-client{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;}
+.un-client i{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block;}
+.un-sub{font-size:11px;color:var(--text2);margin-top:1px;}
+.un-gap{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0;padding:8px 10px;border:1.5px dashed var(--border);border-radius:var(--r-sm);font-size:12px;color:var(--text2);}
+.un-gap strong{color:var(--text);font-weight:700;}
+.un-gap button{flex-shrink:0;height:30px;padding:0 10px;border-radius:99px;border:1px solid var(--pri-border);background:var(--pri-bg);color:var(--pri);font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
+.hdr-btn.cal-hdr-btn{padding:0;}
+@media(prefers-reduced-motion:reduce){#calendar-view{scroll-behavior:auto;}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -1036,6 +1186,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
     <div class="dash-hdr-r">
       <div class="dash-clock" id="dash-clock">--:--</div>
+      <button class="hdr-btn cal-hdr-btn" onclick="openCalendarView()" aria-label="Open calendar" title="Calendar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></button>
       <button class="hdr-btn" onclick="toggleDark()" id="dash-dark-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
     </div>
   </div>
@@ -1051,14 +1202,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
       <div class="dash-stat stat-live"><div class="dash-stat-num" id="stat-live">0</div><div class="dash-stat-label">Live</div></div>
       <div class="dash-stat stat-wrapped"><div class="dash-stat-num" id="stat-wrapped">0</div><div class="dash-stat-label">Wrapped</div></div>
     </div>
+    <div class="wk" id="wk-strip"></div>
   </div>
 
   <!-- Search + Filters — Redesigned -->
   <div class="search-bar">
-    <div class="search-wrap">
+    <div class="search-top">
+      <div class="search-wrap">
       <span class="search-icon"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span></span>
       <input class="search-input" id="search-input" type="text" placeholder="Search project, client, location..." oninput="filterDashboard()"/>
       <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+    </div>
+      <div class="view-toggle" role="group" aria-label="Dashboard view">
+        <button class="vt-btn active" data-view="list" onclick="setView('list')" aria-pressed="true" title="List view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg><span class="vt-lbl">List</span></button>
+        <button class="vt-btn" data-view="calendar" onclick="setView('calendar')" aria-pressed="false" title="Calendar view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg><span class="vt-lbl">Calendar</span></button>
+      </div>
     </div>
     <div class="filter-row">
       <button class="filter-chip active" data-filter="all" onclick="setFilter('all',this)">All <span class="chip-count" id="chip-all">7</span></button>
@@ -1069,7 +1227,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
   </div>
 
-  <div class="dash-body">
+  <div class="dash-body view-list">
+    <div id="calendar-view"></div>
     <div id="live-section"></div>
     <div id="monthly-groups"></div>
     <div id="no-results" class="no-results" style="display:none;">
@@ -1515,6 +1674,7 @@ function renderDashboard(query='', filter='all', sort='date-asc'){
   document.getElementById('chip-live').textContent = allLive.length;
   document.getElementById('chip-upcoming').textContent = allUpcoming.length;
   document.getElementById('chip-wrapped').textContent = allWrapped.length;
+  refreshCalendarViews();
 
   // No results
   const noRes = document.getElementById('no-results');
@@ -4001,14 +4161,14 @@ document.addEventListener('click', closeAllKebabs);
 
 let _editingShootId = null;
 
-function openAddShoot(){
+function openAddShoot(prefillDate){
   _editingShootId = null;
   document.getElementById('add-shoot-modal').classList.add('open');
   document.querySelector('#add-shoot-modal .modal-title').textContent = 'Add Shoot';
   document.getElementById('add-save').textContent = 'Add to Dashboard';
   // Default start date to tomorrow
   const tmr = new Date(); tmr.setDate(tmr.getDate()+1);
-  document.getElementById('add-date-start').value = tmr.toISOString().split('T')[0];
+  document.getElementById('add-date-start').value = (typeof prefillDate==='string' && prefillDate) ? prefillDate : ymd(tmr);
   document.getElementById('add-client').value = '';
   document.getElementById('add-title').value = '';
   document.getElementById('add-date-end').value = '';
@@ -4063,7 +4223,7 @@ async function saveNewShoot(){
     const d = new Date(s);
     d.setDate(d.getDate()+1);
     while(d <= e){
-      dates.push(d.toISOString().split('T')[0]);
+      dates.push(ymd(d));
       d.setDate(d.getDate()+1);
     }
   }
@@ -4208,6 +4368,22 @@ async function confirmDelete(){
   }
 }
 
+// ═══ DATE REPAIR ═══
+// The old Add/Edit Shoot code used toISOString(), which in Malaysia (UTC+8) saved every day after
+// the first one a day early: 21–25 Sep became [21, 21, 22, 23, 24]. That fingerprint (first two
+// dates identical) can't happen otherwise, so shift days 2+ forward by one to restore them.
+function repairShiftedDates(dates){
+  if(!Array.isArray(dates) || dates.length<2 || dates[0]!==dates[1]) return null;
+  return [dates[0], ...dates.slice(1).map(d=>ymd(addDays(parseDate(d),1)))];
+}
+function datesLabelFor(dates){
+  const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const a=parseDate(dates[0]), b=parseDate(dates[dates.length-1]);
+  if(dates.length===1) return a.getDate()+' '+M[a.getMonth()]+' '+a.getFullYear()+' · '+D[a.getDay()];
+  const range = a.getMonth()===b.getMonth() ? a.getDate()+'–'+b.getDate()+' '+M[a.getMonth()] : a.getDate()+' '+M[a.getMonth()]+' – '+b.getDate()+' '+M[b.getMonth()];
+  return range+' '+b.getFullYear()+' · '+D[a.getDay()]+'–'+D[b.getDay()];
+}
+
 // Load user-added shoots from Firebase on startup
 function loadFirebaseShoots(){
   if(!window._fbGet) return;
@@ -4234,6 +4410,11 @@ function loadFirebaseShoots(){
     let added = 0;
     Object.values(data).forEach(shoot=>{
       if(shoot && shoot.id && !SHOOTS.find(s=>s.id===shoot.id) && !_hiddenIds.includes(shoot.id)){
+        const fixed = repairShiftedDates(shoot.dates);
+        if(fixed){
+          shoot.dates = fixed; shoot.datesLabel = datesLabelFor(fixed); shoot.days = fixed.length;
+          if(window._fbUpdate) window._fbUpdate('dashboard-shoots/'+shoot.id, {dates:fixed, datesLabel:shoot.datesLabel, days:fixed.length}).catch(()=>{});
+        }
         shoot.userAdded = true;
         SHOOTS.push(shoot);
         added++;
@@ -4250,6 +4431,11 @@ function loadFirebaseShoots(){
     Object.entries(data).forEach(([id, overrides])=>{
       const shoot = SHOOTS.find(s=>s.id===id);
       if(shoot && overrides){
+        const fixed = repairShiftedDates(overrides.dates);
+        if(fixed){
+          overrides.dates = fixed; overrides.datesLabel = datesLabelFor(fixed); overrides.days = fixed.length;
+          if(window._fbUpdate) window._fbUpdate('dashboard-overrides/'+id, {dates:fixed, datesLabel:overrides.datesLabel, days:fixed.length}).catch(()=>{});
+        }
         if(overrides.client) shoot.client = overrides.client;
         if(overrides.title) shoot.title = overrides.title;
         if(overrides.dates) shoot.dates = overrides.dates;
@@ -4263,8 +4449,423 @@ function loadFirebaseShoots(){
   }).catch(()=>{});
 }
 
+
+// ═══════════════════════════════════════════════════
+// CALENDAR — week strip (hero), month view, up next
+// Reads the same SHOOTS array, so Firebase adds/edits flow in automatically.
+// ═══════════════════════════════════════════════════
+const CAL_SVG = {
+  list: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>',
+  cal: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>',
+  left: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+  right: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+  clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  pin: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+  plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>'
+};
+const CAL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CAL_MON3 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CAL_DOW3 = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const CAL_DOWFULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+let dashView = localStorage.getItem('oblique-view') === 'calendar' ? 'calendar' : 'list';
+let calMonth = null;      // Date = 1st of month being shown
+let calSelected = null;   // 'YYYY-MM-DD'
+let wkOffset = 0;         // week strip paging, 0 = this week
+
+// ═══ PRODUCTION BOOKINGS — imported from Google Calendar "Production" (Sep–Dec 2026) ═══
+// Calendar-only entries: they show in the week strip, month view and Next 14 days,
+// but not in the shoot list or stats. tentative:true = Potential / Tentative / Unconfirmed (dashed).
+// A booking hides itself automatically once a real shoot for the same client covers the same dates.
+// If Firebase has data at /calendar-events, that replaces this list (for a future Google Calendar sync).
+let BOOKINGS = [
+  { id:'gcal-ddealz-bkk',        client:'Ddealz',               title:'BKK Video Shoot',          dates:['2026-09-01','2026-09-02','2026-09-03','2026-09-04'], tentative:true },
+  { id:'gcal-holistq-0915',      client:'Holistq',              title:'Video',                    dates:['2026-09-15'], tentative:true },
+  { id:'gcal-ergolab-0917',      client:'ErgoLab',              title:'Video',                    dates:['2026-09-17'], tentative:true },
+  { id:'gcal-sunway-johor',      client:'Sunway Johor',         title:'Sunway College Johor Photo Shoot', dates:['2026-09-20','2026-09-21','2026-09-22','2026-09-23','2026-09-24','2026-09-25'] },
+  { id:'gcal-qra-xmas',          client:'Qra',                  title:'Xmas Menu Video Shoot',    dates:['2026-09-22','2026-09-23'] },
+  { id:'gcal-getha-kids',        client:'Getha',                title:'Event Shoot — Kids',       dates:['2026-09-26'] },
+  { id:'gcal-qra-0928',          client:'Qra',                  title:'Video Shoot',              dates:['2026-09-28'], tentative:true },
+  { id:'gcal-getha-socmed',      client:'Getha',                title:'SocMed Video',             dates:['2026-09-29','2026-10-01'] },
+  { id:'gcal-specshop-oct',      client:'The Spec Shop',        title:'Shoot',                    dates:['2026-10-05','2026-10-06'], tentative:true },
+  { id:'gcal-getha-wedding',     client:'Getha',                title:'Wedding Mattress',         dates:['2026-10-14'] },
+  { id:'gcal-siskl-chocolate',   client:'SISKL',                title:'Chocolate',                dates:['2026-10-14'] },
+  { id:'gcal-happikiddo-tut',    client:'Happikiddo',           title:'Tutorial',                 dates:['2026-10-15'] },
+  { id:'gcal-qra-1019',          client:'Qra',                  title:'Video Shoot',              dates:['2026-10-19','2026-10-20'], tentative:true },
+  { id:'gcal-happikiddo-1021',   client:'Happikiddo',           title:'Video',                    dates:['2026-10-21'], tentative:true },
+  { id:'gcal-siskl-1021',        client:'SISKL',                title:'Shoot',                    dates:['2026-10-21'], tentative:true },
+  { id:'gcal-siskl-1028',        client:'SISKL',                title:'Shoot',                    dates:['2026-10-28'], tentative:true },
+  { id:'gcal-qra-halloween',     client:'Qra',                  title:'Halloween Event',          dates:['2026-10-31'] },
+  { id:'gcal-siskl-exitpoint',   client:'SISKL',                title:'Exit Point Video',         dates:['2026-11-04'] },
+  { id:'gcal-getha-korea',       client:'Getha',                title:'Korea Shoot (unconfirmed)', dates:['2026-11-15','2026-11-16','2026-11-17','2026-11-18','2026-11-19','2026-11-20','2026-11-21'], tentative:true },
+  { id:'gcal-qra-1117',          client:'Qra',                  title:'Video Shoot',              dates:['2026-11-17','2026-11-18'], tentative:true },
+  { id:'gcal-qra-1125',          client:'Qra',                  title:'Video Shoot',              dates:['2026-11-25','2026-11-26'], tentative:true },
+  { id:'gcal-qra-1207',          client:'Qra',                  title:'Video Shoot',              dates:['2026-12-07','2026-12-08'], tentative:true },
+];
+BOOKINGS.forEach(b=>b.isBooking=true);
+
+// Booking is covered by a real shoot if a client word matches and any date overlaps
+function bookingCovered(b){
+  const words = b.client.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>=3 && w!=='the');
+  return SHOOTS.some(s=>{
+    if(!s.dates || !s.client) return false;
+    const sc = s.client.toLowerCase();
+    return words.some(w=>new RegExp('\\b'+w+'\\b').test(sc)) && s.dates.some(d=>b.dates.includes(d));
+  });
+}
+// Everything the calendar draws: shoots first, then uncovered bookings
+function calItems(){
+  return [...SHOOTS.filter(s=>s.dates && s.dates.length), ...BOOKINGS.filter(b=>b.dates && b.dates.length && !bookingCovered(b))];
+}
+function isTent(item){ return !!item.tentative || item.crewCall==='TBC'; }
+function listenCalendarEvents(){
+  if(!window._fbListen) return;
+  window._fbListen('calendar-events', data=>{
+    if(!data) return;
+    const list = Object.values(data).filter(e=>e && e.id && Array.isArray(e.dates) && e.dates.length);
+    if(!list.length) return;
+    list.forEach(e=>{ e.isBooking=true; e.client=e.client||e.title||'Booking'; e.title=e.title||''; });
+    BOOKINGS = list;
+    refreshCalendarViews();
+  });
+}
+// Turn a booking into a real shoot (prefills the Add Shoot modal)
+function promoteBooking(id){
+  const b = BOOKINGS.find(x=>x.id===id); if(!b) return;
+  openAddShoot(b.dates[0]);
+  document.getElementById('add-client').value = b.client;
+  document.getElementById('add-title').value = b.title.replace(/\s*\((unconfirmed|tentative)\)/i,'');
+  document.getElementById('add-date-end').value = b.dates.length>1 ? b.dates[b.dates.length-1] : '';
+}
+
+// Local-time YYYY-MM-DD (toISOString shifts to UTC — a day early in Malaysia before 8am)
+function ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function mondayOf(d){ const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
+function calEsc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// Status class for bars: TBC crew call reads as tentative (dashed)
+function calClass(item){ return getShootStatus(item) + (isTent(item) ? ' tent' : ''); }
+function calColor(item){ const st=getShootStatus(item); return st==='live'?'var(--pri)':st==='upcoming'?'var(--upcoming)':'var(--wrapped)'; }
+function calDot(item){ const c=calColor(item); return isTent(item) ? `<i style="background:transparent;box-shadow:inset 0 0 0 1.5px ${c}"></i>` : `<i style="background:${c}"></i>`; }
+
+// Pick the value for a given day out of strings like
+// "Mon 7:30 · Tue 7:45 · Thu–Fri 8:30 AM" or a single "9:00 AM"
+function pickForDay(str, dow){
+  if(!str || str==='TBC') return '';
+  const segs = String(str).split(/\s*·\s*/);
+  const re = /^(Sun|Mon|Tue|Wed|Thu|Fri|Sat)(?:\s*[–-]\s*(Sun|Mon|Tue|Wed|Thu|Fri|Sat))?\s+(.+)$/;
+  if(!segs.some(s=>re.test(s))) return segs.length===1 ? str : '';
+  for(const s of segs){
+    const m = s.match(re); if(!m) continue;
+    const a = CAL_DOW3.indexOf(m[1]), b = m[2] ? CAL_DOW3.indexOf(m[2]) : a;
+    if(dow>=a && dow<=b) return m[3];
+  }
+  return '';
+}
+function dayDetail(shoot, dateStr){
+  const i = shoot.dates.indexOf(dateStr);
+  const dow = parseDate(dateStr).getDay();
+  const crew = pickForDay(shoot.crewCall, dow);
+  const wrap = (shoot.wrapPerDay && shoot.wrapPerDay[i]) || pickForDay(shoot.wrapEst, dow);
+  return { index:i, total:shoot.dates.length, crew, wrap };
+}
+function relLabel(dateStr){
+  const n = daysUntil(dateStr);
+  if(n===0) return 'Today';
+  if(n===1) return 'Tomorrow';
+  if(n===-1) return 'Yesterday';
+  return n>0 ? 'In '+n+' days' : Math.abs(n)+' days ago';
+}
+
+// Shoots respecting the search box (and optionally the status chips)
+function calShoots(useStatus){
+  const inp = document.getElementById('search-input');
+  const q = inp ? inp.value.toLowerCase().trim() : '';
+  return calItems().filter(s=>{
+    if(useStatus && currentFilter!=='all' && getShootStatus(s)!==currentFilter) return false;
+    if(q){
+      const hay=(s.client+' '+s.title+' '+s.location+' '+(s.datesLabel||'')).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+function indexByDate(list){
+  const m = {};
+  list.forEach(s=>s.dates.forEach(d=>{ (m[d]=m[d]||[]).push(s); }));
+  return m;
+}
+
+// Lay shoots out across one Mon–Sun week as continuous bars in lanes
+function weekSegments(weekStart, list){
+  const cols = []; for(let i=0;i<7;i++) cols.push(ymd(addDays(weekStart,i)));
+  const segs = [];
+  list.forEach(s=>{
+    const set = new Set(s.dates);
+    let i=0;
+    while(i<7){
+      if(!set.has(cols[i])){ i++; continue; }
+      let j=i; while(j+1<7 && set.has(cols[j+1])) j++;
+      segs.push({ shoot:s, start:i, span:j-i+1,
+        contL: set.has(ymd(addDays(weekStart,i-1))),
+        contR: set.has(ymd(addDays(weekStart,j+1))) });
+      i=j+1;
+    }
+  });
+  segs.sort((a,b)=>a.start-b.start || b.span-a.span);
+  const lanes = [];
+  segs.forEach(sg=>{
+    let l=0;
+    while(lanes[l] && lanes[l].some(([a,b])=>sg.start<=b && sg.start+sg.span-1>=a)) l++;
+    (lanes[l]=lanes[l]||[]).push([sg.start, sg.start+sg.span-1]);
+    sg.lane=l;
+  });
+  return { segs, laneCount:lanes.length, cols };
+}
+
+// ── View switching ──
+function setView(v){
+  dashView = v;
+  localStorage.setItem('oblique-view', v);
+  const body = document.querySelector('#page-dashboard .dash-body');
+  if(body){ body.classList.toggle('view-cal', v==='calendar'); body.classList.toggle('view-list', v!=='calendar'); }
+  document.getElementById('page-dashboard').classList.toggle('view-cal-on', v==='calendar');
+  document.querySelectorAll('.vt-btn').forEach(b=>{
+    const on = b.dataset.view===v;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on?'true':'false');
+  });
+  if(v==='calendar') renderCalendar();
+}
+function openCalendarView(dateStr){
+  const d = dateStr ? parseDate(dateStr) : today();
+  calSelected = ymd(d);
+  calMonth = new Date(d.getFullYear(), d.getMonth(), 1);
+  setView('calendar');
+  requestAnimationFrame(()=>{
+    const el = document.getElementById('calendar-view');
+    if(el) el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'start'});
+  });
+}
+function calShiftMonth(n){ calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+n, 1); renderCalendar(); }
+function calGoToday(){ const t=today(); calMonth=new Date(t.getFullYear(),t.getMonth(),1); calSelected=ymd(t); renderCalendar(); }
+function calSelect(dateStr){
+  calSelected = dateStr;
+  const d = parseDate(dateStr);
+  if(d.getMonth()!==calMonth.getMonth() || d.getFullYear()!==calMonth.getFullYear()) calMonth = new Date(d.getFullYear(), d.getMonth(), 1);
+  renderCalendar();
+}
+function wkShift(n){ wkOffset += n; renderWeekStrip(); }
+
+// ── A · Week strip in the hero ──
+function renderWeekStrip(){
+  const el = document.getElementById('wk-strip'); if(!el) return;
+  const all = calItems();
+  const t = today(), tdStr = ymd(t), tmStr = ymd(addDays(t,1));
+  const start = addDays(mondayOf(t), wkOffset*7);
+  const end = addDays(start,6);
+  const { segs, laneCount, cols } = weekSegments(start, all);
+  const MAX = 3;
+  const title = wkOffset===0 ? 'This week' : wkOffset===1 ? 'Next week' : wkOffset===-1 ? 'Last week'
+    : start.getDate()+' '+CAL_MON3[start.getMonth()]+' – '+end.getDate()+' '+CAL_MON3[end.getMonth()];
+
+  let days = '';
+  cols.forEach((c,i)=>{
+    const d = addDays(start,i);
+    const cls = (c===tdStr?' today':'') + (c<tdStr?' past':'');
+    const n = all.filter(s=>s.dates.includes(c)).length;
+    days += `<button class="wk-day${cls}" onclick="openCalendarView('${c}')" aria-label="${CAL_DOWFULL[d.getDay()]} ${d.getDate()} ${CAL_MONTHS[d.getMonth()]}${n?', '+n+' shoot'+(n>1?'s':''):''}"><span class="wk-dow">${CAL_DOW3[d.getDay()]}</span><span class="wk-num">${d.getDate()}</span></button>`;
+  });
+
+  // Labelled bars: client name inside, title too when the bar is long enough
+  const hidden = {};
+  segs.filter(s=>s.lane>=MAX).forEach(sg=>{ for(let k=sg.start;k<sg.start+sg.span;k++) hidden[k]=(hidden[k]||0)+1; });
+  let bars = '';
+  segs.filter(s=>s.lane<MAX).forEach(sg=>{
+    const it = sg.shoot, cls = calClass(it);
+    const padL = sg.contL && sg.start===0 ? 0 : 3, padR = sg.contR && sg.start+sg.span===7 ? 0 : 3;
+    const label = calEsc(it.client) + (sg.span>=3 && it.title ? `<span class="wk-bar-sub"> · ${calEsc(it.title)}</span>` : '');
+    const firstCol = ymd(addDays(start, sg.start));
+    bars += `<button class="wk-bar ${cls}${padL===0?' cl':''}${padR===0?' cr':''}" style="left:calc(${sg.start/7*100}% + ${padL}px);width:calc(${sg.span/7*100}% - ${padL+padR}px);top:${sg.lane*22}px" onclick="openCalendarView('${firstCol}')" title="${calEsc(it.client+' — '+it.title)}${isTent(it)?' (tentative)':''}">${label}</button>`;
+  });
+  let more = '';
+  Object.entries(hidden).forEach(([k,n])=>{ more += `<span class="wk-more" style="left:${k/7*100}%;width:${100/7}%">+${n}</span>`; });
+  const lanes = Math.min(laneCount, MAX);
+  const barsH = lanes ? lanes*22 - 4 + (more?16:0) : 0;
+
+  // Today + Tomorrow lines (shoots before bookings), else the next thing coming up
+  const on = dStr => all.filter(s=>s.dates.includes(dStr)).sort((a,b)=>(a.isBooking?1:0)-(b.isBooking?1:0));
+  const dayLine = (label, dStr, items, live) => {
+    const s = items[0], dd = dayDetail(s, dStr), bits = [];
+    if(dd.total>1) bits.push('day '+(dd.index+1)+' of '+dd.total);
+    if(dd.crew) bits.push('crew '+calEsc(dd.crew));
+    else if(s.isBooking) bits.push(isTent(s)?'tentative':'booked');
+    const extra = items.length>1 ? `<span class="wk-line-more">+${items.length-1} more</span>` : '';
+    return `<button class="wk-line${live?' is-live':''}" onclick="openCalendarView('${dStr}')">
+      <span class="wk-line-when">${label}</span>
+      <span class="wk-line-what">${calDot(s)}<strong>${calEsc(s.client)}</strong><span class="wk-line-meta">${bits.length?' · '+bits.join(' · '):''}</span></span>${extra}</button>`;
+  };
+  const todayItems = on(tdStr), tomItems = on(tmStr);
+  let lines = '';
+  lines += todayItems.length ? dayLine('Today', tdStr, todayItems, true)
+    : `<div class="wk-line is-empty"><span class="wk-line-when">Today</span><span class="wk-line-what">Nothing scheduled</span></div>`;
+  if(tomItems.length){
+    lines += dayLine('Tomorrow', tmStr, tomItems, false);
+  } else {
+    const next = all.map(s=>({s, d:s.dates.find(x=>x>tmStr)})).filter(o=>o.d).sort((a,b)=>a.d<b.d?-1:1)[0];
+    if(next){
+      const d = parseDate(next.d);
+      lines += dayLine(`${CAL_DOW3[d.getDay()]} ${d.getDate()} ${CAL_MON3[d.getMonth()]}`, next.d, on(next.d), false);
+    } else if(!todayItems.length){
+      lines = `<button class="wk-line" onclick="openAddShoot()"><span class="wk-line-when">Next</span><span class="wk-line-what">No upcoming shoots booked. <strong>Add one</strong></span></button>`;
+    }
+  }
+
+  el.innerHTML = `<div class="wk-hdr"><span class="wk-title">${title}</span>
+      <span class="wk-nav">${wkOffset!==0?`<button class="wk-reset" onclick="wkShift(-wkOffset)">This week</button>`:''}<button onclick="wkShift(-1)" aria-label="Previous week">${CAL_SVG.left}</button><button onclick="wkShift(1)" aria-label="Next week">${CAL_SVG.right}</button></span></div>
+    <div class="wk-row"><div class="wk-days">${days}</div>
+      <div class="wk-bars" style="height:${barsH}px">${bars}${more}</div>
+      ${!segs.length?'<div class="wk-none">Nothing booked this week</div>':''}</div>
+    <div class="wk-lines">${lines}</div>`;
+}
+
+// ── B · Month calendar + selected day, C · Up next ──
+function renderCalendar(){
+  const el = document.getElementById('calendar-view'); if(!el) return;
+  const t = today(), tdStr = ymd(t);
+  if(!calMonth) calMonth = new Date(t.getFullYear(), t.getMonth(), 1);
+  if(!calSelected) calSelected = tdStr;
+
+  const list = calShoots(true);
+  const byDate = indexByDate(list);
+  const MAX_LANES = 3;
+
+  // Month grid: Monday-start weeks covering the month
+  const first = calMonth, last = new Date(first.getFullYear(), first.getMonth()+1, 0);
+  let wk = mondayOf(first), weeks = '';
+  while(wk <= last){
+    const { segs, laneCount, cols } = weekSegments(wk, list);
+    const lanes = Math.min(laneCount, MAX_LANES);
+    const hidden = {};
+    segs.filter(s=>s.lane>=MAX_LANES).forEach(sg=>{ for(let k=sg.start;k<sg.start+sg.span;k++) hidden[k]=(hidden[k]||0)+1; });
+    let cells = '';
+    cols.forEach((c,i)=>{
+      const d = addDays(wk,i);
+      const out = d.getMonth()!==first.getMonth();
+      const cls = (out?' out':'')+(c===tdStr?' today':'')+(c<tdStr?' past':'')+(c===calSelected?' sel':'')+(i>=5?' wknd':'');
+      const n = (byDate[c]||[]).length;
+      cells += `<button class="cal-cell${cls}" onclick="calSelect('${c}')" aria-label="${CAL_DOWFULL[d.getDay()]} ${d.getDate()} ${CAL_MONTHS[d.getMonth()]}${n?', '+n+' shoot'+(n>1?'s':''):''}"${c===calSelected?' aria-current="date"':''}><span class="cal-num">${d.getDate()}</span>${hidden[i]?`<span class="cal-more">+${hidden[i]}</span>`:''}</button>`;
+    });
+    let bars = '';
+    segs.filter(s=>s.lane<MAX_LANES).forEach(sg=>{
+      const cls = calClass(sg.shoot);
+      const left = sg.start/7*100, width = sg.span/7*100;
+      const padL = sg.contL && sg.start===0 ? 0 : 3, padR = sg.contR && sg.start+sg.span===7 ? 0 : 3;
+      bars += `<div class="cal-bar ${cls}${padL===0?' cl':''}${padR===0?' cr':''}" style="left:calc(${left}% + ${padL}px);width:calc(${width}% - ${padL+padR}px);top:${sg.lane*18}px">${calEsc(sg.shoot.client)}</div>`;
+    });
+    const h = 34 + lanes*18 + (Object.keys(hidden).length?12:6);
+    weeks += `<div class="cal-week" style="height:${Math.max(h,58)}px"><div class="cal-cells">${cells}</div><div class="cal-bars">${bars}</div></div>`;
+    wk = addDays(wk,7);
+  }
+
+  // Selected day panel
+  const sd = parseDate(calSelected);
+  const dayShoots = byDate[calSelected] || [];
+  let dayHtml = '';
+  dayShoots.forEach(s=>{
+    const cls = calClass(s), dd = dayDetail(s, calSelected);
+    if(s.isBooking){
+      const tags = [`<span class="cal-tag${isTent(s)?' tent':''}">${isTent(s)?'Tentative':'Confirmed'}</span>`];
+      if(dd.total>1) tags.push(`<span>Day ${dd.index+1} of ${dd.total}</span>`);
+      tags.push('<span>From Google Calendar</span>');
+      dayHtml += `<div class="cal-evt is-booking">
+        <div class="cal-evt-stripe ${cls}"></div>
+        <div class="cal-evt-body"><div class="cal-evt-client">${calEsc(s.client)}</div><div class="cal-evt-title">${calEsc(s.title)}</div>
+        <div class="cal-evt-meta">${tags.join('')}</div>
+        ${calSelected>=tdStr?`<button class="cal-promote" onclick="promoteBooking('${s.id}')">${CAL_SVG.plus} Create shoot page</button>`:''}</div></div>`;
+      return;
+    }
+    const meta = [];
+    if(dd.total>1) meta.push(`<span>Day ${dd.index+1} of ${dd.total}</span>`);
+    meta.push(`<span>${CAL_SVG.clock} Crew ${calEsc(dd.crew||'TBC')}${dd.wrap?' · wrap '+calEsc(dd.wrap):''}</span>`);
+    if(s.location) meta.push(`<span>${CAL_SVG.pin} ${calEsc(s.location)}</span>`);
+    dayHtml += `<div class="cal-evt" onclick="openShoot('${s.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openShoot('${s.id}')">
+      <div class="cal-evt-stripe ${cls}"></div>
+      <div class="cal-evt-body"><div class="cal-evt-client">${calEsc(s.client)}</div><div class="cal-evt-title">${calEsc(s.title)}</div>
+      <div class="cal-evt-meta">${meta.join('')}</div></div></div>`;
+  });
+  if(!dayShoots.length){
+    dayHtml = `<div class="cal-empty">Nothing scheduled.</div>` +
+      (calSelected>=tdStr ? `<button class="cal-add" onclick="openAddShoot('${calSelected}')">${CAL_SVG.plus} Add shoot on ${sd.getDate()} ${CAL_MON3[sd.getMonth()]}</button>` : '');
+  }
+
+  // Up next: the next 14 days (search applies, status chips don't — it's always forward-looking)
+  const upByDate = indexByDate(calShoots(false));
+  let upHtml = '', gapStart = null, gapLen = 0, bookedDays = 0;
+  const flushGap = ()=>{
+    if(!gapStart) return;
+    if(gapLen<2){ gapStart=null; gapLen=0; return; }  // single free days aren't worth a row
+    const a = parseDate(gapStart), b = addDays(a, gapLen-1);
+    const range = gapLen===1 ? `${CAL_DOW3[a.getDay()]} ${a.getDate()} ${CAL_MON3[a.getMonth()]}`
+      : `${a.getDate()} ${CAL_MON3[a.getMonth()]} – ${b.getDate()} ${CAL_MON3[b.getMonth()]}`;
+    upHtml += `<div class="un-gap"><span>Nothing booked · <strong>${range}</strong>${gapLen>1?' ('+gapLen+' days)':''}</span><button onclick="openAddShoot('${gapStart}')">Add shoot</button></div>`;
+    gapStart = null; gapLen = 0;
+  };
+  for(let i=0;i<14;i++){
+    const d = addDays(t,i), c = ymd(d), items = upByDate[c]||[];
+    if(!items.length){ if(!gapStart) gapStart=c; gapLen++; continue; }
+    flushGap(); bookedDays++;
+    const its = items.map(s=>{
+      const dd = dayDetail(s,c), cls = calClass(s);
+      const sub = [dd.total>1?'Day '+(dd.index+1)+'/'+dd.total:'', s.isBooking?(isTent(s)?'Tentative':'Booked'):(dd.crew?'Crew '+dd.crew:'Crew TBC')].filter(Boolean).join(' · ');
+      const click = s.isBooking ? `calSelect('${c}')` : `openShoot('${s.id}')`;
+      return `<div class="un-item" onclick="${click}"><div class="un-client">${calDot(s)}${calEsc(s.client)}</div><div class="un-sub">${calEsc(s.title)} · ${calEsc(sub)}</div></div>`;
+    }).join('');
+    upHtml += `<div class="un-row${i===0?' is-today':''}"><div class="un-date"><div class="un-dow">${i===0?'Today':CAL_DOW3[d.getDay()]}</div><div class="un-day">${d.getDate()}</div></div><div class="un-items">${its}</div></div>`;
+  }
+  flushGap();
+
+  el.innerHTML = `<div class="cal-layout">
+    <div class="cal-card">
+      <div class="cal-hdr">
+        <div class="cal-month">${CAL_MONTHS[first.getMonth()]} <span>${first.getFullYear()}</span></div>
+        <button class="cal-today-btn" onclick="calGoToday()">Today</button>
+        <button class="cal-nav" onclick="calShiftMonth(-1)" aria-label="Previous month">${CAL_SVG.left}</button>
+        <button class="cal-nav" onclick="calShiftMonth(1)" aria-label="Next month">${CAL_SVG.right}</button>
+      </div>
+      <div class="cal-legend">
+        <span><i style="background:var(--pri)"></i>Live</span>
+        <span><i style="background:var(--upcoming)"></i>Upcoming</span>
+        <span><i style="background:var(--wrapped)"></i>Wrapped</span>
+        <span><i style="border:1px dashed var(--text2)"></i>Tentative</span>
+      </div>
+      <div class="cal-dows"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+      ${weeks}
+    </div>
+    <div class="cal-side">
+      <div class="cal-panel">
+        <div class="cal-panel-hdr"><div class="cal-panel-title">${CAL_DOWFULL[sd.getDay()]}, ${sd.getDate()} ${CAL_MON3[sd.getMonth()]}</div><div class="cal-panel-sub">${relLabel(calSelected)}</div></div>
+        ${dayHtml}
+      </div>
+      <div class="cal-panel">
+        <div class="cal-panel-hdr"><div class="cal-panel-title">Next 14 days</div><div class="cal-panel-sub">${bookedDays} shoot day${bookedDays===1?'':'s'} · ${14-bookedDays} free</div></div>
+        ${upHtml}
+      </div>
+    </div>
+  </div>`;
+}
+
+// Called from renderDashboard so search, filters and Firebase updates keep everything in sync
+function refreshCalendarViews(){
+  renderWeekStrip();
+  if(dashView==='calendar') renderCalendar();
+}
+
 // ═══ INIT ═══
 renderDashboard();
+setView(dashView);
+waitFBReady(()=>listenCalendarEvents());
 
 // Load Firebase shoots after connection is ready
 function waitFBReady(cb,n=0){
