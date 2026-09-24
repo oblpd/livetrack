@@ -1090,7 +1090,14 @@ button.wk-line:hover{background:rgba(255,255,255,.08);}
 .cal-evt.is-booking:hover{border-color:transparent;}
 .cal-tag{padding:1px 7px;border-radius:99px;background:var(--upcoming-bg2);color:var(--upcoming);font-weight:700;}
 .cal-tag.tent{background:transparent;box-shadow:inset 0 0 0 1px var(--border);color:var(--text2);}
-.cal-promote{display:inline-flex;align-items:center;gap:5px;margin-top:8px;height:30px;padding:0 10px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
+.cal-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.cal-confirm{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:99px;border:none;background:var(--acc);color:var(--n100);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.cal-confirm:hover{background:var(--pri);}
+[data-theme="dark"] .cal-confirm{background:var(--n100);color:var(--acc);}
+[data-theme="dark"] .cal-confirm:hover{background:var(--pri);color:#fff;}
+.cal-undo{height:32px;padding:0 10px;border:none;background:none;color:var(--text2);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;text-decoration:underline;text-underline-offset:2px;cursor:pointer;}
+.cal-undo:hover{color:var(--pri);}
+.cal-promote{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 10px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
 .cal-promote:hover{border-color:var(--pri);color:var(--pri);}
 .cal-evt-body{min-width:0;flex:1;}
 .cal-evt-client{font-size:13px;font-weight:800;color:var(--text);}
@@ -4461,7 +4468,8 @@ const CAL_SVG = {
   right: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
   clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
   pin: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
-  plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>'
+  plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>',
+  check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
 };
 const CAL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const CAL_MON3 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -4517,9 +4525,36 @@ function bookingCovered(b){
 function calItems(){
   return [...SHOOTS.filter(s=>s.dates && s.dates.length), ...BOOKINGS.filter(b=>b.dates && b.dates.length && !bookingCovered(b))];
 }
-function isTent(item){ return !!item.tentative || item.crewCall==='TBC'; }
+// Team-wide confirm/tentative overrides for bookings, stored at /calendar-booking-status/<id>
+let BOOKING_STATUS = {};
+function isTent(item){
+  if(item.isBooking){
+    const st = BOOKING_STATUS[item.id];
+    return st && typeof st.tentative==='boolean' ? st.tentative : !!item.tentative;
+  }
+  return !!item.tentative || item.crewCall==='TBC';
+}
+function wasTentative(item){ return !!item.tentative; }
+function setBookingConfirmed(id, confirmed){
+  const b = BOOKINGS.find(x=>x.id===id); if(!b) return;
+  const rec = { tentative: !confirmed, updatedAt: Date.now() };
+  BOOKING_STATUS[id] = rec;
+  refreshCalendarViews();
+  const name = b.client + (b.title ? ' · '+b.title : '');
+  if(window._fbSet){
+    window._fbSet('calendar-booking-status/'+id, rec)
+      .then(()=>showToast(confirmed ? name+' confirmed' : name+' set back to tentative'))
+      .catch(()=>showToast('Saved on this device only — couldn\'t reach Firebase'));
+  } else {
+    showToast((confirmed?'Confirmed':'Set to tentative')+' on this device only — Firebase offline');
+  }
+}
 function listenCalendarEvents(){
   if(!window._fbListen) return;
+  window._fbListen('calendar-booking-status', data=>{
+    BOOKING_STATUS = data || {};
+    refreshCalendarViews();
+  });
   window._fbListen('calendar-events', data=>{
     if(!data) return;
     const list = Object.values(data).filter(e=>e && e.id && Array.isArray(e.dates) && e.dates.length);
@@ -4783,7 +4818,12 @@ function renderCalendar(){
         <div class="cal-evt-stripe ${cls}"></div>
         <div class="cal-evt-body"><div class="cal-evt-client">${calEsc(s.client)}</div><div class="cal-evt-title">${calEsc(s.title)}</div>
         <div class="cal-evt-meta">${tags.join('')}</div>
-        ${calSelected>=tdStr?`<button class="cal-promote" onclick="promoteBooking('${s.id}')">${CAL_SVG.plus} Create shoot page</button>`:''}</div></div>`;
+        <div class="cal-actions">
+          ${isTent(s)
+            ? `<button class="cal-confirm" onclick="setBookingConfirmed('${s.id}', true)">${CAL_SVG.check} Confirm shoot</button>`
+            : (wasTentative(s) ? `<button class="cal-undo" onclick="setBookingConfirmed('${s.id}', false)">Mark as tentative</button>` : '')}
+          ${calSelected>=tdStr?`<button class="cal-promote" onclick="promoteBooking('${s.id}')">${CAL_SVG.plus} Create shoot page</button>`:''}
+        </div></div></div>`;
       return;
     }
     const meta = [];
