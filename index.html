@@ -1048,6 +1048,8 @@ button.wk-line:hover{background:rgba(255,255,255,.08);}
 .cal-today-btn:hover{border-color:var(--pri);color:var(--pri);}
 .cal-legend{display:flex;flex-wrap:wrap;gap:12px;padding:0 16px 10px;font-size:11px;color:var(--text2);}
 .cal-legend span{display:flex;align-items:center;gap:5px;}
+.cal-sync{margin-left:auto;color:var(--text3);font-weight:600;}
+.cal-sync.stale{color:var(--upcoming);}
 .cal-legend i{width:14px;height:6px;border-radius:3px;display:inline-block;}
 .cal-dows{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);background:var(--surface2);}
 .cal-dows div{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);text-align:center;padding:6px 0;}
@@ -4527,10 +4529,13 @@ function calItems(){
 }
 // Team-wide confirm/tentative overrides for bookings, stored at /calendar-booking-status/<id>
 let BOOKING_STATUS = {};
+let CAL_SYNC = null;   // _meta from the Google Calendar sync: {syncedAt, calendar, count}
 function isTent(item){
   if(item.isBooking){
     const st = BOOKING_STATUS[item.id];
-    return st && typeof st.tentative==='boolean' ? st.tentative : !!item.tentative;
+    // Newest wins: a dashboard confirm beats an older calendar title; renaming the event later beats the confirm
+    if(st && typeof st.tentative==='boolean' && (!item.updatedAt || (st.updatedAt||0) >= item.updatedAt)) return st.tentative;
+    return !!item.tentative;
   }
   return !!item.tentative || item.crewCall==='TBC';
 }
@@ -4557,8 +4562,10 @@ function listenCalendarEvents(){
   });
   window._fbListen('calendar-events', data=>{
     if(!data) return;
+    const meta = data._meta || null;
     const list = Object.values(data).filter(e=>e && e.id && Array.isArray(e.dates) && e.dates.length);
-    if(!list.length) return;
+    if(!list.length && !meta) return;   // nothing synced yet → keep the built-in list
+    CAL_SYNC = meta;
     list.forEach(e=>{ e.isBooking=true; e.client=e.client||e.title||'Booking'; e.title=e.title||''; });
     BOOKINGS = list;
     refreshCalendarViews();
@@ -4813,6 +4820,7 @@ function renderCalendar(){
     if(s.isBooking){
       const tags = [`<span class="cal-tag${isTent(s)?' tent':''}">${isTent(s)?'Tentative':'Confirmed'}</span>`];
       if(dd.total>1) tags.push(`<span>Day ${dd.index+1} of ${dd.total}</span>`);
+      if(s.location) tags.push(`<span>${CAL_SVG.pin} ${calEsc(s.location)}</span>`);
       tags.push('<span>From Google Calendar</span>');
       dayHtml += `<div class="cal-evt is-booking">
         <div class="cal-evt-stripe ${cls}"></div>
@@ -4879,6 +4887,7 @@ function renderCalendar(){
         <span><i style="background:var(--upcoming)"></i>Upcoming</span>
         <span><i style="background:var(--wrapped)"></i>Wrapped</span>
         <span><i style="border:1px dashed var(--text2)"></i>Tentative</span>
+        ${calSyncLabel()}
       </div>
       <div class="cal-dows"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
       ${weeks}
@@ -4894,6 +4903,13 @@ function renderCalendar(){
       </div>
     </div>
   </div>`;
+}
+
+function calSyncLabel(){
+  if(!CAL_SYNC || !CAL_SYNC.syncedAt) return '';
+  const mins = Math.max(0, Math.round((Date.now()-CAL_SYNC.syncedAt)/60000));
+  const ago = mins<1 ? 'just now' : mins<60 ? mins+' min ago' : Math.round(mins/60)+'h ago';
+  return `<span class="cal-sync${mins>180?' stale':''}" title="${calEsc(CAL_SYNC.calendar||'Google Calendar')} · ${CAL_SYNC.count||0} events">Google Calendar · synced ${ago}</span>`;
 }
 
 // Called from renderDashboard so search, filters and Firebase updates keep everything in sync
