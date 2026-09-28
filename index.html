@@ -1380,6 +1380,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'getha-teaser-sep2026',
+    actId: 'getha-teaser-sep2026-activity',
+    client: 'Getha',
+    title: 'With Love, Getha — Teaser “Who’s Getting Married”',
+    dates: ['2026-09-29'],
+    datesLabel: '29 Sep 2026 · Tuesday',
+    location: 'Getha factory → Getha office',
+    crewCall: '11:30 AM',
+    talentCall: 'Getha team 12:30 PM · Kevin · Priscilla · Foong · Iqbal',
+    wrapEst: '2:45 PM',
+    days: 1,
+  },
+  {
     id: 'qra-party-sep2026',
     actId: 'qra-party-sep2026-activity',
     client: 'Qra',
@@ -2282,6 +2295,7 @@ function dzTab(name, btn){
 }
 
 function getShootHTML(shoot){
+  if(shoot.id==='getha-teaser-sep2026') return getGethaTeaserHTML(shoot);
   if(shoot.id==='qra-party-sep2026') return getQraPartyHTML(shoot);
   if(shoot.id==='johor-sep2026') return getJohorHTML(shoot);
   if(shoot.id==='specshop-aug2026') return getSpecShopHTML(shoot);
@@ -3459,6 +3473,43 @@ function getQraPartyHTML(shoot){
   </div>`;
 }
 
+// ═══════════════════════════════════════════════════
+// GETHA — WITH LOVE, GETHA · TEASER · 29 SEP 2026
+// ═══════════════════════════════════════════════════
+function getGethaTeaserHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Block 1 — Factory · Embroidery B-Roll <span class="srange">11:30 AM – 12:15 PM · Video team · B-roll for Slide 4 VO</span></div>
+      ${breakRow('',ico('clipboard'),'BRIEF · Video Request #3 · With Love, Getha | The Wedding Collection · Teaser “Who’s Getting Married”. The office thinks Kevin is getting married — it’s the Wedding Collection launch. Upload by 10 Oct · Launching 14 Oct 2026, Gurney Plaza, Penang.')}
+      ${breakRow('',ico('lightbulb'),'NOT SHOT TODAY · Slide 1 hook = subtle close-ups from Brandon’s proposal (confirm footage source) · Slide 7 CTA = KV animation outro in post.')}
+      ${breakRow('',ico('clipboard'),'11:30 AM · Video team at the factory. This footage becomes the Slide 4 b-roll under Kevin’s VO: “choosing the right colors… the right shades, and the right cut”.')}
+      ${sceneRow('gt01','11:30','11:50','Colours &amp; shades — thread and fabric','11:30–11:50 AM','Factory · embroidery','Embroidery machine at work','Macro on the needle, thread and pattern forming. Slow and tactile — shoot some at high frame rate for slow-mo.',[ico('clock')+' 20 min',ico('camera')+' Macro / slow-mo','🧵 Embroidery'])}
+      ${sceneRow('gt02','11:50','12:05','The right cut — cutting &amp; finishing','11:50 AM–12:05 PM','Factory','Colours &amp; shades — thread and fabric','Thread spools, fabric swatches, hands choosing between shades. Matches the VO line about choosing the right colours and shades.',[ico('clock')+' 15 min',ico('camera')+' CU / hands','🎨 Shades'])}
+      ${sceneRow('gt03','12:05','12:15','Slides 3 + 5 — Kevin’s phone call, full take (wide)','12:05–12:15 PM','Factory','The right cut — cutting &amp; finishing','Fabric being cut, edges finished, hands inspecting the detail. Keep any finished Wedding Collection piece out of full view — the reveal is at launch.',[ico('clock')+' 10 min',ico('camera')+' CU / hands','✂️ Cut','🤫 No full reveal'])}
+      ${breakRow('move','🚶','12:15–12:30 PM · Move to the Getha office + set up. Hide Wedding Collection KVs / samples from the office background — the misdirect depends on it.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 2 — Getha Team · Teaser Scenes <span class="srange">12:30 – 2:35 PM · Kevin · Priscilla · Foong · Iqbal</span></div>
+      ${breakRow('',ico('clipboard'),'12:30–12:45 PM · Getha team arrives · quick brief + mic up. Run lines once — keep it natural, they’re playing themselves.')}
+      ${sceneRow('gt04','12:45','13:05','Kevin’s phone call — close-ups + inserts','12:45–1:05 PM','Kevin’s office','Slides 3 + 5 — Kevin’s phone call, full take (wide)','One continuous take of the whole call so the edit can cut anywhere: “Ya, I’m actually really excited. A lot of people have been asking me when, so I figured… now’s the right time.” → “I know, it feels really soon. But honestly, I’m pretty excited to finally launch. The mattress, the design, the whole Wedding Collection.” Hold the last line back as a clean separate take — it’s the reveal.',[ico('clock')+' 20 min',ico('camera')+' Wide, locked',ico('mic')+' Kevin','📞 Phone call'])}
+      ${sceneRow('gt05','13:05','13:20','Slide 3 — Team eavesdropping','1:05–1:20 PM','Kevin’s office','Kevin’s phone call — close-ups + inserts','Same lines, tighter: CU on Kevin smiling, hand on phone, glances at the door. Inserts for the edit.',[ico('clock')+' 15 min',ico('camera')+' CU + inserts',ico('mic')+' Kevin'])}
+      ${sceneRow('gt06','13:20','13:35','Slide 6 — Team interrupts Kevin','1:20–1:35 PM','Outside Kevin’s office','Slide 3 — Team eavesdropping','Priscilla, Foong and Iqbal huddled outside the door / behind the glass, listening in, reacting to each line. Play the call so reactions land on cue.',[ico('clock')+' 15 min',ico('camera')+' Over-shoulder',ico('mic')+' Priscilla · Foong · Iqbal','👂 Eavesdrop'])}
+      ${sceneRow('gt07','13:35','13:50','Slide 2 — “Who said yes?”','1:35–1:50 PM','Kevin’s office door','Slide 6 — Team interrupts Kevin','Team bursts in. Iqbal: “What? We thought you’re getting married!” Kevin’s reaction — confused, then laughing. 2–3 takes, vary the energy.',[ico('clock')+' 15 min',ico('camera')+' Wide → CU',ico('mic')+' Iqbal + Kevin + team'])}
+      ${sceneRow('gt08','13:50','14:10','Slide 4 — Kevin VO, clean audio','1:50–2:10 PM','Open office','Slide 2 — “Who said yes?”','Priscilla: “Who said yes?” · Foong: “Is someone in the office getting married?” · Iqbal cuts in: “What? Kevin’s getting married?” Shoot the 2-shot, then singles for each line so the cut can be quick.',[ico('clock')+' 20 min',ico('camera')+' 2-shot + singles',ico('mic')+' Priscilla · Foong · Iqbal'])}
+      ${sceneRow('gt09','14:10','14:20','Pick-ups — reactions + cutaways','2:10–2:20 PM','Kevin’s office (quiet)','Slide 4 — Kevin VO, clean audio','Record the VO wild, phone off, room quiet: “I’ve been thinking about it for quite a while already, and I finally just did it. We’ve been working on all the little details behind the scenes. Choosing the right colors, like the right shades, and the right cut, because I wanted everything to feel right before we officially announce it. Yeah, everything’s almost ready. The big day’s happening this October.” This plays over the factory b-roll.',[ico('clock')+' 10 min','🎙 VO only',ico('mic')+' Kevin'])}
+      ${sceneRow('gt10','14:20','14:35','Wrap','2:20–2:35 PM','Office','Pick-ups — reactions + cutaways','Extra reaction CUs from the team (shock, whispering, pointing), the office environment, phone screen inserts. Anything the edit might need.',[ico('clock')+' 15 min',ico('camera')+' Pick-ups',ico('mic')+' Priscilla · Foong · Iqbal'])}
+      ${breakRow('wrap',ico('clock'),'2:35–2:45 PM · Footage + audio check, card back-up (2 copies) + wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">Getha · With Love, Getha — Teaser “Who’s Getting Married” · 29 Sep 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
 function getSpecShopHTML(shoot){
   return `
   ${shootTopbar(shoot)}
@@ -4616,9 +4667,29 @@ function bookingCovered(b){
     return words.some(w=>new RegExp('\\b'+w+'\\b').test(sc)) && s.dates.some(d=>b.dates.includes(d));
   });
 }
-// Everything the calendar draws: shoots first, then uncovered bookings
+// Days of a booking that a real shoot for the same client already covers
+function coveredDates(b){
+  const words = b.client.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>=3 && w!=='the');
+  const out = new Set();
+  SHOOTS.forEach(s=>{
+    if(!s.dates || !s.client) return;
+    const sc = s.client.toLowerCase();
+    if(!words.some(w=>new RegExp('\\b'+w+'\\b').test(sc))) return;
+    s.dates.forEach(d=>{ if(b.dates.includes(d)) out.add(d); });
+  });
+  return out;
+}
+// Everything the calendar draws: shoots first, then bookings minus any days a shoot covers
 function calItems(){
-  return [...SHOOTS.filter(s=>s.dates && s.dates.length), ...BOOKINGS.filter(b=>b.dates && b.dates.length && !isHiddenBooking(b) && !bookingCovered(b))];
+  const bookings = [];
+  BOOKINGS.forEach(b=>{
+    if(!b.dates || !b.dates.length || isHiddenBooking(b)) return;
+    const cov = coveredDates(b);
+    if(!cov.size) { bookings.push(b); return; }
+    const left = b.dates.filter(d=>!cov.has(d));
+    if(left.length) bookings.push(Object.assign(Object.create(Object.getPrototypeOf(b)), b, { dates: left }));
+  });
+  return [...SHOOTS.filter(s=>s.dates && s.dates.length), ...bookings];
 }
 // Team-wide confirm/tentative overrides for bookings, stored at /calendar-booking-status/<id>
 let BOOKING_STATUS = {};
