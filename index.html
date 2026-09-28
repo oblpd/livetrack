@@ -1380,6 +1380,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'getha-launch-sep2026',
+    actId: 'getha-launch-sep2026-activity',
+    client: 'Getha',
+    title: 'With Love, Getha — Campaign Launch + Product Intro',
+    dates: ['2026-09-30'],
+    datesLabel: '30 Sep 2026 · Wednesday',
+    location: 'Getha PJ Showroom',
+    crewCall: '10:00 AM',
+    talentCall: 'Brandon + fiancée · Getha salesperson · TBC',
+    wrapEst: '4:00 PM',
+    days: 1,
+  },
+  {
     id: 'getha-teaser-sep2026',
     actId: 'getha-teaser-sep2026-activity',
     client: 'Getha',
@@ -2295,6 +2308,7 @@ function dzTab(name, btn){
 }
 
 function getShootHTML(shoot){
+  if(shoot.id==='getha-launch-sep2026') return getGethaLaunchHTML(shoot);
   if(shoot.id==='getha-teaser-sep2026') return getGethaTeaserHTML(shoot);
   if(shoot.id==='qra-party-sep2026') return getQraPartyHTML(shoot);
   if(shoot.id==='johor-sep2026') return getJohorHTML(shoot);
@@ -3487,7 +3501,7 @@ function getGethaTeaserHTML(shoot){
     <div class="session"><div class="session-hdr">Block 1 — Factory · Embroidery B-Roll <span class="srange">11:30 AM – 12:15 PM · Video team · B-roll for Slide 4 VO</span></div>
       ${breakRow('',ico('clipboard'),'BRIEF · Video Request #3 · With Love, Getha | The Wedding Collection · Teaser “Who’s Getting Married”. The office thinks Kevin is getting married — it’s the Wedding Collection launch. Upload by 10 Oct · Launching 14 Oct 2026, Gurney Plaza, Penang.')}
       ${breakRow('',ico('lightbulb'),'NOT SHOT TODAY · Slide 1 hook = subtle close-ups from Brandon’s proposal (confirm footage source) · Slide 7 CTA = KV animation outro in post.')}
-      ${breakRow('',ico('clipboard'),'11:30 AM · Video team at the factory. This footage becomes the Slide 4 b-roll under Kevin’s VO: “choosing the right colors… the right shades, and the right cut”.')}
+      ${breakRow('',ico('clipboard'),'11:30 AM · Video team at the factory. This footage (plus phone BTS from the 30 Sep launch shoot) becomes the Slide 4 b-roll under Kevin’s VO: “choosing the right colors… the right shades, and the right cut”.')}
       ${sceneRow('gt01','11:30','11:50','Colours &amp; shades — thread and fabric','11:30–11:50 AM','Factory · embroidery','Embroidery machine at work','Macro on the needle, thread and pattern forming. Slow and tactile — shoot some at high frame rate for slow-mo.',[ico('clock')+' 20 min',ico('camera')+' Macro / slow-mo','🧵 Embroidery'])}
       ${sceneRow('gt02','11:50','12:05','The right cut — cutting &amp; finishing','11:50 AM–12:05 PM','Factory','Colours &amp; shades — thread and fabric','Thread spools, fabric swatches, hands choosing between shades. Matches the VO line about choosing the right colours and shades.',[ico('clock')+' 15 min',ico('camera')+' CU / hands','🎨 Shades'])}
       ${sceneRow('gt03','12:05','12:15','Slides 3 + 5 — Kevin’s phone call, full take (wide)','12:05–12:15 PM','Factory','The right cut — cutting &amp; finishing','Fabric being cut, edges finished, hands inspecting the detail. Keep any finished Wedding Collection piece out of full view — the reveal is at launch.',[ico('clock')+' 10 min',ico('camera')+' CU / hands','✂️ Cut','🤫 No full reveal'])}
@@ -3507,6 +3521,52 @@ function getGethaTeaserHTML(shoot){
     </div>
 
     <div class="shoot-footer">Getha · With Love, Getha — Teaser “Who’s Getting Married” · 29 Sep 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// GETHA — CAMPAIGN LAUNCH + PRODUCT INTRO · 30 SEP 2026
+// ═══════════════════════════════════════════════════
+function getGethaLaunchHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Block 1 — Campaign Launch Video · Couple <span class="srange">10:00 AM – 12:15 PM · VR#2 Scenes 3–5 · Landscape · Event screen</span></div>
+      ${breakRow('',ico('clipboard'),'BRIEF · With Love, Getha | The Wedding Collection · launching 14 Oct 2026, Gurney Plaza, Penang. Today = VR#2 Campaign Launch Video ft Brandon + fiancée (landscape, event screen) + VR#4 Product Intro Video (landscape, socmed). Upload by 10 Oct.')}
+      ${breakRow('',ico('clipboard'),'PREP CHECKLIST · Brochure (soft + hard copy) · fabric sample · embroidery samples (喜喜 ×6, initials, wedding logo mark) · red curtain backdrop · couple outfits · flowers · paper + pen for the Scene 3 checklist · laptop with a wedding moodboard open.')}
+      ${breakRow('',ico('lightbulb'),'NOT SHOT TODAY · VR#2 Scene 1 = Brandon’s proposal clips (request assets from Getha) · Scene 2 “Just Engaged” car = AI-gen, no talent needed. Also grab phone BTS all day — the 29 Sep teaser (Slide 4) uses launch-shoot BTS under Kevin’s VO.')}
+      ${breakRow('',ico('clipboard'),'10:00–10:30 AM · Crew call + set up + brief. Walk the showroom and pick the Wedding Collection display for Scene 5 (reaction only — product stays out of frame).')}
+      ${sceneRow('gl01','10:30','10:50','Scene 4 — Browsing for a mattress','10:30–10:50 AM','Getha PJ · exterior','Scene 4 — Getha PJ exterior, couple walks in','Establishing wide of the Getha PJ shopfront and signage, then the couple walking in hand in hand. Mix normal camera with a film-camera look (grade in post). Vibe: fun, playful, non-serious.',[ico('clock')+' 20 min',ico('camera')+' Wide → follow',ico('mic')+' Brandon + fiancée','🎞 Landscape'])}
+      ${sceneRow('gl02','10:50','11:20','Scene 5 — Chapter 2: “The Second Happiness”','10:50–11:20 AM','Showroom floor','Scene 4 — Browsing for a mattress','Couple browsing, lying on beds, laughing, bouncing, pointing things out to each other. Make sure Miracle latex products and the Genie section are in shot.',[ico('clock')+' 30 min',ico('camera')+' Handheld',ico('mic')+' Brandon + fiancée','🛏 Miracle latex · Genie'])}
+      ${sceneRow('gl03','11:20','11:45','Scene 3 — “Our Next Chapter” checklist inserts','11:20–11:45 AM','Wedding Collection display','Scene 5 — Chapter 2: “The Second Happiness”','They see the Wedding Collection — excited. Shoot their faces and reactions only; the product must NOT be revealed (shoot from the product’s side, facing them). Text on screen in post.',[ico('clock')+' 25 min',ico('camera')+' Reaction CUs',ico('mic')+' Brandon + fiancée','🤫 No product reveal','⭐ Protect'])}
+      ${sceneRow('gl04','11:45','12:15','Staff serves tea, couple sits down','11:45 AM–12:15 PM','Showroom · table','Scene 3 — “Our Next Chapter” checklist inserts','Hand unfolds a crumpled paper note and ticks items off: Get engaged · Plan the wedding · Find our dream mattress (highlight) · Set up our home · Honeymoon · Build our life together. Plus couple CUs: wedding moodboard on laptop, and cake tasting / trying on outfits if props are available (else AI-gen).',[ico('clock')+' 30 min',ico('camera')+' Inserts / CU',ico('mic')+' Brandon + fiancée','📝 Paper checklist'])}
+      ${breakRow('lunch',ico('coffee'),'12:15–1:00 PM · Lunch Break · Back up cards. Salesperson joins after lunch.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 2 — Product Intro Video · Customisation Journey <span class="srange">1:00 – 2:25 PM · VR#4 · Landscape · Socmed</span></div>
+      ${sceneRow('gl05','13:00','13:15','Passing over the catalogue','1:00–1:15 PM','Consultation area','Staff serves tea, couple sits down','Salesperson welcomes the couple and serves tea. Warm, unhurried — sets up the “customisation” journey.',[ico('clock')+' 15 min',ico('camera')+' Wide + CUs',ico('mic')+' Couple + salesperson','🍵 Tea'])}
+      ${sceneRow('gl06','13:15','13:30','Trying the mattress — lying down','1:15–1:30 PM','Consultation area','Passing over the catalogue','Salesperson hands over the brochure / catalogue; couple flips through it together. Insert on the pages.',[ico('clock')+' 15 min',ico('camera')+' OTS + insert',ico('mic')+' Couple + salesperson','📖 Brochure'])}
+      ${sceneRow('gl07','13:30','13:45','Touching the red colour panel','1:30–1:45 PM','Wedding Collection bed','Trying the mattress — lying down','Couple lies on the mattress, relaxed and happy. Top-down and side angles.',[ico('clock')+' 15 min',ico('camera')+' Top-down + side',ico('mic')+' Brandon + fiancée'])}
+      ${sceneRow('gl08','13:45','13:55','Sitting on the mattress','1:45–1:55 PM','Wedding Collection bed','Touching the red colour panel','Hand CU running across the red panel of the mattress — slow, tactile.',[ico('clock')+' 10 min',ico('camera')+' Macro / hands',ico('mic')+' Brandon + fiancée','🟥 Red panel'])}
+      ${sceneRow('gl09','13:55','14:05','Sharing the embroidery design options','1:55–2:05 PM','Wedding Collection bed','Sitting on the mattress','Couple sits on the edge, chatting with the salesperson.',[ico('clock')+' 10 min',ico('camera')+' Mid 2-shot',ico('mic')+' Couple + salesperson'])}
+      ${sceneRow('gl10','14:05','14:25','Scene 6 — Product aesthetic shots (no full reveal)','2:05–2:25 PM','Wedding Collection bed','Sharing the embroidery design options','Salesperson lays the embroidery samples out on the mattress (喜喜, initials, logo mark); couple picks favourites. CU on the samples and their hands.',[ico('clock')+' 20 min',ico('camera')+' CU + reactions',ico('mic')+' Couple + salesperson','🧵 Embroidery samples'])}
+      ${breakRow('move','🔧','2:25–2:35 PM · Talent wrap · Reset for product-only shots: dress the bed, flowers, red curtain backdrop, lighting for hard light and shadow.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 3 — Product Only · Aesthetic + Reveal <span class="srange">2:35 – 3:45 PM · VR#2 Scenes 6–8 + VR#4 opener · No talent</span></div>
+      ${breakRow('',ico('lightbulb'),'CONFIDENTIAL · VR#2 must never show the full mattress (reveal happens at the offline launch). VR#4 does show it — keep that footage off shared drives / socials until 14 Oct.')}
+      ${sceneRow('gl11','14:35','14:55','Scene 7 — Embroidery design variations (quick cuts)','2:35–2:55 PM','Styled bed set','Scene 6 — Product aesthetic shots (no full reveal)','Play with light, shadow and close-ups: quilting texture, piping, red panel, flowers and veil in the foreground. End on a FRONT-FACING shot of the embroidery panel — it transitions into the Scene 7 design compilation.',[ico('clock')+' 20 min',ico('camera')+' Macro / slider','💡 Light + shadow','🤫 No full reveal'])}
+      ${sceneRow('gl12','14:55','15:15','Scene 8 — Red curtain pull','2:55–3:15 PM','Styled bed set','Scene 7 — Embroidery design variations (quick cuts)','Same locked front-facing frame as the end of Scene 6, swap the panel each take: 喜喜 (6 variations) → initial customisation → wedding logo mark customisation. Identical framing so the quick cuts snap.',[ico('clock')+' 20 min',ico('camera')+' Locked frame','🧵 喜喜 ×6 · initials · logo mark'])}
+      ${sceneRow('gl13','15:15','15:30','VR#4 opener — light &amp; shadow → full mattress','3:15–3:30 PM','Red curtain set','Scene 8 — Red curtain pull','Red curtain pulls open and cuts off BEFORE the full mattress is revealed. Candles / flowers in the foreground. KV lockup “With Love, Getha” goes on in post.',[ico('clock')+' 15 min',ico('camera')+' Wide, locked','🟥 Red curtain','🤫 Cut before reveal'])}
+      ${sceneRow('gl14','15:30','15:45','Wrap','3:30–3:45 PM','Styled bed set','VR#4 opener — light &amp; shadow → full mattress','Start with lighting, shadows and close-ups of the mattress, then pull out to the full mattress. This is the Product Intro reveal (socmed, post-launch).',[ico('clock')+' 15 min',ico('camera')+' CU → wide reveal','👀 Full reveal · embargo'])}
+      ${breakRow('wrap',ico('clock'),'3:45–4:00 PM · Footage check + card back-up (2 copies) + wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">Getha · With Love, Getha — Campaign Launch + Product Intro · 30 Sep 2026 · Oblique Production · Confidential</div>
   </div>`;
 }
 
