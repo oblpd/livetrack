@@ -548,6 +548,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .modal-input::placeholder{color:var(--text3);}
 [data-theme="dark"] .modal-input{background:var(--n900);border-color:var(--n700);color:var(--n100);}
 .modal-row{display:flex;gap:12px;}
+.modal-check{display:flex;align-items:flex-start;gap:10px;margin:-4px 0 18px;padding:10px 12px;border:1px dashed var(--border);border-radius:var(--r-sm);cursor:pointer;}
+.modal-check input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--pri);flex-shrink:0;cursor:pointer;}
+.modal-check strong{display:block;font-size:13px;color:var(--text);}
+.modal-check small{display:block;font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4;}
 .modal-row .modal-field{flex:1;}
 .modal-save{
   width:100%;min-height:var(--min-touch);height:52px;
@@ -1084,13 +1088,19 @@ button.wk-line:hover{background:rgba(255,255,255,.08);}
 .cal-panel-sub{font-size:11px;font-weight:600;color:var(--text3);white-space:nowrap;}
 .cal-evt{display:flex;gap:10px;padding:10px;border-radius:var(--r-sm);background:var(--surface2);margin-bottom:8px;cursor:pointer;border:1px solid transparent;transition:border-color .2s;}
 .cal-evt:hover{border-color:var(--pri);}
+.cal-evt{position:relative;}
+.cal-evt-body{padding-right:26px;}
+.cal-del{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:var(--r-sm);border:none;background:transparent;color:var(--text3);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.cal-del:hover{background:var(--pri-bg);color:var(--pri);}
+.cal-restore{border:none;background:none;padding:0;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--pri);cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
 .cal-evt-stripe{width:4px;border-radius:2px;flex-shrink:0;}
 .cal-evt-stripe.live{background:var(--pri);}.cal-evt-stripe.upcoming{background:var(--upcoming);}.cal-evt-stripe.wrapped{background:var(--wrapped);}
 .cal-evt-stripe.tent{background:transparent!important;border:1.5px dashed;}
 .cal-evt-stripe.tent.live{border-color:var(--pri);}.cal-evt-stripe.tent.upcoming{border-color:var(--upcoming);}.cal-evt-stripe.tent.wrapped{border-color:var(--wrapped);}
 .cal-evt.is-booking{cursor:default;}
 .cal-evt.is-booking:hover{border-color:transparent;}
-.cal-tag{padding:1px 7px;border-radius:99px;background:var(--upcoming-bg2);color:var(--upcoming);font-weight:700;}
+.cal-actions .cal-tag{align-self:center;}
+.cal-tag{font-size:11px;line-height:1.5;padding:1px 7px;border-radius:99px;background:var(--upcoming-bg2);color:var(--upcoming);font-weight:700;}
 .cal-tag.tent{background:transparent;box-shadow:inset 0 0 0 1px var(--border);color:var(--text2);}
 .cal-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
 .cal-confirm{display:inline-flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:99px;border:none;background:var(--acc);color:var(--n100);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
@@ -1281,6 +1291,10 @@ button.wk-line:hover{background:rgba(255,255,255,.08);}
       <label class="modal-label">Location <span style="font-weight:400;opacity:.6;">(optional)</span></label>
       <input class="modal-input" id="add-location" type="text" placeholder="e.g. Studio, Bangsar"/>
     </div>
+    <label class="modal-check">
+      <input type="checkbox" id="add-tentative"/>
+      <span><strong>Tentative</strong><small>Not confirmed yet. Shows as a dashed outline on the calendar.</small></span>
+    </label>
     <button class="modal-save" id="add-save" onclick="saveNewShoot()">Add to Dashboard</button>
   </div>
 </div>
@@ -1288,7 +1302,7 @@ button.wk-line:hover{background:rgba(255,255,255,.08);}
 <!-- ═══ DELETE CONFIRM MODAL ═══ -->
 <div class="confirm-overlay" id="delete-confirm" onclick="closeDeleteConfirm()">
   <div class="confirm-box" onclick="event.stopPropagation()">
-    <div class="confirm-title">Delete Shoot</div>
+    <div class="confirm-title" id="delete-confirm-title">Delete Shoot</div>
     <div class="confirm-text" id="delete-confirm-text">Are you sure you want to remove this shoot from the dashboard?</div>
     <div class="confirm-btns">
       <button class="confirm-btn cancel" onclick="closeDeleteConfirm()">Cancel</button>
@@ -1365,6 +1379,19 @@ function ico(name, cls='') {
 }
 
 const SHOOTS = [
+  {
+    id: 'qra-party-sep2026',
+    actId: 'qra-party-sep2026-activity',
+    client: 'Qra',
+    title: 'Party Hosting #1 — Host vs Guest',
+    dates: ['2026-09-28'],
+    datesLabel: '28 Sep 2026 · Monday',
+    location: 'QRA — outlet TBC',
+    crewCall: '2:00 PM',
+    talentCall: 'Party Host + Party Guest · TBC',
+    wrapEst: '6:30 PM',
+    days: 1,
+  },
   {
     id: 'johor-sep2026',
     actId: 'johor-sep2026-activity',
@@ -2255,6 +2282,7 @@ function dzTab(name, btn){
 }
 
 function getShootHTML(shoot){
+  if(shoot.id==='qra-party-sep2026') return getQraPartyHTML(shoot);
   if(shoot.id==='johor-sep2026') return getJohorHTML(shoot);
   if(shoot.id==='specshop-aug2026') return getSpecShopHTML(shoot);
   if(shoot.id==='sommni-frwd-aug2026') return getSommniFRWDHTML(shoot);
@@ -3379,6 +3407,58 @@ function getSommniFRWDHTML(shoot){
 // ═══════════════════════════════════════════════════
 // THE SPEC SHOP — FOUNDER SHOOT HTML
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// QRA — PARTY HOSTING #1 · HOST VS GUEST · 28 SEP 2026
+// ═══════════════════════════════════════════════════
+function getQraPartyHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="session"><div class="session-hdr">Block 1 — Split-Screen Openers · Walk-Ins <span class="srange">2:30 – 3:00 PM · Scene #1 both sides · matched framing</span></div>
+      ${breakRow('',ico('clipboard'),'BRIEF · Split-screen / side-by-side comparison of how a Party Host vs a Party Guest prepares for a party at QRA. Host = focus on the items · Guest = shopping experience → Customised Gifting Service. Format 5:4 · Submission 5 Oct.')}
+      ${breakRow('',ico('lightbulb'),'SPLIT-SCREEN RULE · Every Host/Guest pair (QP01↔QP02, QP11↔QP17) must match camera height, lens and eyeline. Keep the action in the centre of the frame so it survives being cropped to half-width.')}
+      ${breakRow('',ico('clipboard'),'FEATURED PRODUCTS · Pre-cut fruit · Ready-made dips · Qra x Mauceri Spinach &amp; Cheese · Carmencita Paella Kit EPan Seafood · Marinated New Zealand Frenched Lamb Cutlet · Qra marinated chicken. Check stock on arrival.')}
+      ${breakRow('',ico('clipboard'),'2:00–2:30 PM · Crew call + set up + brief. Lock the entrance framing first (shared by QP01, QP02, QP17).')}
+      ${sceneRow('qp01','14:30','14:40','Scene #1 (Guest) — Walks in, same framing','2:30–2:40 PM','Entrance','Scene #1 (Host) — Walks in, straight to the prepped food','Host walks into QRA, grabs a basket and heads straight for the ready-to-eat section, no browsing. Leave space for Text Overlay #1: <b>PARTY HOST</b> — “I just need the food. Quick to prep, but still delicious.”',[ico('clock')+' 10 min',ico('camera')+' Locked · matched',ico('mic')+' Party Host','◧ Left half'])}
+      ${sceneRow('qp02','14:40','14:50','Scene #1 (Guest) — Requests the Customised Gifting Service','2:40–2:50 PM','Entrance','Scene #1 (Guest) — Walks in, same framing','Same camera position, lens and height as QP01 so the two halves line up. Guest walks in, slower and curious. Text Overlay #1: <b>THE GUEST</b> — “I want to bring something that feels personal.”',[ico('clock')+' 10 min',ico('camera')+' Locked · matched',ico('mic')+' Party Guest','◨ Right half'])}
+      ${sceneRow('qp03','14:50','15:00','Pre-cut fruit platter','2:50–3:00 PM','Service counter','Scene #1 (Guest) — Requests the Customised Gifting Service','Guest asks staff for the Customised Gifting Service; staff points her to the gifting corner. Grab a clean line from staff for the edit.',[ico('clock')+' 10 min',ico('camera')+' 2-shot',ico('mic')+' Guest + QRA staff'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 2 — Party Host · In the Cart <span class="srange">3:00 – 4:25 PM · Scene #2 + #3 (Host) · 1 product per beat</span></div>
+      ${breakRow('',ico('lightbulb'),'Each product is its own beat: grab → hold label to camera ~2 sec → into the cart. The product name pops on screen in the edit, so keep the top third clear.')}
+      ${sceneRow('qp04','15:00','15:10','Ready-to-serve dips','3:00–3:10 PM','Fresh / chiller','Pre-cut fruit platter','Talent grabs one product per beat and holds the label to the lens for ~2 sec so the product name can pop on screen (Text Overlay #2 “In the cart” ✅ list). Keep headroom clear for the overlay.',[ico('clock')+' 10 min','🍉 Pre-cut fruit',ico('mic')+' Party Host'])}
+      ${sceneRow('qp05','15:10','15:20','Qra x Mauceri Spinach &amp; Cheese','3:10–3:20 PM','Chiller','Ready-to-serve dips','Same grab-and-hold beat.',[ico('clock')+' 10 min','🥣 Dips',ico('mic')+' Party Host'])}
+      ${sceneRow('qp06','15:20','15:30','Carmencita Paella Kit EPan Seafood','3:20–3:30 PM','Chiller','Qra x Mauceri Spinach &amp; Cheese','Featured product — hero it: label facing camera, one clean CU on the shelf before the grab.',[ico('clock')+' 10 min','⭐ Featured',ico('mic')+' Party Host'])}
+      ${sceneRow('qp07','15:30','15:40','Marinated New Zealand Frenched Lamb Cutlet','3:30–3:40 PM','Grocery aisle','Carmencita Paella Kit EPan Seafood','Featured product — same beat; get a CU of the pack front.',[ico('clock')+' 10 min','⭐ Featured',ico('mic')+' Party Host'])}
+      ${sceneRow('qp08','15:40','15:50','Qra marinated chicken','3:40–3:50 PM','Butcher chiller','Marinated New Zealand Frenched Lamb Cutlet','Featured product — show the marinade through the pack; CU + grab.',[ico('clock')+' 10 min','⭐ Featured',ico('mic')+' Party Host'])}
+      ${sceneRow('qp09','15:50','16:00','Kitchen — request customised cuttings','3:50–4:00 PM','Butcher chiller','Qra marinated chicken','Featured product — last item into the cart.',[ico('clock')+' 10 min','⭐ Featured',ico('mic')+' Party Host'])}
+      ${sceneRow('qp10','16:00','16:15','Scene #3 (Host) — Products placed at the counter','4:00–4:15 PM','Butcher / kitchen counter','Kitchen — request customised cuttings','Host asks the counter for a custom cut; staff prepares it on camera. Hands + knife CUs for b-roll.',[ico('clock')+' 15 min',ico('camera')+' CU + 2-shot',ico('mic')+' Host + butcher'])}
+      ${sceneRow('qp11','16:15','16:25','Step 1 — Browse the gifting corner','4:15–4:25 PM','Checkout counter','Scene #3 (Host) — Products placed at the counter','Host unloads the cart; lay all featured products out in a hero line-up. Text Overlay #3: “Pre-cut. Pre-made. Ready to serve.” Frame for the left half to pair with QP17.',[ico('clock')+' 10 min','◧ Left half','🛒 Hero line-up',ico('mic')+' Party Host'])}
+      ${breakRow('move','🔧','4:25–4:40 PM · Break + reset to the gifting corner. Dress the gifting table: boxes, ribbons, cards, hamper.')}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 3 — Party Guest · Customised Gifting <span class="srange">4:40 – 6:00 PM · Scene #2 + #3 (Guest) · Text Overlay #2 steps</span></div>
+      ${sceneRow('qp12','16:40','16:50','Step 2 — Pick a base gift (snacks, drinks, self-care)','4:40–4:50 PM','Gifting corner','Step 1 — Browse the gifting corner','Wide establishing of the gifting corner, then Guest browsing. Text Overlay #2: <i>Customised gifting service</i>.',[ico('clock')+' 10 min',ico('camera')+' Wide → mid',ico('mic')+' Party Guest'])}
+      ${sceneRow('qp13','16:50','17:05','Step 3 — Xmas Hamper','4:50–5:05 PM','Gifting corner','Step 2 — Pick a base gift (snacks, drinks, self-care)','Guest picks items into the box. One CU per category so each reads on screen.',[ico('clock')+' 15 min','🎁 Snacks · drinks · self-care',ico('mic')+' Party Guest'])}
+      ${sceneRow('qp14','17:05','17:15','Step 4 — Customise: ribbon, card, personal note','5:05–5:15 PM','Gifting corner','Step 3 — Xmas Hamper','Guest checks out the Xmas Hamper option. Hero shot of the hamper, dressed.',[ico('clock')+' 10 min','🎄 Xmas Hamper',ico('mic')+' Party Guest'])}
+      ${sceneRow('qp15','17:15','17:35','Chilling at QRA Café while the gift is wrapped','5:15–5:35 PM','Gifting counter','Step 4 — Customise: ribbon, card, personal note','Box closed, ribbon tied, card written. Macro CUs of the ribbon pull and the handwriting — this is the “feels personal” payoff, over-shoot it.',[ico('clock')+' 20 min',ico('camera')+' Macro / CU','✍️ Personal note',ico('mic')+' Party Guest'])}
+      ${sceneRow('qp16','17:35','17:50','Scene #3 (Guest) — Walks out with the wrapped gift','5:35–5:50 PM','QRA Café','Chilling at QRA Café while the gift is wrapped','Guest relaxing with a drink at the café, gift being wrapped in the background or brought over.',[ico('clock')+' 15 min','☕ Café',ico('mic')+' Party Guest'])}
+      ${sceneRow('qp17','17:50','18:00','Packshots — featured products + wrapped gift','5:50–6:00 PM','Entrance / exit','Scene #3 (Guest) — Walks out with the wrapped gift','Mirror of QP02 framing. Text Overlay #3: “Pick. Personalise. Present. Done.” Frame for the right half to pair with QP11.',[ico('clock')+' 10 min','◨ Right half',ico('camera')+' Matched to QP02',ico('mic')+' Party Guest'])}
+    </div>
+
+    <div class="session"><div class="session-hdr">Block 4 — Pick-Ups · Packshots + End Card <span class="srange">6:00 – 6:15 PM</span></div>
+      ${sceneRow('qp18','18:00','18:15','Wrap','6:00–6:15 PM','Checkout counter','Packshots — featured products + wrapped gift','Clean packshots of each featured product and the finished gift for the Output line: “No matter is for party hosting or gifting, QRA has you covered. Shop the convenience range and try the customised gifting service now at QRA.”',[ico('clock')+' 15 min',ico('camera')+' Packshot','🔚 End card'])}
+      ${breakRow('wrap',ico('clock'),'6:15–6:30 PM · Footage check + card back-up (2 copies) + wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">Qra · Party Hosting #1 — Host vs Guest · 28 Sep 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
+
 function getSpecShopHTML(shoot){
   return `
   ${shootTopbar(shoot)}
@@ -4182,6 +4262,7 @@ function openAddShoot(prefillDate){
   document.getElementById('add-title').value = '';
   document.getElementById('add-date-end').value = '';
   document.getElementById('add-location').value = '';
+  document.getElementById('add-tentative').checked = false;
   setTimeout(()=>document.getElementById('add-client').focus(), 300);
 }
 
@@ -4197,6 +4278,7 @@ function openEditShoot(shootId){
   document.getElementById('add-date-start').value = shoot.dates[0] || '';
   document.getElementById('add-date-end').value = shoot.dates.length > 1 ? shoot.dates[shoot.dates.length-1] : '';
   document.getElementById('add-location').value = (shoot.location && shoot.location !== 'TBC') ? shoot.location : '';
+  document.getElementById('add-tentative').checked = shoot.tentative === true;
   setTimeout(()=>document.getElementById('add-client').focus(), 300);
 }
 
@@ -4215,6 +4297,7 @@ async function saveNewShoot(){
   const startDate = document.getElementById('add-date-start').value;
   const endDate = document.getElementById('add-date-end').value;
   const location = document.getElementById('add-location').value.trim();
+  const tentative = document.getElementById('add-tentative').checked;
 
   if(!client){ showToast('Client name is required'); return; }
   if(!title){ showToast('Shoot title is required'); return; }
@@ -4261,6 +4344,7 @@ async function saveNewShoot(){
       existingShoot.datesLabel = datesLabel;
       existingShoot.location = location || existingShoot.location || 'TBC';
       existingShoot.days = dates.length;
+      existingShoot.tentative = tentative;
 
       if(window._fbSet){
         showSync('syncing', 'Saving changes...');
@@ -4268,6 +4352,7 @@ async function saveNewShoot(){
           client, title, dates, datesLabel,
           location: existingShoot.location,
           days: dates.length,
+          tentative,
           updatedAt: new Date().toISOString()
         });
         showSync('success', 'Changes saved');
@@ -4284,6 +4369,7 @@ async function saveNewShoot(){
         talentCall: existingShoot?.talentCall || 'TBC',
         wrapEst: existingShoot?.wrapEst || 'TBC',
         days: dates.length,
+        tentative,
         userAdded: true,
         createdAt: isEdit ? (existingShoot?.createdAt || new Date().toISOString()) : new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -4318,12 +4404,15 @@ async function saveNewShoot(){
 
 // ═══ DELETE SHOOT ═══
 let _deleteTargetId = null;
+let _deleteBookingId = null;
 let _hiddenIds = [];
 
 function openDeleteConfirm(shootId){
   const shoot = SHOOTS.find(s=>s.id===shootId);
   if(!shoot) return;
   _deleteTargetId = shootId;
+  _deleteBookingId = null;
+  document.getElementById('delete-confirm-title').textContent = 'Delete Shoot';
   const action = 'Remove';
   document.getElementById('delete-confirm-text').textContent =
     action+' "'+shoot.client+' — '+shoot.title+'" from the dashboard?';
@@ -4334,9 +4423,11 @@ function openDeleteConfirm(shootId){
 function closeDeleteConfirm(){
   document.getElementById('delete-confirm').classList.remove('open');
   _deleteTargetId = null;
+  _deleteBookingId = null;
 }
 
 async function confirmDelete(){
+  if(_deleteBookingId){ const bid=_deleteBookingId; closeDeleteConfirm(); setBookingHidden(bid, true); return; }
   if(!_deleteTargetId) return;
   const id = _deleteTargetId;
   const shoot = SHOOTS.find(s=>s.id===id);
@@ -4451,6 +4542,7 @@ function loadFirebaseShoots(){
         if(overrides.datesLabel) shoot.datesLabel = overrides.datesLabel;
         if(overrides.location) shoot.location = overrides.location;
         if(overrides.days) shoot.days = overrides.days;
+        if(typeof overrides.tentative==='boolean') shoot.tentative = overrides.tentative;
         changed = true;
       }
     });
@@ -4471,6 +4563,7 @@ const CAL_SVG = {
   clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
   pin: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
   plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>',
+  trash: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>',
   check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
 };
 const CAL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -4525,7 +4618,7 @@ function bookingCovered(b){
 }
 // Everything the calendar draws: shoots first, then uncovered bookings
 function calItems(){
-  return [...SHOOTS.filter(s=>s.dates && s.dates.length), ...BOOKINGS.filter(b=>b.dates && b.dates.length && !bookingCovered(b))];
+  return [...SHOOTS.filter(s=>s.dates && s.dates.length), ...BOOKINGS.filter(b=>b.dates && b.dates.length && !isHiddenBooking(b) && !bookingCovered(b))];
 }
 // Team-wide confirm/tentative overrides for bookings, stored at /calendar-booking-status/<id>
 let BOOKING_STATUS = {};
@@ -4537,17 +4630,42 @@ function isTent(item){
     if(st && typeof st.tentative==='boolean' && (!item.updatedAt || (st.updatedAt||0) >= item.updatedAt)) return st.tentative;
     return !!item.tentative;
   }
-  return !!item.tentative || item.crewCall==='TBC';
+  return item.tentative === true;   // crew call TBC just means details are pending, not that the shoot is unconfirmed
 }
 function wasTentative(item){ return !!item.tentative; }
+function isHiddenBooking(b){ const st = BOOKING_STATUS[b.id]; return !!(st && st.hidden); }
+function openBookingRemove(id){
+  const b = BOOKINGS.find(x=>x.id===id); if(!b) return;
+  _deleteBookingId = id; _deleteTargetId = null;
+  const d = parseDate(b.dates[0]);
+  document.getElementById('delete-confirm-title').textContent = 'Remove Booking';
+  document.getElementById('delete-confirm-text').textContent =
+    'Remove "'+b.client+' — '+b.title+'" ('+d.getDate()+' '+CAL_MON3[d.getMonth()]+') from the dashboard for everyone? ' +
+    'It stays in Google Calendar, so delete it there too if the shoot is cancelled.';
+  document.getElementById('delete-confirm-btn').textContent = 'Remove';
+  document.getElementById('delete-confirm').classList.add('open');
+}
+function setBookingHidden(id, hidden){
+  BOOKING_STATUS[id] = Object.assign({}, BOOKING_STATUS[id], { hidden: hidden, hiddenAt: Date.now() });
+  refreshCalendarViews();
+  const msg = hidden ? 'Removed from the dashboard' : 'Restored';
+  if(window._fbUpdate){
+    window._fbUpdate('calendar-booking-status/'+id, { hidden: hidden, hiddenAt: Date.now() })
+      .then(()=>showToast(msg))
+      .catch(()=>showToast(msg+' on this device only — couldn\'t reach Firebase'));
+  } else showToast(msg+' on this device only — Firebase offline');
+}
+function restoreHiddenBookings(){
+  BOOKINGS.filter(isHiddenBooking).forEach(b=>setBookingHidden(b.id, false));
+}
 function setBookingConfirmed(id, confirmed){
   const b = BOOKINGS.find(x=>x.id===id); if(!b) return;
   const rec = { tentative: !confirmed, updatedAt: Date.now() };
-  BOOKING_STATUS[id] = rec;
+  BOOKING_STATUS[id] = Object.assign({}, BOOKING_STATUS[id], rec);
   refreshCalendarViews();
   const name = b.client + (b.title ? ' · '+b.title : '');
-  if(window._fbSet){
-    window._fbSet('calendar-booking-status/'+id, rec)
+  if(window._fbUpdate){
+    window._fbUpdate('calendar-booking-status/'+id, rec)
       .then(()=>showToast(confirmed ? name+' confirmed' : name+' set back to tentative'))
       .catch(()=>showToast('Saved on this device only — couldn\'t reach Firebase'));
   } else {
@@ -4578,6 +4696,8 @@ function promoteBooking(id){
   document.getElementById('add-client').value = b.client;
   document.getElementById('add-title').value = b.title.replace(/\s*\((unconfirmed|tentative)\)/i,'');
   document.getElementById('add-date-end').value = b.dates.length>1 ? b.dates[b.dates.length-1] : '';
+  document.getElementById('add-tentative').checked = isTent(b);
+  if(b.location) document.getElementById('add-location').value = b.location;
 }
 
 // Local-time YYYY-MM-DD (toISOString shifts to UTC — a day early in Malaysia before 8am)
@@ -4823,6 +4943,7 @@ function renderCalendar(){
       if(s.location) tags.push(`<span>${CAL_SVG.pin} ${calEsc(s.location)}</span>`);
       tags.push('<span>From Google Calendar</span>');
       dayHtml += `<div class="cal-evt is-booking">
+        <button class="cal-del" onclick="openBookingRemove('${s.id}')" aria-label="Remove booking" title="Remove">${CAL_SVG.trash}</button>
         <div class="cal-evt-stripe ${cls}"></div>
         <div class="cal-evt-body"><div class="cal-evt-client">${calEsc(s.client)}</div><div class="cal-evt-title">${calEsc(s.title)}</div>
         <div class="cal-evt-meta">${tags.join('')}</div>
@@ -4839,9 +4960,11 @@ function renderCalendar(){
     meta.push(`<span>${CAL_SVG.clock} Crew ${calEsc(dd.crew||'TBC')}${dd.wrap?' · wrap '+calEsc(dd.wrap):''}</span>`);
     if(s.location) meta.push(`<span>${CAL_SVG.pin} ${calEsc(s.location)}</span>`);
     dayHtml += `<div class="cal-evt" onclick="openShoot('${s.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openShoot('${s.id}')">
+      <button class="cal-del" onclick="event.stopPropagation();openDeleteConfirm('${s.id}')" aria-label="Delete shoot" title="Delete">${CAL_SVG.trash}</button>
       <div class="cal-evt-stripe ${cls}"></div>
       <div class="cal-evt-body"><div class="cal-evt-client">${calEsc(s.client)}</div><div class="cal-evt-title">${calEsc(s.title)}</div>
-      <div class="cal-evt-meta">${meta.join('')}</div></div></div>`;
+      <div class="cal-evt-meta">${meta.join('')}</div>
+      ${isTent(s)?`<div class="cal-actions"><span class="cal-tag tent">Tentative</span><button class="cal-confirm" onclick="event.stopPropagation();setShootConfirmed('${s.id}', true)">${CAL_SVG.check} Confirm shoot</button></div>`:''}</div></div>`;
   });
   if(!dayShoots.length){
     dayHtml = `<div class="cal-empty">Nothing scheduled.</div>` +
@@ -4888,6 +5011,7 @@ function renderCalendar(){
         <span><i style="background:var(--wrapped)"></i>Wrapped</span>
         <span><i style="border:1px dashed var(--text2)"></i>Tentative</span>
         ${calSyncLabel()}
+        ${(()=>{ const n = BOOKINGS.filter(isHiddenBooking).length; return n ? `<button class="cal-restore" onclick="restoreHiddenBookings()">${n} removed · Restore</button>` : ''; })()}
       </div>
       <div class="cal-dows"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
       ${weeks}
@@ -4910,6 +5034,18 @@ function calSyncLabel(){
   const mins = Math.max(0, Math.round((Date.now()-CAL_SYNC.syncedAt)/60000));
   const ago = mins<1 ? 'just now' : mins<60 ? mins+' min ago' : Math.round(mins/60)+'h ago';
   return `<span class="cal-sync${mins>180?' stale':''}" title="${calEsc(CAL_SYNC.calendar||'Google Calendar')} · ${CAL_SYNC.count||0} events">Google Calendar · synced ${ago}</span>`;
+}
+
+function setShootConfirmed(id, confirmed){
+  const s = SHOOTS.find(x=>x.id===id); if(!s) return;
+  s.tentative = !confirmed;
+  renderDashboard(document.getElementById('search-input')?.value||'', currentFilter);
+  const path = (s.userAdded ? 'dashboard-shoots/' : 'dashboard-overrides/') + id;
+  if(window._fbUpdate){
+    window._fbUpdate(path, { tentative: !confirmed })
+      .then(()=>showToast(s.client+' confirmed'))
+      .catch(()=>showToast('Saved on this device only — couldn\'t reach Firebase'));
+  } else showToast('Confirmed on this device only — Firebase offline');
 }
 
 // Called from renderDashboard so search, filters and Firebase updates keep everything in sync
