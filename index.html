@@ -1380,6 +1380,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'sunway-ipoh-oct2026',
+    actId: 'sunway-ipoh-oct2026-activity',
+    client: 'Sunway College Ipoh',
+    title: 'Campus Photoshoot — Art, Studios & Smart Classroom',
+    dates: ['2026-10-20'],
+    datesLabel: '20 Oct 2026 · Tuesday',
+    location: 'Sunway College Ipoh, Sunway City Ipoh, Tambun, Perak',
+    crewCall: '8:30 AM · Meet at Lobby',
+    talentCall: '15 talents ONLY 10:30 AM – 12:00 PM & 2:00 – 2:30 PM',
+    wrapEst: '3:30 PM',
+    days: 1,
+  },
+  {
     id: 'happikiddo-ads-oct2026',
     actId: 'happikiddo-ads-oct2026-activity',
     client: 'Happikiddo',
@@ -2321,6 +2334,7 @@ function dzTab(name, btn){
 }
 
 function getShootHTML(shoot){
+  if(shoot.id==='sunway-ipoh-oct2026') return getSunwayIpohHTML(shoot);
   if(shoot.id==='happikiddo-ads-oct2026') return getHappikiddoHTML(shoot);
   if(shoot.id==='getha-launch-sep2026') return getGethaLaunchHTML(shoot);
   if(shoot.id==='getha-teaser-sep2026') return getGethaTeaserHTML(shoot);
@@ -2341,6 +2355,70 @@ function getShootHTML(shoot){
   if(shoot.id==='ergolab-jul2026') return getErgolabHTML(shoot);
   if(shoot.id==='ddealz-bkk-sep2026') return getDdealzHTML(shoot);
   return '<p style="padding:40px;text-align:center;">Shoot not found.</p>';
+}
+
+
+// ═══════════════════════════════════════════════════
+// SUNWAY COLLEGE IPOH — 20 Oct 2026 (single day)
+// ═══════════════════════════════════════════════════
+function getSunwayIpohHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="warn-note">🎬 Talents on site 10:30 AM–12:00 PM and 2:00–2:30 PM only  ·  9:00–10:30 AM is the no-talent empty-wides run  ·  Mac Lab iMacs and the Classroom 105 panel must be ON before we walk in.</div>
+    ${breakRow('wrap',ico('check-circle'),'8:30 – 9:00 AM · MEET &amp; BRIEF — Campus walkthrough.')}
+    <div class="session"><div class="session-hdr">EMPTY WIDES — ALL LOCATIONS <span class="srange">9:00 – 10:30 AM · 90 min</span></div>
+      ${sceneRow('ip01','09:00','09:10','Classroom 105','9:00 – 9:10 AM','Lobby','Clean empty wides: lobby, reception counter, Sunway branding and signage, building interior','Start at the Lobby — we are already here from the 8:30 meet.',['🎒 Signage, branding wall',ico('clock')+' 10 min'])}
+      ${sceneRow('ip02','09:10','09:20','Mac Lab','9:10 – 9:20 AM','Classroom 105','Empty classroom: interactive panel ON, desks and chairs set, wide from the back and from the side','⚠️ Panel must be ON and showing related academic project.',['🎒 Interactive panel ON',ico('clock')+' 10 min'])}
+      ${sceneRow('ip03','09:20','09:30','SCI Library','9:20 – 9:30 AM','Mac Lab','Empty row of iMacs, screens live, lab wide and workstation details','⚠️ All machines must be ON with sunway college logo.',['🎒 iMacs ON with sunway college logo',ico('clock')+' 10 min'])}
+      ${sceneRow('ip04','09:30','09:40','Student Lounge','9:30 – 9:40 AM','SCI Library','Empty stacks, study zone, reading tables, counter and signage','',['🎒 Books on shelves',ico('clock')+' 10 min'])}
+      ${sceneRow('ip05','09:40','09:50','Common Room','9:40 – 9:50 AM','Student Lounge','Empty soft seating, lounge wide and detail','',[ico('clock')+' 10 min'])}
+      ${sceneRow('ip06','09:50','10:00','Studio 2','9:50 – 10:00 AM','Common Room','Empty common room wide, games and seating dressed','',['🎒 Board/table games set out',ico('clock')+' 10 min'])}
+      ${sceneRow('ip07','10:00','10:10','Studio 1','10:00 – 10:10 AM','Studio 2','Empty studio: benches dressed, work-in-progress on display, equipment and storage walls','',['🎒 Work-in-progress pieces staged',ico('clock')+' 10 min'])}
+      ${sceneRow('ip08','10:10','10:20','Art Gallery','10:10 – 10:20 AM','Studio 1','Empty studio set-up: easels and benches dressed, art materials laid out','',['🎒 Easels, canvases, art materials',ico('clock')+' 10 min'])}
+      ${sceneRow('ip09','10:20','10:30','Art Gallery','10:20 – 10:30 AM','Art Gallery','Empty gallery hang: interior wides, artwork on the walls, signage and gallery branding, texture details','Finish here so we are in position when the 15 talents arrive at 10:30.',['🎒 Artwork on display',ico('clock')+' 10 min'])}
+    </div>
+    <div class="session"><div class="session-hdr">ART GALLERY <span class="srange">10:30 – 10:42 AM · 12 min</span></div>
+      ${sceneRow('ip10','10:30','10:42','Studio 1','10:30 – 10:42 AM','Art Gallery','Hero: students viewing and discussing work on the gallery walls; one pointing out a piece to the group. Plus a tight pair at a single artwork','One hero setup only — 12 minutes is all the window allows. Talents arrive styled and briefed, no wardrobe changes on the floor.',['👥 6 talents','👕 Casual Campus outfit · aprons / art smocks','🎒 Artwork on display, sketchbooks',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','10:42 – 10:47 AM · WALK — Art Gallery → Studio 1')}
+    <div class="session"><div class="session-hdr">STUDIO 1 <span class="srange">10:47 – 10:58 AM · 11 min</span></div>
+      ${sceneRow('ip11','10:47','10:58','Studio 2','10:47 – 10:58 AM','Studio 1','Hero: students at easels / work benches mid-task, one giving guidance over another\'s shoulder. Wide + mid + over-the-shoulder','Individual',['👥 6 talents','👕 Casual Campus outfit · aprons / art smocks','🎒 Easels, canvases, art materials',ico('clock')+' 11 min'])}
+    </div>
+    ${breakRow('move','🚶','10:58 – 11:03 AM · WALK — Studio 1 → Studio 2')}
+    <div class="session"><div class="session-hdr">STUDIO 2 <span class="srange">11:03 – 11:14 AM · 11 min</span></div>
+      ${sceneRow('ip12','11:03','11:14','Common Room','11:03 – 11:14 AM','Studio 2','Hero: collaborative group project — students working together at a large table, pointing and discussing. Plus individual focused-work frames','Collaboration',['👥 6–8 talents','👕 Casual Campus outfit · aprons / art smocks','🎒 Project materials, models, tools',ico('clock')+' 11 min'])}
+    </div>
+    ${breakRow('move','🚶','11:14 – 11:19 AM · WALK — Studio 2 → Common Room')}
+    <div class="session"><div class="session-hdr">COMMON ROOM <span class="srange">11:19 – 11:29 AM · 10 min</span></div>
+      ${sceneRow('ip13','11:19','11:29','Student Lounge','11:19 – 11:29 AM','Common Room','Students relaxing between classes — talking, laughing, on phones and laptops, a game going. Wide of the room plus one tighter group frame','Biggest group of the morning — stage them before we walk in. Outfit change to college wear happens here, so hold the art smocks for the art block only.',['👥 8 talents','👕 Casual Campus outfit','🎒 Bags, drinks, laptops, board/table games',ico('clock')+' 10 min'])}
+    </div>
+    ${breakRow('move','🚶','11:29 – 11:34 AM · WALK — Common Room → Student Lounge')}
+    <div class="session"><div class="session-hdr">STUDENT LOUNGE &amp; LIBRARY <span class="srange">11:34 – 11:45 AM · 11 min</span></div>
+      ${sceneRow('ip14','11:34','11:40','SCI Library','11:34 – 11:40 AM','Student Lounge','Informal study and hang-out: students on soft seating, group chat, a pair working through notes. Interior wide + mid','',['👥 4–6 talents','👕 Casual Campus outfit','🎒 Books, laptops, drinks',ico('clock')+' 6 min'])}
+      ${sceneRow('ip15','11:40','11:45','Mac Lab','11:40 – 11:45 AM','SCI Library','Students studying at tables and between the shelves, plus one individual focused-study frame','Lounge and Library are adjacent — running them back-to-back with no move is the only reason both fit inside the window.',['👥 6 talents','👕 Casual Campus outfit','🎒 Books, laptops, notebooks',ico('clock')+' 5 min'])}
+    </div>
+    ${breakRow('move','🚶','11:45 – 11:50 AM · WALK — SCI Library → Mac Lab')}
+    <div class="session"><div class="session-hdr">APPLE-MAC COMPUTER LAB <span class="srange">11:50 AM – 12:00 PM · 10 min</span></div>
+      ${sceneRow('ip16','11:50','12:00','Lobby','11:50 AM – 12:00 PM','Mac Lab','Hero: full row of iMacs with students working, screens live. One leaning in to help at a station','Hard stop at 12:00 — talents are released. Anything missed here comes back at 2:00 only if the client extends them.',['👥 8–10 talents','👕 Casual Campus outfit','🎒 iMacs ON with sunway college logo, graphics tablets',ico('clock')+' 10 min'])}
+    </div>
+    ${breakRow('lunch',ico('utensils'),'12:00 – 2:00 PM · LUNCH')}
+    <div class="session"><div class="session-hdr">LOBBY <span class="srange">2:00 – 2:12 PM · 12 min</span></div>
+      ${sceneRow('ip17','14:00','14:12','Classroom 105','2:00 – 2:12 PM','Lobby','Hero: students walking through the lobby / arriving on campus, chatting naturally. Plus the full-group frame against the branding wall','Empty lobby already shot at 9:00 — every minute of this window is face-forward. Get the full-group frame first in case we run out of time.',['👥 All 15 talents','👕 Formal attire / Casual Campus outfit','🎒 School bags, books, prospectus',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','2:12 – 2:17 PM · WALK — Lobby → Classroom 105')}
+    <div class="session"><div class="session-hdr">CLASSROOM 105 <span class="srange">2:17 – 2:30 PM · 13 min</span></div>
+      ${sceneRow('ip18','14:17','14:30','Eg: entrance','2:17 – 2:30 PM','Classroom 105','Hero: one talent presenting on the interactive panel with the class engaged — hands up, discussion, students looking to the board. Wide from the back + mid from the side','⚠️ Interactive panel must be ON and showing related academic project. ⚠️ The client\'s itinerary puts this room at 2:30–3:00, but the talents are released at 2:30 — we have pulled it forward into their window. If the client can hold the talents to 3:00 this room gets a proper 30 min.',['👥 All 15 talents','👕 Formal attire / Casual Campus outfit','🎒 Interactive panel ON with course content, notebooks, laptops',ico('clock')+' 13 min'])}
+    </div>
+    <div class="session"><div class="session-hdr">PICK-UPS &amp; RE-SHOOTS <span class="srange">2:30 – 3:15 PM · 45 min</span></div>
+      ${sceneRow('ip19','14:30','15:15','WRAP','2:30 – 3:15 PM','Eg: entrance','Re-shoots and pick-ups from anywhere on campus. Priority if time is short: (1) Mac Lab if screens weren\'t ready, (2) Classroom 105 panel, (3) Art Gallery / Studio clean wides, (4) Library, (5) exterior &amp; campus grounds','Talents are gone from 2:30 — anything needing a face must be caught before then.',['🎒 Per shot',ico('clock')+' 45 min'])}
+    </div>
+    ${breakRow('wrap',ico('check-circle'),'3:15 – 3:30 PM · WRAP — Footage check with the client, back-up cards (2 copies), pack down')}
+  </div>`;
 }
 
 
