@@ -1393,6 +1393,19 @@ const SHOOTS = [
     days: 1,
   },
   {
+    id: 'sunway-velocity-oct2026',
+    actId: 'sunway-velocity-oct2026-activity',
+    client: 'Sunway College @ Velocity',
+    title: 'Campus Photoshoot — 13 Locations + Drone',
+    dates: ['2026-10-24'],
+    datesLabel: '24 Oct 2026 · Saturday',
+    location: 'Sunway College @ Velocity, Jalan Peel, Maluri, Kuala Lumpur',
+    crewCall: '8:15 AM · Drone pre-roll 8:30 AM',
+    talentCall: 'Cast & called — campus is closed Saturday',
+    wrapEst: '5:15 PM',
+    days: 1,
+  },
+  {
     id: 'happikiddo-ads-oct2026',
     actId: 'happikiddo-ads-oct2026-activity',
     client: 'Happikiddo',
@@ -2334,6 +2347,7 @@ function dzTab(name, btn){
 }
 
 function getShootHTML(shoot){
+  if(shoot.id==='sunway-velocity-oct2026') return getSunwayVelocityHTML(shoot);
   if(shoot.id==='sunway-ipoh-oct2026') return getSunwayIpohHTML(shoot);
   if(shoot.id==='happikiddo-ads-oct2026') return getHappikiddoHTML(shoot);
   if(shoot.id==='getha-launch-sep2026') return getGethaLaunchHTML(shoot);
@@ -2418,6 +2432,91 @@ function getSunwayIpohHTML(shoot){
       ${sceneRow('ip19','14:30','15:15','WRAP','2:30 – 3:15 PM','Eg: entrance','Re-shoots and pick-ups from anywhere on campus. Priority if time is short: (1) Mac Lab if screens weren\'t ready, (2) Classroom 105 panel, (3) Art Gallery / Studio clean wides, (4) Library, (5) exterior &amp; campus grounds','Talents are gone from 2:30 — anything needing a face must be caught before then.',['🎒 Per shot',ico('clock')+' 45 min'])}
     </div>
     ${breakRow('wrap',ico('check-circle'),'3:15 – 3:30 PM · WRAP — Footage check with the client, back-up cards (2 copies), pack down')}
+  </div>`;
+}
+
+
+// ═══════════════════════════════════════════════════
+// SUNWAY COLLEGE @ VELOCITY — 24 Oct 2026 (single day)
+// ═══════════════════════════════════════════════════
+function getSunwayVelocityHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="warn-note">🛸 Drone at 8:30 AM needs the CAAM permit AND written approval from Velocity building management  ·  🚇 MRT access sits on Prasarana / mall land, not college land — confirm who owns the exact spot  ·  📅 Saturday: every frame has to be cast and called, the campus will be empty.</div>
+    ${breakRow('wrap',ico('check-circle'),'8:15 – 8:30 AM · BRIEFING — Crew call &amp; setup.')}
+    ${breakRow('move','🚶','8:30 – 9:00 AM · DRONE — Empty-street aerials of the building, the Jalan Peel frontage and the Velocity block.')}
+    <div class="session"><div class="session-hdr">LOCATION 1 · GROUND — JALAN PEEL <span class="srange">9:00 – 9:30 AM · 30 min</span></div>
+      ${sceneRow('v01','09:00','09:18','Jalan Peel — frontage','9:00 – 9:18 AM','Jalan Peel — forecourt','Hero group: 5 students at the Sunway College signage wall / V Office monument, walking and laughing to camera. Plus singles and pairs at the sign','',['👥 5 pax','👕 Casual campus wear','🎒 School bags, books, laptops',ico('clock')+' 18 min'])}
+      ${sceneRow('v02','09:18','09:30','Covered walkway','9:18 – 9:30 AM','Jalan Peel — frontage','Full building exterior from street level + branding and signage details.','',['👥 5 pax (same group)','👕 Casual campus wear',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','9:30 – 9:35 AM · WALK — Jalan Peel forecourt → covered walkway')}
+    <div class="session"><div class="session-hdr">LOCATION 2 · GROUND — JALAN PEEL <span class="srange">9:35 – 10:05 AM · 30 min</span></div>
+      ${sceneRow('v03','09:35','09:53','Covered walkway','9:35 – 9:53 AM','Covered walkway','Hero: 5 students walking toward camera down the covered walkway, chatting, and Sunway College signage in frame.','',['👥 5 pax','👕 Casual campus wear','🎒 School bags, books, laptops',ico('clock')+' 18 min'])}
+      ${sceneRow('v04','09:53','10:05','Access turnstiles','9:53 – 10:05 AM','Covered walkway','Clean empty wide of the walkway and entrance, plus signage and architecture details (red louvres, planters, entrance glazing)','',[ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','10:05 – 10:10 AM · WALK — Covered walkway → Access turnstiles')}
+    <div class="session"><div class="session-hdr">LOCATION 3 · GROUND — ACCESS <span class="srange">10:10 – 10:40 AM · 30 min</span></div>
+      ${sceneRow('v05','10:10','10:28','Access turnstiles','10:10 – 10:28 AM','Access turnstiles','Students tapping through the turnstiles with lanyards, walking into campus. Mix of single and pairs, shot from the front and from the side','Avoid rush &amp; lunch hour',['👥 4–5 pax','👕 Casual campus wear','🎒 Lanyards, student cards, bags, books, laptops',ico('clock')+' 18 min'])}
+      ${sceneRow('v06','10:28','10:40','MRT link / concourse','10:28 – 10:40 AM','Access turnstiles','The Sunway College marble wall and logo as a clean hero, plus a tighter detail of the gate and the branding','',['👥 1–2 pax','👕 Casual campus wear','🎒 Lanyards, student cards, bags, books, laptops',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','10:40 – 10:45 AM · WALK — Access turnstiles → MRT link / station concourse')}
+    <div class="session"><div class="session-hdr">LOCATION 13 · MRT ACCESS <span class="srange">10:45 – 11:15 AM · 30 min</span></div>
+      ${sceneRow('v07','10:45','11:03','MRT link / concourse','10:45 – 11:03 AM','MRT link / concourse','Hero: students coming off the MRT and walking the link toward campus — the commute-to-campus story. Shot wide with the station architecture and signage readable','Dont disturb mrt traffic',['👥 4–5 pax','👕 Casual campus wear','🎒 Bags, phones, student cards, laptops, books',ico('clock')+' 18 min'])}
+      ${sceneRow('v08','11:03','11:15','Exit to mall','11:03 – 11:15 AM','MRT link / concourse','Connectivity story: wayfinding signage, the walk from station to campus entrance, students on the escalator or travelator. Plus a clean wide of the link','',['👥 2–3 pax','👕 Casual campus wear','🎒 Bags, phones',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','11:15 – 11:20 AM · WALK — MRT link → campus exit to mall')}
+    <div class="session"><div class="session-hdr">LOCATION 12 · EXIT TO MALL <span class="srange">11:20 – 11:40 AM · 20 min</span></div>
+      ${sceneRow('v09','11:20','11:40','Empty room with white walls','11:20 – 11:40 AM','Exit to mall','Student leaving campus through the glass doors into the Velocity mall concourse, V Office / Sunway College signage above the door. Plus a clean wide of the threshold','',['👥 2–3 pax','👕 Casual campus wear','🎒 Bags, books',ico('clock')+' 20 min'])}
+    </div>
+    ${breakRow('move','🚶','11:40 – 11:45 AM · LIFT — Ground → Level 6')}
+    <div class="session"><div class="session-hdr">PORTRAIT SHOOT — ALL TALENTS <span class="srange">11:45 – 11:55 AM · 10 min</span></div>
+      ${sceneRow('v10','11:45','11:55','Classroom (L6)','11:45 – 11:55 AM','Empty room with white walls','Talent individual portrait shoot','',['👥 All talent','👕 Casual campus wear / formal attire','🎒 Bags, books, laptops, headphones, stationeries',ico('clock')+' 10 min'])}
+    </div>
+    <div class="session"><div class="session-hdr">LOCATION 4 · LEVEL 6 — CLASSROOM <span class="srange">11:55 AM – 12:25 PM · 30 min</span></div>
+      ${sceneRow('v11','11:55','12:13','Classroom (L6)','11:55 AM – 12:13 PM','Classroom (L6)','Hero: lecturer presenting at the front, class engaged — hands up, discussion, students turned toward the board. Wide from the back + mid from the side','Pre-select the classroom. Projector and whiteboard must have real related content on them / sunway logo.',['👥 8–10 pax + 1 lecturer','👕 Casual campus wear, formal attire','🎒 Whiteboard content, notebooks, laptops, projector ON',ico('clock')+' 18 min'])}
+      ${sceneRow('v12','12:13','12:25','Student Hub','12:13 – 12:25 PM','Classroom (L6)','Second look: small-group work at the desks, students turning to each other, and a student presenting to the class','',['👥 6–8 pax','👕 Casual campus wear','🎒 Notebooks, laptops',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('lunch',ico('utensils'),'12:25 – 1:00 PM · LUNCH')}
+    <div class="session"><div class="session-hdr">LOCATION 5 · LEVEL 6 — STUDENT HUB <span class="srange">1:00 – 1:30 PM · 30 min</span></div>
+      ${sceneRow('v13','13:00','13:18','Student Hub','1:00 – 1:18 PM','Student Hub','Hero: students at the ping-pong and foosball tables mid-game, laughing. Plus friends around the café tables and a single portrait at the \'I ♥ SC\' wall','',['👥 6–8 pax','👕 Casual campus wear','🎒 Ping-pong bats, foosball table, laptops, drinks',ico('clock')+' 18 min'])}
+      ${sceneRow('v14','13:18','13:30','L6 corridors','1:18 – 1:30 PM','Student Hub','Student working on a laptop at the window. Plus a clean empty wide of the hub','',['👥 2–3 pax','👕 Casual campus wear','🎒 Laptops, books, folders',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','1:30 – 1:35 PM · WALK — Student Hub → Level 6 corridors')}
+    <div class="session"><div class="session-hdr">LOCATION 6 · LEVEL 6 — ENVIRONMENT <span class="srange">1:35 – 2:05 PM · 30 min</span></div>
+      ${sceneRow('v15','13:35','13:53','L6 corridors','1:35 – 1:53 PM','L6 corridors','Hero: students walking the mural corridor toward camera, chatting, the artwork running the full length of the frame. 4–5 passes with different pairings','',['👥 4–6 pax','👕 Casual campus wear','🎒 Books, bags, laptops',ico('clock')+' 18 min'])}
+      ${sceneRow('v16','13:53','14:05','Studio (L6)','1:53 – 2:05 PM','L6 corridors','Staff / student group portrait on the orange stools at the Sunway College wall with the green planting, plus mural detail shots and the Information Centre wayfinding sign','',['👥 8–12 pax','👕 Casual campus wear','🎒 Lanyards, bags, books',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','2:05 – 2:10 PM · WALK — Corridors → Studio')}
+    <div class="session"><div class="session-hdr">LOCATION 7 · LEVEL 6 — STUDIO <span class="srange">2:10 – 2:40 PM · 30 min</span></div>
+      ${sceneRow('v17','14:10','14:28','Studio (L6)','2:10 – 2:28 PM','Studio (L6)','Facility hero: the full studio with the green screen lit, softboxes and stands in position, a student on set and a second operating the camera — the room working as a studio','Make sure lights must be ON and the green screen pulled. Confirm studio booking.',['👥 2–3 pax','👕 Casual campus wear','🎒 Green screen lit, strobes, softboxes, camera on tripod',ico('clock')+' 18 min'])}
+      ${sceneRow('v18','14:28','14:40','Info Center','2:28 – 2:40 PM','Studio (L6)','Tighter: student presenting to camera on the green screen; hands on the camera and lighting controls. Plus a clean empty wide of the rigged studio','',['👥 1–2 pax','👕 Casual campus wear','🎒 Studio kit',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','2:40 – 2:45 PM · WALK — Studio → Info Center')}
+    <div class="session"><div class="session-hdr">LOCATION 8 · LEVEL 6 — INFO CENTER <span class="srange">2:45 – 3:15 PM · 30 min</span></div>
+      ${sceneRow('v19','14:45','15:03','Info Center','2:45 – 3:03 PM','Info Center','Hero: counsellor advising a prospective student on the yellow armchairs against the blue wall, brochure in hand, both engaged. Plus a second angle over the counsellor\'s shoulder','',['👥 2 pax','👕 Casual campus wear','🎒 Brochures, prospectus, course flyers, notepad',ico('clock')+' 18 min'])}
+      ${sceneRow('v20','15:03','15:15','Computer Lab (L7)','3:03 – 3:15 PM','Info Center','Interior wide of the centre — the hexagonal timber ceiling, orange seating, brochure racks and counter. Plus a staff member at the counter greeting a visitor','',['👥 1–2 pax','👕 Casual campus wear','🎒 Brochure racks, counter signage',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','3:15 – 3:20 PM · LIFT — Level 6 → Level 7')}
+    <div class="session"><div class="session-hdr">LOCATION 9 · LEVEL 7 — COMPUTER LAB <span class="srange">3:20 – 3:50 PM · 30 min</span></div>
+      ${sceneRow('v21','15:20','15:38','Computer Lab (L7)','3:20 – 3:38 PM','Computer Lab (L7)','Hero: full row of workstations with students working, screens live, a lecturer leaning in to help at a station. Shot down the row with shallow depth','All computers must be ON and showing sunway logo',['👥 6–8 pax + 1 lecturer','👕 Casual campus wear','🎒 PCs ON with sunway logo',ico('clock')+' 18 min'])}
+      ${sceneRow('v22','15:38','15:50','Library (L7)','3:38 – 3:50 PM','Computer Lab (L7)','Reverse angle down the row; two students collaborating at one screen; hands-on-keyboard detail. Plus a clean empty wide of the lab','',['👥 4–6 pax','👕 Casual campus wear','🎒 PCs ON, keyboards, mice',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','3:50 – 3:55 PM · WALK — Computer Lab → Library')}
+    <div class="session"><div class="session-hdr">LOCATION 10 · LEVEL 7 — LIBRARY <span class="srange">3:55 – 4:25 PM · 30 min</span></div>
+      ${sceneRow('v23','15:55','16:13','Library (L7)','3:55 – 4:13 PM','Library (L7)','Hero: student studying at a desk by the window with the planting behind; librarian or lecturer leaning in to guide a second student at the desk','',['👥 3–4 pax','👕 Casual campus wear','🎒 Books, laptop, stationeries',ico('clock')+' 18 min'])}
+      ${sceneRow('v24','16:13','16:25','Discussion Rooms','4:13 – 4:25 PM','Library (L7)','Student browsing between the shelves with a book open; student on a laptop at the geometric green wall feature. Plus interior wides of the stacks and study zone','',['👥 2–3 pax','👕 Casual campus wear','🎒 Books, laptop, stationeries',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('move','🚶','4:25 – 4:30 PM · WALK — Library → Discussion Rooms')}
+    <div class="session"><div class="session-hdr">LOCATION 11 · LEVEL 7 — DISCUSSION ROOMS <span class="srange">4:30 – 5:00 PM · 30 min</span></div>
+      ${sceneRow('v25','16:30','16:48','Discussion Rooms','4:30 – 4:48 PM','Discussion Rooms','Hero: full group project session around the table — 6–7 students, laptops open, screen on the wall, everyone engaged and talking. Shot wide through the glass and from inside','Screen shows sunway logo or academic related scene',['👥 6–7 pax','👕 Casual campus wear','🎒 Laptops, notebooks, wall screen ON, stationeries',ico('clock')+' 18 min'])}
+      ${sceneRow('v26','16:48','17:00','WRAP','4:48 – 5:00 PM','Discussion Rooms','Second room, smaller group of 3 in close discussion; and a round-table trio with laptops at the green wall. Plus a clean empty wide of a discussion room','',['👥 3–4 pax','👕 Casual campus wear','🎒 Laptops, notebooks, wall screen ON, stationeries',ico('clock')+' 12 min'])}
+    </div>
+    ${breakRow('wrap',ico('check-circle'),'5:00 – 5:15 PM · WRAP')}
   </div>`;
 }
 
