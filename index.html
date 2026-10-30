@@ -1380,6 +1380,19 @@ function ico(name, cls='') {
 
 const SHOOTS = [
   {
+    id: 'ergolab-nov2026',
+    actId: 'ergolab-nov2026-activity',
+    client: 'ErgoLab',
+    title: 'OBL09 · OBL10 · OBL11 — Pillow 2.0 + Seat Cushion',
+    dates: ['2026-11-16'],
+    datesLabel: '16 Nov 2026 · Monday',
+    location: 'Muji-style Airbnb (address TBC)',
+    crewCall: '2:00 PM',
+    talentCall: 'Albert 3:00 PM · Sha 6:30 PM · Alvin 8:30 PM',
+    wrapEst: '11:00 PM (hard stop 12:00 AM)',
+    days: 1,
+  },
+  {
     id: 'sunway-ipoh-oct2026',
     actId: 'sunway-ipoh-oct2026-activity',
     client: 'Sunway College Ipoh',
@@ -2347,6 +2360,7 @@ function dzTab(name, btn){
 }
 
 function getShootHTML(shoot){
+  if(shoot.id==='ergolab-nov2026') return getErgolabNovHTML(shoot);
   if(shoot.id==='sunway-velocity-oct2026') return getSunwayVelocityHTML(shoot);
   if(shoot.id==='sunway-ipoh-oct2026') return getSunwayIpohHTML(shoot);
   if(shoot.id==='happikiddo-ads-oct2026') return getHappikiddoHTML(shoot);
@@ -2371,6 +2385,68 @@ function getShootHTML(shoot){
   return '<p style="padding:40px;text-align:center;">Shoot not found.</p>';
 }
 
+
+
+// ═══════════════════════════════════════════════════
+// ERGOLAB — OBL09 / OBL10 / OBL11 — 16 Nov 2026 (single day)
+// ═══════════════════════════════════════════════════
+function getErgolabNovHTML(shoot){
+  return `
+  ${shootTopbar(shoot)}
+  ${timerBar()}
+  ${shootHero(shoot)}
+  <div class="shoot-wrap">
+    ${progressAndActivity()}
+
+    <div class="warn-note">🎬 3 talents, 1 location — Albert 3:00–6:00 PM · Sha 6:30–9:00 PM · Alvin 8:30–11:00 PM  ·  Props: [Oblique] 1.0 pillow + 1.0 box, 2.0 pillow + 2.0 box, lousy seat cushion · [Client] Plastic chairs x2  ·  2 cameras (Cam A front · Cam B side / B-roll) + prompter</div>
+    <div class="session"><div class="session-hdr">Crew Call · Setup + Beauty Shots <span class="srange">2:00 – 3:00 PM · No talent</span></div>
+      ${breakRow('',ico('clipboard'),'2:00 PM · Crew call · unload · set up')}
+      ${sceneRow('en01','14:00','15:00','Living Room → Dining','2:00 – 3:00 PM','Bedroom','Pillow 2.0 beauty shots + MAX + ARC cushion beauty shots','After beauty shots can start setup.',[ico('camera')+' B-roll',ico('clock')+' 60 min','🛏 Pillow 2.0 · MAX · ARC'])}
+    </div>
+    <div class="session"><div class="session-hdr">Video 3 — OBL11 · Cushion · Office Worker — Fix My Plastic Chair <span class="srange">3:00 – 6:00 PM · Albert</span></div>
+      ${breakRow('move','🚶','3:00 – 3:10 PM · Albert arrives — check outfit + briefing')}
+      ${sceneRow('en02','15:10','15:20','Dining Area','3:10 – 3:20 PM','Living Room → Dining','Hook 1 — Walk &amp; talk, cushion in hand, then throw it away [Cam A gimbal]','"I don\'t need a seat cushion." &lt;hand zoom in&gt; — leave room in frame for the toss. On-screen: Just a seat cushion?',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 MAX Seat Cushion'])}
+      ${sceneRow('en03','15:20','15:35','Dining Area','3:20 – 3:35 PM','Dining Area','Hook 1 cont. + Hook 2 — laptop work, backache, punches back · stands, pats tailbone, looks at chair → pan / zoom out to reveal chair [Cam A + B]','',[ico('camera')+' Hook',ico('clock')+' 15 min',ico('mic')+' Albert · Casual collar tee + shorts','💻 Laptop · plastic chair'])}
+      ${sceneRow('en04','15:35','15:45','Dining Area','3:35 – 3:45 PM','Dining Area','Hook 3 — Google Meet call: tilts left, then right [Cam A front · Cam B over-shoulder on laptop]','',[ico('camera')+' Hook',ico('clock')+' 10 min',ico('mic')+' Albert · Casual collar tee + shorts','💻 Laptop (GMeet UI)'])}
+      ${sceneRow('en05','15:45','16:00','Dining Area / around house','3:45 – 4:00 PM','Dining Area','Talking Head — Problem [Cam A front · Cam B side]','"I don\'t have a proper desk…" → "…honestly killing me"',[ico('camera')+' Talking Head',ico('clock')+' 15 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 Plastic chair'])}
+      ${sceneRow('en06','16:00','16:20','Dining Area','4:00 – 4:20 PM','Dining Area / around house','B-roll — Problem','Working on hard plastic chair, chair closeup (flatness), walking around trying different sitting poses, stand + flex waist &amp; back, patting back.',[ico('camera')+' B-roll',ico('clock')+' 20 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 Plastic chair · 💻 Laptop'])}
+      ${sceneRow('en07','16:20','16:35','Dining Area','4:20 – 4:35 PM','Dining Area','Talking Head — Solution: takes out MAX cushion [Cam A + B]','"So I got the ErgoLab MAX…" → "…even on a dining chair."',[ico('camera')+' Talking Head',ico('clock')+' 15 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 MAX Seat Cushion'])}
+      ${sceneRow('en08','16:35','17:00','Dining Area','4:35 – 5:00 PM','Dining Area','ARC bundle','Talks to cam, grabs ARC from behind + shows it · uses ARC + MAX together · correct sitting posture (wide) · interacts with both cushions.',[ico('camera')+' Talking Head',ico('clock')+' 25 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 ARC Back Cushion · MAX'])}
+      ${sceneRow('en09','17:00','17:05','Dining Area','5:00 – 5:05 PM','Dining Area','Talking Head — CTA [Cam A + B]','"If you\'re working from a dining chair…"',[ico('camera')+' Talking Head',ico('clock')+' 5 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 MAX + ARC'])}
+      ${sceneRow('en10','17:05','17:20','Dining Area','5:05 – 5:20 PM','Dining Area','B-roll — MAX product','Beauty shots, touch tailbone cutout &amp; curve, point at shape, press (firmness), place on chair, flip to non-slip base + touch.',[ico('camera')+' B-roll',ico('clock')+' 15 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 MAX Cushion'])}
+      ${sceneRow('en11','17:20','17:35','Living Room','5:20 – 5:35 PM','Dining Area','B-roll — Result','Sitting happily working, cushion closeup while seated, on a meeting call, tilt down back from shoulders → hips (sitting straight).',[ico('camera')+' B-roll',ico('clock')+' 15 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 MAX cushion · 💻 Laptop'])}
+      ${breakRow('move','🚶','5:35 – 5:40 PM · Move to Living Room')}
+      ${sceneRow('en12','17:40','17:50','Bedroom','5:40 – 5:50 PM','Living Room','"Ended up everywhere"','TH + cushion on living-room floor, unzip / take off cover, cushion beauty shots.',[ico('camera')+' B-roll',ico('clock')+' 10 min',ico('mic')+' Albert · Casual collar tee + shorts','🪑 MAX cushion · floor rug · sofa props'])}
+      ${sceneRow('en13','17:50','18:00','Bedroom','5:50 – 6:00 PM','Bedroom','OBL10 cameo — Husband sleeps uncomfortably on flat pillow, neck pain','OBL10 script, act as husband (solo).',[ico('camera')+' B-roll',ico('clock')+' 10 min',ico('mic')+' Albert · Sleepwear','🛏 Flat pillow (Airbnb pillow)'])}
+      ${breakRow('move','🚶','6:00 PM · Albert wrapped')}
+    </div>
+      ${breakRow('lunch',ico('utensils'),'6:00 – 6:30 PM · Dinner Break')}
+    <div class="session"><div class="session-hdr">Video 2 — OBL10 · Deep Sleep Pillow · 1.0 Owner Tried 2.0 <span class="srange">6:30 – 9:00 PM · Sha</span></div>
+      ${breakRow('move','🚶','6:30 PM · Sha arrives — check outfit + briefing')}
+      ${sceneRow('en14','18:30','18:55','Bedroom','6:30 – 6:55 PM','Bedroom','Hooks 1–3','H1: talking, a 2.0 pillow flies in, she catches it · H2: phone on pillow page, points at it, puts phone down, pulls 2.0 from behind · H3: shows the 2.0 box. Crew member throws the pillow from off-frame left. ~6 min per hook.',[ico('camera')+' Hook',ico('clock')+' 25 min',ico('mic')+' Sha · Pyjamas sleepwear','🛏 2.0 pillow · 📦 2.0 box · 📱 Phone'])}
+      ${sceneRow('en15','18:55','19:45','Bedroom','6:55 – 7:45 PM','Bedroom','Talking Head — full body [Cam A front · Cam B side]','"I can\'t sleep without…" → "This one is MINE!"',[ico('camera')+' Talking Head',ico('clock')+' 50 min',ico('mic')+' Sha · Pyjamas sleepwear','🛏 1.0 + 2.0 pillows'])}
+      ${sceneRow('en16','19:45','19:55','Bedroom + Bathroom','7:45 – 7:55 PM','Bedroom','CTA — talking head holding 2.0','Whispers to camera, then walks out of frame.',[ico('camera')+' Talking Head',ico('clock')+' 10 min',ico('mic')+' Sha · Pyjamas sleepwear','🛏 2.0 pillow'])}
+      ${sceneRow('en17','19:55','20:15','Bedroom','7:55 – 8:15 PM','Bedroom + Bathroom','Morning beats [Cam A + B]','Waking up happily (pillow level + top) · wakes up, no frizzy hair → looks in mirror, happy. Tidying up hair in bathroom.',[ico('camera')+' B-roll',ico('clock')+' 20 min',ico('mic')+' Sha · Pyjamas sleepwear','🛏 2.0 pillow · 🪞 Bathroom mirror'])}
+      ${sceneRow('en18','20:15','20:35','Bedroom / Entrance / Living','8:15 – 8:35 PM','Bedroom','B-roll — lying on 2.0','Top / side / closeup / wide · sleeping happily, turning onto side · different sleep postures, neck-on-pillow closeup · point to the dip · 1.0 + 2.0 on bed together with talent.',[ico('camera')+' B-roll',ico('clock')+' 20 min',ico('mic')+' Sha · Pyjamas sleepwear','🛏 1.0 + 2.0 pillow'])}
+      ${sceneRow('en19','20:35','20:55','Living Room (table set)','8:35 – 8:55 PM','Bedroom / Entrance / Living','B-roll — website, box, cover + charcoal','Scrolling ErgoLab site · grabs the box at the door, brings it to bedroom · touches surface + fabric closeup · takes cover off · charcoal closeup + touching charcoal.',[ico('camera')+' B-roll',ico('clock')+' 20 min',ico('mic')+' Sha · Pyjamas sleepwear','📦 2.0 box · 📱 Phone'])}
+      ${breakRow('move','🚶','8:30 PM · Alvin arrives — check outfit + briefing · set up living room scene')}
+      ${breakRow('move','🚶','9:00 PM · Sha wrapped')}
+    </div>
+    <div class="session"><div class="session-hdr">Video 1 — OBL09 · Deep Sleep Pillow · You Asked, I Answer <span class="srange">9:00 – 11:00 PM · Alvin</span></div>
+      ${sceneRow('en20','21:00','21:05','Living Room (table set)','9:00 – 9:05 PM','Living Room (table set)','Briefing · frame check · prompter load','Use dining table.',[ico('camera')+' Talking Head',ico('clock')+' 5 min',ico('mic')+' Alvin · Light blue suit + long pants','🛏 Table · 1.0 + 2.0 pillows'])}
+      ${sceneRow('en21','21:05','21:25','Living Room (table set)','9:05 – 9:25 PM','Living Room (table set)','Hooks 1–3','H1: both pillows on table · H2: holding phone, scrolling comments, looks at camera · H3: holding the 2.0, straight to camera.',[ico('camera')+' Hook',ico('clock')+' 20 min',ico('mic')+' Alvin · Light blue suit + long pants','🛏 1.0 + 2.0 pillows · 📱 Phone'])}
+      ${sceneRow('en22','21:25','21:40','Living Room (table set)','9:25 – 9:40 PM','Living Room (table set)','Q&amp;A — "Is 2.0 just 1.0?" + "Why not charge more?" [Cam A half body · Cam B side, chest closeup]','Each question: talent points top-left / top-right as if a comment pops up.',[ico('camera')+' Talking Head',ico('clock')+' 15 min',ico('mic')+' Alvin · Light blue suit + long pants','🛏 2.0 pillow'])}
+      ${sceneRow('en23','21:40','21:55','Living Room (table set)','9:40 – 9:55 PM','Living Room (table set)','Q&amp;A — Annudin (side / back sleepers) + Wendy (too firm?) [Cam A + B]','Point to the dip on "See this dip in the middle?"',[ico('camera')+' Talking Head',ico('clock')+' 15 min',ico('mic')+' Alvin · Light blue suit + long pants','🛏 2.0 pillow'])}
+      ${sceneRow('en24','21:55','22:10','Living Room (table set)','9:55 – 10:10 PM','Living Room (table set)','Q&amp;A — Alex (felt weird first nights) + Alyaa (memory foam heat) [Cam A + B]','',[ico('camera')+' Talking Head',ico('clock')+' 15 min',ico('mic')+' Alvin · Light blue suit + long pants','🛏 2.0 pillow'])}
+      ${sceneRow('en25','22:10','22:25','Living Room (table set)','10:10 – 10:25 PM','Living Room (table set)','Q&amp;A — Heng (sweat / pillowcase) + "What if I don\'t like it?" + Outro / CTA [Cam A + B]','',[ico('camera')+' Talking Head',ico('clock')+' 15 min',ico('mic')+' Alvin · Light blue suit + long pants','🛏 2.0 pillow · spare pillowcase'])}
+      ${sceneRow('en26','22:25','22:55','Wrap','10:25 – 10:55 PM','Living Room (table set)','B-roll — Alvin\'s hands only','Touch pillow (refined arch + fabric) · point to the dip / showcase design · press for firmness · fabric + pillow closeups · pillowcase beauty · charcoal closeup · pillow beauty (not priority).',[ico('camera')+' B-roll',ico('clock')+' 30 min',ico('mic')+' Alvin · Light blue suit + long pants','🛏 1.0 + 2.0 · coverless 2.0 · spare pillowcase'])}
+      ${breakRow('move','🚶','11:00 PM · Alvin wrapped')}
+      ${breakRow('wrap',ico('check-circle'),'11:00 PM – 12:00 AM · Buffer, check footage, wrap 🎉')}
+    </div>
+
+    <div class="shoot-footer">ErgoLab · Deep Sleep Pillow 2.0 + Seat Cushion Videoshoot · 16 November 2026 · Oblique Production · Confidential</div>
+  </div>`;
+}
 
 // ═══════════════════════════════════════════════════
 // SUNWAY COLLEGE IPOH — 20 Oct 2026 (single day)
